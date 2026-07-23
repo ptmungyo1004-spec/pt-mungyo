@@ -1,0 +1,3995 @@
+{
+  "exportedAt": "2026-07-22T07:30:51.949Z",
+  "data": {
+    "items": [
+      {
+        "id": "item_mrd54shsl3o9",
+        "code": "AINSWORTH",
+        "name": "AINSWORTH YELLOW STONE",
+        "spec": "",
+        "unit": "BAG",
+        "active": "Y",
+        "linkedMaterialCode": "AINSWORTH",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrd561owwkxg",
+        "code": "DENTAL PLASTER(1000KG)",
+        "name": "DENTAL PLASTER-WHITE",
+        "spec": "",
+        "unit": "BAG",
+        "active": "Y",
+        "linkedMaterialCode": "1000KG BAG",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrd5abnj33g1",
+        "code": "ND18B-방글라데시",
+        "name": "DIE STONE - BRIGHT NEON YELLOW",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "ND18B-방글라데시",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrd9uaeykun3",
+        "code": "UDC25-GB",
+        "name": "DIE STONE -GOLDEN BROWN",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "PROFESSIONAL(25KG)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrd9va3hpyte",
+        "code": "NDLABC25-Y",
+        "name": "LAB STONE - YELLOW",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "PROFESSIONAL(25KG)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrd9w0zt7rfn",
+        "code": "NDLABC25-W",
+        "name": "LAB STONE -WHITE",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "PROFESSIONAL(25KG)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrd9zhc9z0ge",
+        "code": "NDLABC25-DB",
+        "name": "LAB STONE-DARK BLUE",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "PROFESSIONAL(25KG)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrda4orv2pa5",
+        "code": "NDC25-PK",
+        "name": "DENTAL STONE -PINK",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "PROFESSIONAL(25KG)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrda5nb20v3r",
+        "code": "NDLABC25-GN",
+        "name": "LAB STONE-GREEN",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "PROFESSIONAL(25KG)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mreaj6lx7noi",
+        "code": "NDLABP25-Y",
+        "name": "LAB STONE -YELLOW",
+        "spec": "",
+        "unit": "BAG",
+        "active": "Y",
+        "linkedMaterialCode": "25KG BAG(브라운지대)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrebg80jhdbr",
+        "code": "NDC20-GN",
+        "name": "DENTAL STONE - GREEN",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "PROFESSIONAL(20KG)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mreciw0supe2",
+        "code": "NDLABP25-PK",
+        "name": "LAB STONE - PINK",
+        "spec": "",
+        "unit": "BAG",
+        "active": "Y",
+        "linkedMaterialCode": "25KG BAG(브라운지대)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrecjq31y19v",
+        "code": "NDOTP25-W",
+        "name": "ORTHODONTIC ROCK - WHITE",
+        "spec": "",
+        "unit": "BAG",
+        "active": "Y",
+        "linkedMaterialCode": "25KG BAG(브라운지대)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mreckrqyw0fy",
+        "code": "UDP25-GB",
+        "name": "DIE STONE - GOLDEN BROWN",
+        "spec": "",
+        "unit": "BAG",
+        "active": "Y",
+        "linkedMaterialCode": "25KG BAG(브라운지대)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrefrrf11x0n",
+        "code": "UD12E-GN",
+        "name": "DIE STONE - GREEN",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "UD12",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrefsu0xmis3",
+        "code": "ND12E-Y",
+        "name": "DENTAL STONE - YELLOW",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "ND12",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrem707k7ne3",
+        "code": "UDC25-I",
+        "name": "DIE STONE-IVORY",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "PROFESSIONAL(25KG)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrem983mmuti",
+        "code": "NDOTC25-W",
+        "name": "ORTHO STONE-WHITE",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "PROFESSIONAL(25KG)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mremspykwo4i",
+        "code": "YUKIBANA-BLUE",
+        "name": "YUKIBANA LAB STONE-BLUE",
+        "spec": "",
+        "unit": "BAG",
+        "active": "Y",
+        "linkedMaterialCode": "25KG BAG(브라운지대)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mremtyiirrpg",
+        "code": "YUKIBANA-YELLOW",
+        "name": "YUKIBANA DENTAL STONE-YELLOW",
+        "spec": "",
+        "unit": "BOX",
+        "active": "Y",
+        "linkedMaterialCode": "25KG BAG(브라운지대)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrip76enb2k2",
+        "code": "GM 40",
+        "name": "GM 40",
+        "spec": "",
+        "unit": "25KG",
+        "active": "Y",
+        "linkedMaterialCode": "GM 40 (25)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrip8oijp0bf",
+        "code": "CH 70",
+        "name": "CH 70",
+        "spec": "",
+        "unit": "25KG",
+        "active": "Y",
+        "linkedMaterialCode": "CH 70 (25)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrip9iwdxvcw",
+        "code": "CH 80",
+        "name": "CH 80",
+        "spec": "",
+        "unit": "25KG",
+        "active": "Y",
+        "linkedMaterialCode": "CH 80 (25)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mriph8v11t5e",
+        "code": "GRX 60",
+        "name": "GRX 60",
+        "spec": "",
+        "unit": "25KG",
+        "active": "Y",
+        "linkedMaterialCode": "GRX 60 (25)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mriv7y35pros",
+        "code": "PT.MUNGYO(Chalk)",
+        "name": "PT.MUNGYO(Chalk)",
+        "spec": "",
+        "unit": "TON BAG",
+        "active": "Y",
+        "linkedMaterialCode": "Gypsum raw stone",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mriyitsvd26k",
+        "code": "LABC25-Y",
+        "name": "LAB STONE - YELLOW",
+        "spec": "",
+        "unit": "25KG",
+        "active": "Y",
+        "linkedMaterialCode": "PROFESSIONAL(25KG)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mriyob9z553z",
+        "code": "DPC25-W",
+        "name": "DENTAL PLASTER -WHITE",
+        "spec": "",
+        "unit": "25KG",
+        "active": "Y",
+        "linkedMaterialCode": "25KG BAG(브라운지대)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mriz0lcetr4r",
+        "code": "LABC25-SB",
+        "name": "LAB STONE - SKY BLUE",
+        "spec": "",
+        "unit": "25KG",
+        "active": "Y",
+        "linkedMaterialCode": "PROFESSIONAL(25KG)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mriz1z564y14",
+        "code": "UDOTC25",
+        "name": "ORTHO ROCK -WHITE",
+        "spec": "",
+        "unit": "25KG",
+        "active": "Y",
+        "linkedMaterialCode": "PROFESSIONAL(25KG)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrizabbkrkbk",
+        "code": "UD12E-GB(KOREA)",
+        "name": "DIE STONE(GOLDEN BROWN) 12KG - KOREA",
+        "spec": "",
+        "unit": "1TON BAG",
+        "active": "Y",
+        "linkedMaterialCode": "",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrn533ew2bi8",
+        "code": "UDP25-IV",
+        "name": "DIE STONE TYPE 4 - IVORY",
+        "spec": "",
+        "unit": "25KG",
+        "active": "Y",
+        "linkedMaterialCode": "25KG BAG(브라운지대)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrn5jkuz5fud",
+        "code": "DP25-W",
+        "name": "DENTAL PLASTER TYPE 2- WHITE",
+        "spec": "",
+        "unit": "25KG",
+        "active": "Y",
+        "linkedMaterialCode": "25KG BAG(브라운지대)",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrn62371nl5h",
+        "code": "UD18-GB",
+        "name": "DIE STONE TYPE 4 - GOLDEN BROWN",
+        "spec": "",
+        "unit": "18KG",
+        "active": "Y",
+        "linkedMaterialCode": "",
+        "materialPerUnit": 1
+      },
+      {
+        "id": "item_mrn642oeus89",
+        "code": "UDE12E-GB",
+        "name": "DIE STONE EXTREME TYPE 4 - GOLDEN BROWN",
+        "spec": "",
+        "unit": "12KG",
+        "active": "Y",
+        "linkedMaterialCode": "",
+        "materialPerUnit": 1
+      }
+    ],
+    "partners": [
+      {
+        "id": "partner_mrczlyc63wtu",
+        "code": "MAJESTIC",
+        "name": "MAJESTIC INTERNATIONAL",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrd5131lv279",
+        "code": "AINSWORTH",
+        "name": "AINSWORTH DENTAL",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrd5y31sgwc5",
+        "code": "AL-FARES DENT",
+        "name": "AL-FARES DENT",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrda35v5fosx",
+        "code": "DIDOFERTOOLS.S.L.",
+        "name": "DIDOFERTOOLS.S.L.",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrdafsyjdh2j",
+        "code": "MOUNT ZION",
+        "name": "MOUNT ZION CO.LTD",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrebvjszqqya",
+        "code": "PACIFIC MEDIHUS",
+        "name": "PACIFIC MEDIHUS PTE.LTD.",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mremfiawlmar",
+        "code": "MODERN DENTAL",
+        "name": "MODERN DENTAL LABORATORY CO.,LTD.",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mremvnxa957q",
+        "code": "PT. FARZA INDONESIA",
+        "name": "PT. FARZA INDONESIA",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mriqz2zwsg6q",
+        "code": "HAENG NAM",
+        "name": "HAENG NAM (INDONESIA)",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mriqzi7tj14y",
+        "code": "NARUMI",
+        "name": "NARUMI (INDONESIA)",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mriqzyy827r1",
+        "code": "SANGO SEMARANG",
+        "name": "SANGO SEMARANG (INDONESIA)",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrir0gpjkoic",
+        "code": "KOPIN/KEDAUNG",
+        "name": "KOPIN/KEDAUNG (INDONESIA)",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrir0spsevec",
+        "code": "KUANGLIN",
+        "name": "KUANGLIN (INDONESIA)",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrir156eq39i",
+        "code": "SRI TOKI",
+        "name": "SRI TOKI (INDONESIA)",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrir1ic6bflr",
+        "code": "INDOPORCELEN",
+        "name": "INDOPORCELEN (INDONESIA)",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrir2bepo4bb",
+        "code": "DALTON",
+        "name": "DALTON (INDONESIA)",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrir2r44hpsm",
+        "code": "LUCKY INDAH",
+        "name": "LUCKY INDAH (INDONESIA)",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mriuax3kokqi",
+        "code": "BARRETA CEMERLANG",
+        "name": "BARRETA CEMERLANG",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mriv5koqyhsb",
+        "code": "PT.MUNGYO(Chalk)",
+        "name": "PT.MUNGYO(Chalk)",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mriyr7c2b61m",
+        "code": "WRICGH MILLNERS",
+        "name": "WRICGH MILLNERS DENTAL SUPPLIES",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrj0037hhq06",
+        "code": "PT.MUNGYO(KOREA)",
+        "name": "PT.MUNGYO(KOREA)",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      },
+      {
+        "id": "partner_mrn666eek4b4",
+        "code": "AGKEM IMPEX",
+        "name": "AGKEM IMPEX PRIVATE LIMITED",
+        "type": "매출처",
+        "manager": "",
+        "phone": "",
+        "address": ""
+      }
+    ],
+    "equipment": [],
+    "production": [
+      {
+        "id": "prod_mrj0mq8z5rcq",
+        "date": "2026-07-13",
+        "itemCode": "UD12E-GB(KOREA)",
+        "qty": 5,
+        "memo": ""
+      },
+      {
+        "id": "prod_mru8sqv76usn",
+        "date": "2026-07-21",
+        "itemCode": "AINSWORTH",
+        "partnerCode": "AINSWORTH",
+        "qty": 750,
+        "unit": "BAG",
+        "memo": ""
+      }
+    ],
+    "txn": [
+      {
+        "id": "txn_mreewhbb68kt",
+        "type": "in",
+        "date": "2026-06-29",
+        "itemCode": "DENTAL PLASTER(1000KG)",
+        "partnerCode": "AINSWORTH",
+        "qty": 5,
+        "unitPrice": 0,
+        "orderCode": "PMGH260604-AW03",
+        "orderItemId": "oitem_mrd4z7lads5l",
+        "unit": "BAG",
+        "prodStatus": "생산완료"
+      },
+      {
+        "id": "txn_mriva9uyl7el",
+        "type": "in",
+        "date": "2026-07-13",
+        "itemCode": "PT.MUNGYO(Chalk)",
+        "partnerCode": "PT.MUNGYO(Chalk)",
+        "qty": 4.5,
+        "unitPrice": 0,
+        "unit": "T",
+        "prodStatus": "생산완료"
+      },
+      {
+        "id": "txn_mrizylfinw8w",
+        "type": "in",
+        "date": "2026-07-13",
+        "itemCode": "UD12E-GB(KOREA)",
+        "partnerCode": "PT.MUNGYO(KOREA)",
+        "qty": 5,
+        "unit": "T",
+        "prodStatus": "생산완료"
+      },
+      {
+        "id": "txn_mro9xavuxwwd",
+        "type": "out",
+        "date": "2026-07-17",
+        "itemCode": "PT.MUNGYO(Chalk)",
+        "partnerCode": "",
+        "qty": 4.5,
+        "unit": "TON BAG"
+      },
+      {
+        "id": "txn_mrq4irkmk76r",
+        "type": "in",
+        "date": "2026-06-30",
+        "itemCode": "NDLABP25-Y",
+        "partnerCode": "AL-FARES DENT",
+        "qty": 6,
+        "unit": "T",
+        "prodStatus": "생산완료"
+      },
+      {
+        "id": "txn_mrq4jop6co51",
+        "type": "in",
+        "date": "2026-07-01",
+        "itemCode": "NDC25-PK",
+        "partnerCode": "DIDOFERTOOLS.S.L.",
+        "qty": 6,
+        "unit": "T",
+        "prodStatus": "생산완료"
+      },
+      {
+        "id": "txn_mrq4l3thrlsb",
+        "type": "in",
+        "date": "2026-07-01",
+        "itemCode": "NDLABP25-Y",
+        "partnerCode": "AL-FARES DENT",
+        "qty": 3,
+        "unit": "T",
+        "prodStatus": "생산완료"
+      },
+      {
+        "id": "txn_mrq4mki5skte",
+        "type": "in",
+        "date": "2026-07-01",
+        "itemCode": "NDLABP25-Y",
+        "partnerCode": "AL-FARES DENT",
+        "qty": 3,
+        "unit": "T",
+        "prodStatus": "생산완료"
+      },
+      {
+        "id": "txn_mrq4nycd83l5",
+        "type": "in",
+        "date": "2026-07-02",
+        "itemCode": "AINSWORTH",
+        "partnerCode": "DIDOFERTOOLS.S.L.",
+        "qty": 6,
+        "unit": "T",
+        "prodStatus": "생산완료"
+      },
+      {
+        "id": "txn_mrq4ohgbu0tp",
+        "type": "in",
+        "date": "2026-07-02",
+        "itemCode": "ND12E-Y",
+        "partnerCode": "MOUNT ZION",
+        "qty": 6,
+        "unit": "T",
+        "prodStatus": "생산완료"
+      },
+      {
+        "id": "txn_mrq4plu6mg4v",
+        "type": "in",
+        "date": "2026-07-03",
+        "itemCode": "NDLABP25-PK",
+        "partnerCode": "AL-FARES DENT",
+        "qty": 5.2,
+        "unit": "T",
+        "prodStatus": "생산완료"
+      },
+      {
+        "id": "txn_mrr54o646q2m",
+        "type": "in",
+        "date": "2026-07-18",
+        "itemCode": "NDC25-PK",
+        "partnerCode": "DIDOFERTOOLS.S.L.",
+        "qty": 468,
+        "unit": "BOX",
+        "unitPrice": 0,
+        "orderCode": "PMGH260528-SD01",
+        "orderItemId": "oitem_mrdabm5y7saq",
+        "prodStatus": "생산완료"
+      },
+      {
+        "id": "txn_mrsy07c6gd5l",
+        "type": "in",
+        "date": "2026-07-20",
+        "itemCode": "UDC25-GB",
+        "partnerCode": "AL-FARES DENT",
+        "qty": 216,
+        "unit": "BOX",
+        "unitPrice": 0,
+        "orderCode": "PMGH260529-AF03",
+        "orderItemId": "oitem_mrd9xftppy9d"
+      },
+      {
+        "id": "txn_mrsy0qo601s3",
+        "type": "in",
+        "date": "2026-07-20",
+        "itemCode": "UDC25-GB",
+        "partnerCode": "DIDOFERTOOLS.S.L.",
+        "qty": 108,
+        "unit": "BOX",
+        "unitPrice": 0,
+        "orderCode": "PMGH260528-SD01",
+        "orderItemId": "oitem_mrdadqxusm1l"
+      },
+      {
+        "id": "txn_mru8sqv7v10z",
+        "type": "in",
+        "date": "2026-07-21",
+        "itemCode": "AINSWORTH",
+        "partnerCode": "AINSWORTH",
+        "qty": 750,
+        "unit": "BAG",
+        "memo": "Recorded via Production (생산관리 실적등록)"
+      },
+      {
+        "id": "txn_mrugwj78txq1",
+        "type": "in",
+        "date": "2026-07-21",
+        "itemCode": "AINSWORTH",
+        "partnerCode": "AINSWORTH",
+        "qty": 350,
+        "unit": "BAG",
+        "unitPrice": 0,
+        "orderCode": "PMGH260604-AW03",
+        "orderItemId": "oitem_mrd4y4nyikrc"
+      }
+    ],
+    "calendar": [
+      {
+        "id": "cal_mrcxqeuh2p0o",
+        "date": "2026-08-14",
+        "title": "MAJESTIC INTERNATIONAL(방글라데시)",
+        "category": "납품예정",
+        "color": "#4a7c59",
+        "memo": "ND18B-BNY - 1340CTN",
+        "createdAt": "2026-07-09T03:16:26.921Z"
+      },
+      {
+        "id": "cal_mrczw9rulli2",
+        "date": "2026-07-09",
+        "title": "시리아 LABSTONE (DB)",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "시리아 (LAB STONE(DB) 108 가포장 생산",
+        "createdAt": "2026-07-09T04:16:59.514Z"
+      },
+      {
+        "id": "cal_mrd4kr8wiao6",
+        "date": "2026-07-28",
+        "title": "AINSWORTH DENTAL(호주)",
+        "category": "납품예정",
+        "color": "#4a7c59",
+        "memo": "AINSWORTH DENTAL(호주)\n20PT 1대",
+        "createdAt": "2026-07-09T06:28:00.368Z"
+      },
+      {
+        "id": "cal_mrec3rfpm3z1",
+        "date": "2026-07-31",
+        "title": "PACIFIC MEDIHUB(싱가폴)",
+        "category": "납품예정",
+        "color": "#4a7c59",
+        "memo": "NCD20-GN 72CTN",
+        "createdAt": "2026-07-10T02:46:30.566Z"
+      },
+      {
+        "id": "cal_mrec4xvg4030",
+        "date": "2026-07-28",
+        "title": "DIDOFERTOOLS,S.L",
+        "category": "납품예정",
+        "color": "#4a7c59",
+        "memo": "25KG BOX 720CTN",
+        "createdAt": "2026-07-10T02:47:25.564Z"
+      },
+      {
+        "id": "cal_mrec62c7ipxl",
+        "date": "2026-07-28",
+        "title": "AL-FARES DENT(시리아)",
+        "category": "납품예정",
+        "color": "#4a7c59",
+        "memo": "25KG BOX 540CTN 15PT",
+        "createdAt": "2026-07-10T02:48:18.007Z"
+      },
+      {
+        "id": "cal_mrec95s5myhq",
+        "date": "2026-07-29",
+        "title": "AL-FARES DENT(시리아)",
+        "category": "납품예정",
+        "color": "#4a7c59",
+        "memo": "25KG BAG 800BAG  16PT",
+        "createdAt": "2026-07-10T02:50:42.437Z"
+      },
+      {
+        "id": "cal_mrecb42z4xyo",
+        "date": "2026-07-30",
+        "title": "MOUNT ZION CO.LTD(미얀마)",
+        "category": "납품예정",
+        "color": "#4a7c59",
+        "memo": "12KG, 25KG 1248CTN  20PT",
+        "createdAt": "2026-07-10T02:52:13.548Z"
+      },
+      {
+        "id": "cal_mrfv6exciv9w",
+        "date": "2026-07-08",
+        "title": "싱가폴(DENTAL STONE)-G",
+        "category": "일정",
+        "color": "#b5533c",
+        "memo": "DENTAL STONE(G) 1.5T 생산 -가포장(색상흰색)",
+        "createdAt": "2026-07-11T04:28:13.200Z"
+      },
+      {
+        "id": "cal_mrfv8xlcziao",
+        "date": "2026-07-07",
+        "title": "호주(AINSWORTH)",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "YELLOW STONE 4.7T 생산 -가포장",
+        "createdAt": "2026-07-11T04:30:10.704Z"
+      },
+      {
+        "id": "cal_mrfvb4jmyes2",
+        "date": "2026-07-07",
+        "title": "PT.MUNGYO",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "분필 생산 4T",
+        "createdAt": "2026-07-11T04:31:53.026Z"
+      },
+      {
+        "id": "cal_mrfvctdh4y7a",
+        "date": "2026-07-03",
+        "title": "시리아",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "LAB STONE(P) 5.2T 생산",
+        "createdAt": "2026-07-11T04:33:11.861Z"
+      },
+      {
+        "id": "cal_mrfvdnpbobyp",
+        "date": "2026-07-03",
+        "title": "미얀마",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "DIE STONE(GREEN) 7T 가포장(색상흰색)",
+        "createdAt": "2026-07-11T04:33:51.167Z"
+      },
+      {
+        "id": "cal_mrfvefttibth",
+        "date": "2026-07-03",
+        "title": "미얀마",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "LAB STONE(Y) 5.5T 생산 가포장",
+        "createdAt": "2026-07-11T04:34:27.617Z"
+      },
+      {
+        "id": "cal_mrfveycn6uat",
+        "date": "2026-07-03",
+        "title": "PT.MUNGYO",
+        "category": "생산계획",
+        "color": "#4a7c59",
+        "memo": "분필 8T 생산",
+        "createdAt": "2026-07-11T04:34:51.623Z"
+      },
+      {
+        "id": "cal_mrfvg46hvibg",
+        "date": "2026-07-02",
+        "title": "스페인",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "DENTAL STONE(P) 6T 생산 - 가포장",
+        "createdAt": "2026-07-11T04:35:45.833Z"
+      },
+      {
+        "id": "cal_mrfvgsosbf4a",
+        "date": "2026-07-02",
+        "title": "미얀마",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "DENTAL STONE(Y) 6T 생산 - 가포장",
+        "createdAt": "2026-07-11T04:36:17.596Z"
+      },
+      {
+        "id": "cal_mrfvhn9ap967",
+        "date": "2026-07-01",
+        "title": "스페인",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "DENTAL STONE(P) 6T 생산 - 가포장",
+        "createdAt": "2026-07-11T04:36:57.214Z"
+      },
+      {
+        "id": "cal_mrfvim74xuxv",
+        "date": "2026-07-01",
+        "title": "시리아& 미얀마",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "LAB STONE(Y) 6T 생산 - 가포장",
+        "createdAt": "2026-07-11T04:37:42.496Z"
+      },
+      {
+        "id": "cal_mrfvk7nwkb9l",
+        "date": "2026-06-30",
+        "title": "시리아",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "LAB STONE(W) 3T 생산 - 가포장",
+        "createdAt": "2026-07-11T04:38:56.972Z"
+      },
+      {
+        "id": "cal_mrh9gp7lmwc2",
+        "date": "2026-06-29",
+        "title": "호주(AINSWORTH)",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "DENTAL PLASTER 5T 생산",
+        "createdAt": "2026-07-12T03:55:53.889Z"
+      },
+      {
+        "id": "cal_mriut4d444i6",
+        "date": "2026-07-13",
+        "title": "die stone (GB)21% KOREA",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "die stone (GB)21% KOREA  5T 생산",
+        "createdAt": "2026-07-13T06:41:11.512Z"
+      },
+      {
+        "id": "cal_mriutx6zj5hv",
+        "date": "2026-07-13",
+        "title": "분필 석고 생산",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "분필 석고 생산 4.5T 생산",
+        "createdAt": "2026-07-13T06:41:48.875Z"
+      },
+      {
+        "id": "cal_mriyd32bqfzq",
+        "date": "2026-08-04",
+        "title": "MODERN DENTAL LABORATORY CO.,LTD.",
+        "category": "납품예정",
+        "color": "#4a7c59",
+        "memo": "20PT BOX",
+        "createdAt": "2026-07-13T08:20:41.795Z"
+      },
+      {
+        "id": "cal_mriz6ncoy2jp",
+        "date": "2026-08-20",
+        "title": "WRIGHT MILLNERS(남아프리카공화국)",
+        "category": "납품예정",
+        "color": "#4a7c59",
+        "memo": "WRIGHT MILLNERS DENTAL SUPPLIES\n20PT BOX+BAG",
+        "createdAt": "2026-07-13T08:43:41.112Z"
+      },
+      {
+        "id": "cal_mrjzfae72doq",
+        "date": "2026-07-14",
+        "title": "LAB STONE(G) 3.6T",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "LAB STONE(G) 3.6T 스페인",
+        "createdAt": "2026-07-14T01:38:10.399Z"
+      },
+      {
+        "id": "cal_mrjzg94v987c",
+        "date": "2026-07-14",
+        "title": "YELLOW STONE - Y -5T",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "YELLOW STONE - Y -5T 호주",
+        "createdAt": "2026-07-14T01:38:55.423Z"
+      },
+      {
+        "id": "cal_mromfrfi8rh2",
+        "date": "2026-07-17",
+        "title": "die stone (GB)21% KOREA",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "DIE STONE (GB)21% KOREA 5T 생산",
+        "createdAt": "2026-07-17T07:33:28.350Z"
+      },
+      {
+        "id": "cal_mromh02rv43e",
+        "date": "2026-07-17",
+        "title": "DIE STONE(IV)25KG",
+        "category": "생산계획",
+        "color": "#b5533c",
+        "memo": "DIE STONE(IV) 25KG 홍콩 6T",
+        "createdAt": "2026-07-17T07:34:26.211Z"
+      }
+    ],
+    "orders": [
+      {
+        "id": "order_mrcxyf0ppbtg",
+        "orderCode": "PMGH260609-MJ02",
+        "orderDate": "2026-06-19",
+        "partnerCode": "MAJESTIC",
+        "country": "방글라데시",
+        "reqDelivery": "2026-08-14",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "생산일자 2년후 알루미늄 호일팩 위에만 표기할것",
+        "shippingMark": "",
+        "packingType": "DIE STONE 18KG 마제스틱 전용 포장용지",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mrczbbkn527y",
+            "itemNo": "ND18B-BNY",
+            "itemCode": "ND18B-방글라데시",
+            "weight": "18KG",
+            "qty": 1340,
+            "unitPrice": 15.2,
+            "lotNo": ""
+          }
+        ]
+      },
+      {
+        "id": "order_mrd4x7enl21o",
+        "orderCode": "PMGH260604-AW03",
+        "orderDate": "2026-06-05",
+        "partnerCode": "AINSWORTH",
+        "country": "호주",
+        "reqDelivery": "2026-07-27",
+        "prodDeliveryDate": "",
+        "status": "생산중",
+        "specialNote": "1. YELLOWSTONE STONE ITEM 9분~12분\n2. DENTAL PLASTER SETTIG TIME 8~10분\n3. DENTAL PLASTER 컨테이너 가장 안쪽에 적재\n4 생산 및 수출자 : PT.MUNGYO GROUP INDONESIA",
+        "shippingMark": "AINSWORTH DENTAL COMPANY PTY LTD.\nSYDNEY, AUSTRALIA\nPALLET NO. :\nMADE IN INDONESIA",
+        "packingType": "호주 전용 지대 사용",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mrd4y4nyikrc",
+            "itemNo": "NDLABP20AW-Y",
+            "itemCode": "AINSWORTH",
+            "weight": "20KG",
+            "qty": 750,
+            "lotNo": "",
+            "materialLinks": [
+              {
+                "type": "material",
+                "code": "AINSWORTH-YELLOW",
+                "per": 1
+              }
+            ]
+          },
+          {
+            "id": "oitem_mrd4z7lads5l",
+            "itemNo": "DPAJ1000-W",
+            "itemCode": "DENTAL PLASTER(1000KG)",
+            "weight": "1000KG",
+            "qty": 5,
+            "unitPrice": 427,
+            "lotNo": "2026.06.29"
+          }
+        ]
+      },
+      {
+        "id": "order_mrd6vsvpss7x",
+        "orderCode": "PMGH260529-AF03",
+        "orderDate": "2026-05-29",
+        "partnerCode": "AL-FARES DENT",
+        "country": "시리아",
+        "reqDelivery": "2026-07-27",
+        "prodDeliveryDate": "",
+        "status": "생산중",
+        "specialNote": "플라스틱 팔렛트 사용\n지대 롯드번호\n1.GOLDEN BROWN - 999888\n2. YELLOW - 999777\n3. DARK BLUE - 999666\n4. WHITE - 999555",
+        "shippingMark": "DUBAI, UAE\nPALLET NO.:\nMADE IN INDONESIA",
+        "packingType": "CTN",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mrd9xftppy9d",
+            "itemNo": "UDC25-GB",
+            "itemCode": "UDC25-GB",
+            "weight": "25KG",
+            "qty": 216,
+            "lotNo": "",
+            "materialLinks": [
+              {
+                "type": "material",
+                "code": "PROFESSIONAL(25KG)",
+                "per": 1
+              },
+              {
+                "type": "submaterial",
+                "code": "비닐PE8*60*85",
+                "per": 1
+              }
+            ]
+          },
+          {
+            "id": "oitem_mrd9ya2j9862",
+            "itemNo": "NDLABC25-Y",
+            "itemCode": "NDLABC25-Y",
+            "weight": "25KG",
+            "qty": 108,
+            "lotNo": "",
+            "materialLinks": [
+              {
+                "type": "material",
+                "code": "PROFESSIONAL(25KG)",
+                "per": 1
+              },
+              {
+                "type": "material",
+                "code": "AINSWORTH-GREEN",
+                "per": 1
+              }
+            ]
+          },
+          {
+            "id": "oitem_mrda0d6p3x52",
+            "itemNo": "NDLABC25-DB",
+            "itemCode": "NDLABC25-DB",
+            "weight": "25KG",
+            "qty": 108,
+            "lotNo": "",
+            "materialLinks": [
+              {
+                "type": "material",
+                "code": "PROFESSIONAL(25KG)",
+                "per": 1
+              },
+              {
+                "type": "submaterial",
+                "code": "비닐PE8*60*85",
+                "per": 1
+              }
+            ]
+          },
+          {
+            "id": "oitem_mrda10oj6kkn",
+            "itemNo": "NDLABC25-W",
+            "itemCode": "NDLABC25-W",
+            "weight": "25KG",
+            "qty": 108,
+            "lotNo": "",
+            "materialLinks": [
+              {
+                "type": "material",
+                "code": "PROFESSIONAL(25KG)",
+                "per": 1
+              },
+              {
+                "type": "submaterial",
+                "code": "비닐PE8*60*85",
+                "per": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "order_mrdaasvsjrrg",
+        "orderCode": "PMGH260528-SD01",
+        "orderDate": "2026-05-29",
+        "partnerCode": "DIDOFERTOOLS.S.L.",
+        "country": "스페인",
+        "reqDelivery": "2026-07-24",
+        "prodDeliveryDate": "",
+        "status": "생산중",
+        "specialNote": "나무팔렛트 사용시 훈증해야 합니다.",
+        "shippingMark": "DIDOFERTOOLS,S.L.\nGIJON, SPAIN\nPALLET NO.:\nMADE IN INDONESIA",
+        "packingType": "720CTN",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mrdabm5y7saq",
+            "itemNo": "NDC25-PK",
+            "itemCode": "NDC25-PK",
+            "weight": "25KG",
+            "qty": 486,
+            "lotNo": "",
+            "materialLinks": [
+              {
+                "type": "material",
+                "code": "PROFESSIONAL(25KG)",
+                "per": 1
+              },
+              {
+                "type": "submaterial",
+                "code": "비닐PE8*60*85",
+                "per": 1
+              }
+            ]
+          },
+          {
+            "id": "oitem_mrdacxhdbwks",
+            "itemNo": "NDLABC25-GN",
+            "itemCode": "NDLABC25-GN",
+            "weight": "25KG",
+            "qty": 144,
+            "lotNo": "",
+            "materialLinks": [
+              {
+                "type": "material",
+                "code": "PROFESSIONAL(25KG)",
+                "per": 1
+              },
+              {
+                "type": "submaterial",
+                "code": "비닐PE8*60*85",
+                "per": 1
+              }
+            ]
+          },
+          {
+            "id": "oitem_mrdadqxusm1l",
+            "itemNo": "UDC25-GB",
+            "itemCode": "UDC25-GB",
+            "weight": "25KG",
+            "qty": 108,
+            "lotNo": "",
+            "materialLinks": [
+              {
+                "type": "material",
+                "code": "PROFESSIONAL(25KG)",
+                "per": 1
+              },
+              {
+                "type": "submaterial",
+                "code": "비닐PE8*60*85",
+                "per": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "order_mrdarn96el59",
+        "orderCode": "MGH260515-MZ01",
+        "orderDate": "2026-06-01",
+        "partnerCode": "MOUNT ZION",
+        "country": "미얀마",
+        "reqDelivery": "2026-07-27",
+        "prodDeliveryDate": "",
+        "status": "생산중",
+        "specialNote": "나무팔렛트 사용시 훈증해야 합니다.",
+        "shippingMark": "MOUNT ZION CO.LTD\nYANGON, MIYANMAR\nPALLET NO,:\nMADE IN KOREA/IDONESIA",
+        "packingType": "12KG BOX\n25KG BOX",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mrefux92vw0i",
+            "itemNo": "UD12E-GN",
+            "itemCode": "UD12E-GN",
+            "weight": "12KG",
+            "qty": 480,
+            "lotNo": "",
+            "materialCode": "UD12",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mrefw6a042mo",
+            "itemNo": "NDLABC25-Y",
+            "itemCode": "NDLABC25-Y",
+            "weight": "25KG",
+            "qty": 288,
+            "lotNo": "",
+            "materialLinks": [
+              {
+                "type": "material",
+                "code": "PROFESSIONAL(25KG)",
+                "per": 1
+              },
+              {
+                "type": "submaterial",
+                "code": "비닐PE8*60*85",
+                "per": 1
+              }
+            ]
+          },
+          {
+            "id": "oitem_mrefwwbhx1nc",
+            "itemNo": "ND12E-Y",
+            "itemCode": "ND12E-Y",
+            "weight": "12KG",
+            "qty": 480,
+            "lotNo": "",
+            "materialCode": "ND12",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mrebz4nr9fr8",
+        "orderCode": "PMGH260619-PM01",
+        "orderDate": "2026-06-23",
+        "partnerCode": "PACIFIC MEDIHUS",
+        "country": "싱가폴",
+        "reqDelivery": "2026-07-27",
+        "prodDeliveryDate": "",
+        "status": "생산중",
+        "specialNote": "CARTON에 LOT NO.와 EXPIRYY DATE를 표시\n플라스틱 팔렛트 사용",
+        "shippingMark": "PACIFIC MEDIHUB PTE.LTD.\nSINGAPORE\nPALLET NO.:\nMADE IN INDONESIA",
+        "packingType": "20KG 박스",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mrec06bn65pu",
+            "itemNo": "NDC20-GN",
+            "itemCode": "NDC20-GN",
+            "weight": "20KG",
+            "qty": 72,
+            "lotNo": "",
+            "materialLinks": [
+              {
+                "type": "material",
+                "code": "PROFESSIONAL(20KG)",
+                "per": 1
+              },
+              {
+                "type": "submaterial",
+                "code": "비닐PE8*65*80",
+                "per": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "order_mrecfygm1ukr",
+        "orderCode": "PMGH260604-AF04R",
+        "orderDate": "2026-06-04",
+        "partnerCode": "AL-FARES DENT",
+        "country": "시리아",
+        "reqDelivery": "2026-07-27",
+        "prodDeliveryDate": "",
+        "status": "생산중",
+        "specialNote": "지대 라벨 확인",
+        "shippingMark": "LATTAKIA PORT, SYRIA\nPALLET NO.:\nMADE IN INDONESIA",
+        "packingType": "BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mrecgrditrgi",
+            "itemNo": "NDLABP25-Y",
+            "itemCode": "NDLABP25-Y",
+            "weight": "25KG",
+            "qty": 250,
+            "lotNo": "",
+            "materialLinks": [
+              {
+                "type": "material",
+                "code": "25KG BAG(브라운지대)",
+                "per": 1
+              }
+            ]
+          },
+          {
+            "id": "oitem_mreclxofa17e",
+            "itemNo": "NDLAP25-PK",
+            "itemCode": "NDLABP25-PK",
+            "weight": "25KG",
+            "qty": 400,
+            "lotNo": "",
+            "materialCode": "25KG BAG(브라운지대)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mrecml40xofz",
+            "itemNo": "NDOTP25-W",
+            "itemCode": "NDOTP25-W",
+            "weight": "25KG",
+            "qty": 50,
+            "lotNo": "",
+            "materialCode": "25KG BAG(브라운지대)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mrecn2nt0hcj",
+            "itemNo": "UDP25-GB",
+            "itemCode": "UDP25-GB",
+            "weight": "25KG",
+            "qty": 100,
+            "lotNo": "",
+            "materialCode": "25KG BAG(브라운지대)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mremkvllqprq",
+        "orderCode": "PMGH260626-MD04",
+        "orderDate": "2026-06-30",
+        "partnerCode": "MODERN DENTAL",
+        "country": "홍콩",
+        "reqDelivery": "2026-07-30",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "플라스틱 팔레트 사용",
+        "shippingMark": "MODERN DENTAL LABORATOR CO., LTD\nYANTIAN, CHINA\nPALLET NO.:\nMADE IN IDOESIA",
+        "packingType": "BOX",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mremmqu6fl5r",
+            "itemNo": "UDC25-I",
+            "itemCode": "UDC25-I",
+            "weight": "25KG",
+            "qty": 540,
+            "lotNo": "",
+            "materialCode": "PROFESSIONAL(25KG)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mremohh6ygin",
+            "itemNo": "NDOTC25-W",
+            "itemCode": "NDOTC25-W",
+            "weight": "25KG",
+            "qty": 30,
+            "lotNo": "",
+            "materialCode": "PROFESSIONAL(25KG)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mren11bvim6y",
+        "orderCode": "PI260709-FARZA2602_1",
+        "orderDate": "2026-07-10",
+        "partnerCode": "PT. FARZA INDONESIA",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-08-08",
+        "prodDeliveryDate": "2026-07-28",
+        "status": "접수",
+        "specialNote": "LIMESTONE TYPE 3 - SNOW ROCK 'LAB STONE TYPE 3 BLUE\nLIMESTONE TYPE 3 - SNOW ROCK 'DENTAL STONE TYPE 3 YELLOW",
+        "shippingMark": "PT. FARZA INDONESIA\nSOUTH JAKARTA, INDONESIA\nPALLET NO.:\nMADE IN INDONESIA",
+        "packingType": "BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mren2qu39p9i",
+            "itemNo": "LS3 - BLUE",
+            "itemCode": "YUKIBANA-BLUE",
+            "weight": "25KG",
+            "qty": 600,
+            "lotNo": "",
+            "materialCode": "25KG BAG(브라운지대)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mren3ekupzgx",
+            "itemNo": "DS3 - YELLOW",
+            "itemCode": "YUKIBANA-YELLOW",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "25KG BAG(브라운지대)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mripdgkplf8w",
+        "orderCode": "HAENG NAM 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "HAENG NAM",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mripg5h3ng6n",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mripjdlw3b2a",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 2000,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mripkj9lmib5",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 800,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mripnqne0m0a",
+        "orderCode": "NARUMI 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "NARUMI",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mripp2wdwlmx",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 80,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mripptvirij7",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 800,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mripq4o0a5kh",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 800,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mripr8ckt2z2",
+        "orderCode": "SANGO SEMARANG 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "SANGO SEMARANG",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mripryuq38tx",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 160,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mripsf0zdhu7",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 1200,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mripsrfq99p4",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 400,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mript9g6jijs",
+            "itemNo": "",
+            "itemCode": "CH 80",
+            "weight": "25KG",
+            "qty": 400,
+            "lotNo": "",
+            "materialCode": "CH 80 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mripu10ed4js",
+        "orderCode": "KOPIN/KEDAUNG 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "KOPIN/KEDAUNG",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mripwxvqauru",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 600,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriq2pmxcw8l",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 600,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mripvm3lgb6z",
+        "orderCode": "KUANGLIN 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "KUANGLIN",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mripvz0bahyk",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 40,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mripw7xx4v11",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 80,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mripwig6noe3",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 120,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mripxzpcibfi",
+        "orderCode": "SRI TOKI 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "SRI TOKI",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mripyepqnyjo",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 80,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mripyrys57xy",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 120,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mripzp7bvezm",
+        "orderCode": "INDOPORCELEN 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "INDOPORCELEN",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mriq01hrn9ju",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 100,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriq0ezkzh1u",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 400,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriq39t5i01w",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 400,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mriqcxc81e1l",
+        "orderCode": "HAENG NAM SAMPLE 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "HAENG NAM",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mriqd5x831dz",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqde9r8rin",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqt2jruoe6",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mriqedpvrd24",
+        "orderCode": "NARUMI SAMPLE 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "NARUMI",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mriqenjfxppt",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 300,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqew9mxa6l",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 300,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqf4qcd73j",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 300,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mriqfx83i3e8",
+        "orderCode": "SANGO SEMARANG SAMPLE 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "SANGO SEMARANG",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mriqg6d0b41i",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqgfvg30s4",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqgtz4qn9m",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqh0n0ee59",
+            "itemNo": "",
+            "itemCode": "CH 80",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "CH 80 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mriqhwz5c01b",
+        "orderCode": "KOPIN/KEDAUNG SAMPLE 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "KOPIN/KEDAUNG",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mriqi74k7353",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 100,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqie1j12cr",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 100,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqikdft1vq",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 100,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mriqjar291uv",
+        "orderCode": "KUANGLIN SAMPLE 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "KUANGLIN",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mriqjlhpkb8t",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 50,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqjsp8vtzw",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 50,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqk144wprt",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 50,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mriqkt1ml71v",
+        "orderCode": "SRI TOKI SAMPLE 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "SRI TOKI",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mriql3fhohsc",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 50,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqla3scst1",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 50,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqliq3531y",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 50,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mriqmwuu7btx",
+        "orderCode": "INDOPORCELEN SAMPLE 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "INDOPORCELEN",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mriqn5okermf",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqnf7fn035",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqnlyjso3k",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mriqoe2osg0i",
+        "orderCode": "BARRETA CEMERLANG SAMPLE 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "BARRETA CEMERLANG",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mriqooi6gc0w",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 50,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqovom5277",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 50,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqp21j85ci",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 50,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mriqpu6sfyeo",
+        "orderCode": "DALTON SAMPLE 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "DALTON",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mriqq4hqtwdq",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 100,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqqag785x1",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 100,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqqgfkhocj",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 100,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mriqrjoe4qsj",
+        "orderCode": "LUCKY INDAH SAMPLE 13/07/2026",
+        "orderDate": "2026-07-13",
+        "partnerCode": "LUCKY INDAH",
+        "country": "INDONESIA",
+        "reqDelivery": "2026-07-31",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mriqrrgunbms",
+            "itemNo": "",
+            "itemCode": "GM 40",
+            "weight": "25KG",
+            "qty": 100,
+            "lotNo": "",
+            "materialCode": "GM 40 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqryy5ehj5",
+            "itemNo": "",
+            "itemCode": "GRX 60",
+            "weight": "25KG",
+            "qty": 100,
+            "lotNo": "",
+            "materialCode": "GRX 60 (25)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriqs6eid7qe",
+            "itemNo": "",
+            "itemCode": "CH 70",
+            "weight": "25KG",
+            "qty": 100,
+            "lotNo": "",
+            "materialCode": "CH 70 (25)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mriyw4b5tuc0",
+        "orderCode": "PMGH260710-WM03",
+        "orderDate": "2026-07-10",
+        "partnerCode": "WRICGH MILLNERS",
+        "country": "South Africa",
+        "reqDelivery": "2026-08-20",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "WRIGHT MILLNERS DENTAL SUPPLIES\nCAPE TOWN, SOUTH AFRICA\nPALLET NO.:\nMADE IN INDONESIA",
+        "packingType": "25KG BAG , CTN",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mriyx8hq7fut",
+            "itemNo": "LABC25-Y",
+            "itemCode": "LABC25-Y",
+            "weight": "25KG",
+            "qty": 396,
+            "lotNo": "",
+            "materialCode": "PROFESSIONAL(25KG)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriyy0aq1eu9",
+            "itemNo": "DP25 -W",
+            "itemCode": "DPC25-W",
+            "weight": "25KG",
+            "qty": 200,
+            "lotNo": "",
+            "materialCode": "25KG BAG(브라운지대)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriyysabx1mq",
+            "itemNo": "UDC25-I",
+            "itemCode": "UDC25-I",
+            "weight": "25KG",
+            "qty": 108,
+            "lotNo": "",
+            "materialCode": "PROFESSIONAL(25KG)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriz3k7448at",
+            "itemNo": "LABC25-SB",
+            "itemCode": "LABC25-SB",
+            "weight": "25KG",
+            "qty": 36,
+            "lotNo": "",
+            "materialCode": "PROFESSIONAL(25KG)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mriz4dsi5zcp",
+            "itemNo": "NDOTC25-W",
+            "itemCode": "NDOTC25-W",
+            "weight": "25KG",
+            "qty": 36,
+            "lotNo": "",
+            "materialCode": "PROFESSIONAL(25KG)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mrn50z4qv2vc",
+        "orderCode": "PMGH260609-BM01R",
+        "orderDate": "2026-07-10",
+        "partnerCode": "BOMM LTDA.",
+        "country": "CHILE",
+        "reqDelivery": "2026-08-12",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "BOMM LTDA\nVALPARAISO, CHILE\nPALLET NO.:\nMADE IN INDONESIA",
+        "packingType": "25KG BAG",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mrn5h8qo9zhd",
+            "itemNo": "UDP25-IV",
+            "itemCode": "UDP25-IV",
+            "weight": "25KG",
+            "qty": 100,
+            "lotNo": "",
+            "materialCode": "25KG BAG(브라운지대)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mrn5i6l65soh",
+            "itemNo": "NDLABP25-Y",
+            "itemCode": "NDLABP25-Y",
+            "weight": "25KG",
+            "qty": 650,
+            "lotNo": "",
+            "materialCode": "25KG BAG(브라운지대)",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mrn5k8j2o3or",
+            "itemNo": "DP25-W",
+            "itemCode": "DP25-W",
+            "weight": "25KG",
+            "qty": 50,
+            "lotNo": "",
+            "materialCode": "25KG BAG(브라운지대)",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mrn5u6jouq65",
+        "orderCode": "PMGH260714-MJ04",
+        "orderDate": "2026-07-15",
+        "partnerCode": "MAJESTIC",
+        "country": "BANGLADESH",
+        "reqDelivery": "2026-09-04",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "18KG BOX",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mrn5xc04uv2c",
+            "itemNo": "ND18B-BNY",
+            "itemCode": "ND18B-방글라데시",
+            "weight": "18",
+            "qty": 1340,
+            "lotNo": "",
+            "materialCode": "ND18B-방글라데시",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mrn5yve69qij",
+        "orderCode": "PMGH260714-MJ05",
+        "orderDate": "2026-07-15",
+        "partnerCode": "MAJESTIC",
+        "country": "BANGLADESH",
+        "reqDelivery": "2026-10-02",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "",
+        "packingType": "18KG BOX",
+        "memo": "",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mrn5zmmhl9sn",
+            "itemNo": "ND18B-BNY",
+            "itemCode": "ND18B-방글라데시",
+            "weight": "18KG",
+            "qty": 1340,
+            "lotNo": "",
+            "materialCode": "ND18B-방글라데시",
+            "materialPerUnit": 1
+          }
+        ]
+      },
+      {
+        "id": "order_mrn6e3rmwrlg",
+        "orderCode": "PMGH260707-AK03",
+        "orderDate": "2026-07-08",
+        "partnerCode": "AGKEM IMPEX",
+        "country": "INDIA",
+        "reqDelivery": "2026-09-10",
+        "prodDeliveryDate": "",
+        "status": "접수",
+        "specialNote": "",
+        "shippingMark": "AGKEM IMPEX PRIVATE LIMITED\nCHENNAI, INDIA\nPALLET NO.:\nMADE IN INDONESIA",
+        "packingType": "18KG BOX\n12KG BOX",
+        "memo": "1.5KG ALU BAGX12PCS, 1.5KG ALU BAGX8PCS",
+        "prodDate": "",
+        "shipDate": "",
+        "items": [
+          {
+            "id": "oitem_mrn6f5yi0j7a",
+            "itemNo": "UD18-GB",
+            "itemCode": "UD18-GB",
+            "weight": "18KG",
+            "qty": 720,
+            "lotNo": "",
+            "materialCode": "UD18",
+            "materialPerUnit": 1
+          },
+          {
+            "id": "oitem_mrn6fs96v72e",
+            "itemNo": "UDE12E-GB",
+            "itemCode": "UDE12E-GB",
+            "weight": "12KG",
+            "qty": 320,
+            "lotNo": "",
+            "materialCode": "UDE12E",
+            "materialPerUnit": 1
+          }
+        ]
+      }
+    ],
+    "worklogs": [
+      {
+        "id": "wlog_mrd4ez9jzuzr",
+        "date": "2026-07-09",
+        "memo": "",
+        "teams": [
+          {
+            "id": "team_mrd5l78vorgs",
+            "name": "치과혼합",
+            "total": "2.7T",
+            "workers": "3",
+            "hours": "4",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mrd5mn7rskpx",
+                "name": "LAB STONE -DARK BLUE",
+                "itemType": "반제품",
+                "itemTypeText": "",
+                "spec": "시리아",
+                "qty": "108BOX - 2.7T",
+                "memo": ""
+              }
+            ]
+          },
+          {
+            "id": "team_mrixoqs2nmzg",
+            "name": "Ball Mill Work (볼밀작업)",
+            "total": "4T",
+            "workers": "2",
+            "hours": "8시간",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mrixp7ttmj0x",
+                "name": "볼밀작업",
+                "itemType": "반제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "4T",
+                "memo": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wlog_mriiouqb4a8y",
+        "date": "2026-07-13",
+        "memo": "8:00-17:00",
+        "teams": [
+          {
+            "id": "team_mriipvq79rav",
+            "name": "치과혼합",
+            "total": "8T",
+            "workers": "2",
+            "hours": "4",
+            "memo": "분필 생산",
+            "rows": [
+              {
+                "id": "wrow_mriiqkr0s9oe",
+                "name": "분필 생산",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "4.5T",
+                "memo": ""
+              }
+            ]
+          },
+          {
+            "id": "team_mriiu9avrzlq",
+            "name": "알파반",
+            "total": "10T",
+            "workers": "4",
+            "hours": "16",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mriiusjpkxtv",
+                "name": "볼밀작업",
+                "itemType": "반제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "8T",
+                "memo": ""
+              }
+            ]
+          },
+          {
+            "id": "team_mrikbmc4f9ld",
+            "name": "혼합반",
+            "total": "5T",
+            "workers": "4",
+            "hours": "5",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mrikca77ygwh",
+                "name": "DIE STONE 12KG(GB)",
+                "itemType": "반제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "5T",
+                "memo": "KOREA DIE STONE 12KG(GB)"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wlog_mrjz99p6w0g5",
+        "date": "2026-07-14",
+        "memo": "8:00-17:00",
+        "teams": [
+          {
+            "id": "team_mrjzaae1hi7g",
+            "name": "Dental Mixing (치과혼합)",
+            "total": "8.6T",
+            "workers": "2",
+            "hours": "4",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mrjzb9rtw8n7",
+                "name": "LAB STONE-(G)",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "3.6T",
+                "memo": ""
+              },
+              {
+                "id": "wrow_mrkbajstn6so",
+                "name": "YELLOW STONE",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "5T",
+                "memo": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wlog_mrn73gxv3g3i",
+        "date": "2026-07-16",
+        "memo": "8:00-17:00",
+        "teams": [
+          {
+            "id": "team_mrn74bxx5t3f",
+            "name": "Dental Mixing (치과혼합)",
+            "total": "11T",
+            "workers": "2",
+            "hours": "5",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mrn754ni8ywr",
+                "name": "DIE STONE 12KG(GB)",
+                "itemType": "반제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "5T",
+                "memo": ""
+              },
+              {
+                "id": "wrow_mrn75z85j9hj",
+                "name": "DIE STONE 25KG",
+                "itemType": "반제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "6T",
+                "memo": "홍콩(MODERN DENT)"
+              }
+            ]
+          },
+          {
+            "id": "team_mrn76rtw399t",
+            "name": "Packing Team (포장반)",
+            "total": "",
+            "workers": "5",
+            "hours": "6",
+            "memo": "",
+            "rows": []
+          }
+        ]
+      },
+      {
+        "id": "wlog_mrn77wkyl271",
+        "date": "2026-07-15",
+        "memo": "8:00-17:00",
+        "teams": [
+          {
+            "id": "team_mrn78xhaavh1",
+            "name": "Dental Mixing (치과혼합)",
+            "total": "8.6",
+            "workers": "3",
+            "hours": "5",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mrn7bhkxahq2",
+                "name": "LAB STONE(P)",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "1T",
+                "memo": ""
+              },
+              {
+                "id": "wrow_mrn7cd8h18u8",
+                "name": "ORTHODONTIC ROCK",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "1.25T",
+                "memo": ""
+              },
+              {
+                "id": "wrow_mrn7e5xigm52",
+                "name": "ORTHO STONE",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "0.75T",
+                "memo": ""
+              },
+              {
+                "id": "wrow_mrn7ehvrs606",
+                "name": "YELLOW STONE",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "5.5T",
+                "memo": ""
+              }
+            ]
+          },
+          {
+            "id": "team_mrn7frk1l5am",
+            "name": "Packing Team (포장반)",
+            "total": "5T",
+            "workers": "7",
+            "hours": "8시간",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mrn7gkkonwvb",
+                "name": "DIE STONE 12KG(GB)",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "12KG BOX",
+                "qty": "5T",
+                "memo": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wlog_mromjcnxa95a",
+        "date": "2026-07-17",
+        "memo": "8:00-17:00",
+        "teams": [
+          {
+            "id": "team_mromkzdqikvl",
+            "name": "Dental Mixing (치과혼합)",
+            "total": "8.6",
+            "workers": "4",
+            "hours": "5",
+            "memo": "Continue with yesterday's production",
+            "rows": [
+              {
+                "id": "wrow_mromlcbda9ls",
+                "name": "DIE STONE 12KG(GB)",
+                "itemType": "반제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "5T",
+                "memo": "국내용"
+              },
+              {
+                "id": "wrow_mromm3zoqeir",
+                "name": "DIE STONE 25KG(IV)",
+                "itemType": "반제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "5.7T",
+                "memo": "홍콩(MODERN DENT)"
+              },
+              {
+                "id": "wrow_mroo3g4cvddo",
+                "name": "분필용 석고",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "6.3T",
+                "memo": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wlog_mrq48q8re67y",
+        "date": "2026-07-18",
+        "memo": "8:00-16:00",
+        "teams": [
+          {
+            "id": "team_mrq49hn0c3w8",
+            "name": "Packing Team (포장반)",
+            "total": "",
+            "workers": "4",
+            "hours": "6",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mru8rfu0yyna",
+                "name": "DENTAL STONE(P)",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "25KG CARTON BOX",
+                "qty": "199 BOX",
+                "memo": "6CTN: LEFT OVER, 1CTN; 23KG"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wlog_mru8af65l6kf",
+        "date": "2026-07-20",
+        "memo": "8:00-17:00",
+        "teams": [
+          {
+            "id": "team_mru8ayjwi45a",
+            "name": "Packing Team (포장반)",
+            "total": "",
+            "workers": "4",
+            "hours": "7",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mru8cwa1axhi",
+                "name": "DIE STONE(GB)",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "25KG CARTON BOX",
+                "qty": "288 BOX",
+                "memo": "SPAIN: 72 BOX, SYRIA: 216 BOX"
+              }
+            ]
+          },
+          {
+            "id": "team_mru8dmi1gvzh",
+            "name": "Dental Mixing (치과혼합)",
+            "total": "5.7T",
+            "workers": "2",
+            "hours": "1",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mru8e9hbhfk0",
+                "name": "DIE STONE(IV)",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "5.7T",
+                "memo": "HONG KONG"
+              },
+              {
+                "id": "wrow_mru8enddqmyu",
+                "name": "분필 생산",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "8T",
+                "memo": "PT. MUNGYO"
+              },
+              {
+                "id": "wrow_mru8fgu8xplg",
+                "name": "ORTHO ROCK WHITE",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "1.1T",
+                "memo": "SOUTH AFRICA"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wlog_mru8g5jz7bz2",
+        "date": "2026-07-21",
+        "memo": "8:00-17:00",
+        "teams": [
+          {
+            "id": "team_mru8gelwa1ck",
+            "name": "Packing Team (포장반)",
+            "total": "",
+            "workers": "",
+            "hours": "7",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mru8gzzbr162",
+                "name": "DIE STONE(GB)",
+                "itemType": "완제품",
+                "itemTypeText": "",
+                "spec": "25KG CARTON BOX",
+                "qty": "36 BOX",
+                "memo": "SPAIN"
+              },
+              {
+                "id": "wrow_mru8mwxfia8d",
+                "name": "YELLOW STONE",
+                "itemType": "반제품",
+                "itemTypeText": "",
+                "spec": "20KG PAPER BAG",
+                "qty": "250 BAG",
+                "memo": "AUSTRALIA"
+              }
+            ]
+          },
+          {
+            "id": "team_mru8niocyygi",
+            "name": "Dental Mixing (치과혼합)",
+            "total": "",
+            "workers": "2",
+            "hours": "7",
+            "memo": "",
+            "rows": [
+              {
+                "id": "wrow_mru8ocjl8eje",
+                "name": "LAB STONE(G)",
+                "itemType": "반제품",
+                "itemTypeText": "",
+                "spec": "TON BAG",
+                "qty": "4T",
+                "memo": "Adding green pigment"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "materials": [
+      {
+        "id": "mat_mrcxv1os1h5t",
+        "code": "UD12",
+        "name": "DIE STONE 12KG",
+        "category": "박스",
+        "unit": "수량",
+        "safetyStock": 500
+      },
+      {
+        "id": "mat_mrd5d4tblmuh",
+        "code": "ND18B-방글라데시",
+        "name": "DIE STONE -BRIGHT NEON YELLOW",
+        "category": "박스",
+        "unit": "개",
+        "safetyStock": 1340
+      },
+      {
+        "id": "mat_mrd66lb3ri1b",
+        "code": "PROFESSIONAL(25KG)",
+        "name": "PROFESSIONAL(25KG)",
+        "category": "박스",
+        "unit": "개",
+        "safetyStock": 500
+      },
+      {
+        "id": "mat_mrd689awzbab",
+        "code": "AINSWORTH-YELLOW",
+        "name": "AINSWORTH 20KG BAG YELLOW",
+        "category": "지대",
+        "unit": "개",
+        "safetyStock": 800
+      },
+      {
+        "id": "mat_mrd9encl5dow",
+        "code": "1000KG BAG",
+        "name": "DENTAL PLASTER(1000KG)",
+        "category": "기타",
+        "unit": "톤백",
+        "safetyStock": 100
+      },
+      {
+        "id": "mat_mrd9ge1ocdvy",
+        "code": "25KG BAG(브라운지대)",
+        "name": "25KG BAG(브라운지대)",
+        "category": "지대",
+        "unit": "개",
+        "safetyStock": 10000
+      },
+      {
+        "id": "mat_mrebhruo1qhb",
+        "code": "PROFESSIONAL(20KG)",
+        "name": "PROFESSIONAL(20KG)",
+        "category": "부자재",
+        "unit": "개",
+        "safetyStock": 0
+      },
+      {
+        "id": "mat_mreftubll96u",
+        "code": "ND12",
+        "name": "DENTAL STONE 12KG",
+        "category": "박스",
+        "unit": "개",
+        "safetyStock": 0
+      },
+      {
+        "id": "mat_mrh98hamousf",
+        "code": "Gypsum raw stone",
+        "name": "Gypsum raw stone",
+        "category": "원석",
+        "unit": "ton",
+        "safetyStock": 0
+      },
+      {
+        "id": "mat_mriudx75qyon",
+        "code": "GM 40 (25)",
+        "name": "GM 40 (25)",
+        "category": "지대",
+        "unit": "25KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "mat_mriueiykvgu5",
+        "code": "GRX 60 (25)",
+        "name": "GRX 60 (25)",
+        "category": "지대",
+        "unit": "25KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "mat_mriuey5rx81r",
+        "code": "CH 70 (25)",
+        "name": "CH 70 (25)",
+        "category": "지대",
+        "unit": "25KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "mat_mriufakqt7ht",
+        "code": "CH 80 (25)",
+        "name": "CH 80 (25)",
+        "category": "지대",
+        "unit": "25KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "mat_mrn6qatw2xgm",
+        "code": "UD18",
+        "name": "DIE STONE 18KG",
+        "category": "박스",
+        "unit": "18KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "mat_mrn6ryr69zww",
+        "code": "UDE12E",
+        "name": "DIE STONE EXTREME-GOLDEN BROWN",
+        "category": "박스",
+        "unit": "12KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "mat_mrptfgsozk8e",
+        "code": "AINSWORTH-GREEN",
+        "name": "AINSWORTH 20KG BAG GREEN",
+        "category": "지대",
+        "unit": "개",
+        "safetyStock": 0
+      }
+    ],
+    "materialTxn": [
+      {
+        "id": "mtxn_mreewhbbka11",
+        "date": "2026-07-10",
+        "materialCode": "1000KG BAG",
+        "type": "out",
+        "qty": 5,
+        "memo": "PMGH260604-AW03 · DENTAL PLASTER-WHITE 생산입고 자동차감",
+        "source": "auto",
+        "orderCode": "PMGH260604-AW03",
+        "orderItemId": "oitem_mrd4z7lads5l"
+      },
+      {
+        "id": "mtxn_mrh99oe0swa2",
+        "date": "2026-07-12",
+        "materialCode": "Gypsum raw stone",
+        "type": "in",
+        "qty": 1000,
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "mtxn_mrivuu81lcch",
+        "date": "2026-07-13",
+        "materialCode": "1000KG BAG",
+        "type": "in",
+        "qty": 100,
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "mtxn_mrn72wlo4w4n",
+        "date": "2026-07-10",
+        "materialCode": "PROFESSIONAL(25KG)",
+        "type": "in",
+        "qty": 2500,
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "mtxn_mromci71v3gv",
+        "date": "2026-07-17",
+        "materialCode": "PROFESSIONAL(25KG)",
+        "type": "in",
+        "qty": 960,
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "mtxn_mromddtzp6sq",
+        "date": "2026-07-17",
+        "materialCode": "UD12",
+        "type": "in",
+        "qty": 550,
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "mtxn_mrpsmyz33q68",
+        "date": "2026-07-18",
+        "materialCode": "25KG BAG(브라운지대)",
+        "type": "in",
+        "qty": 5050,
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "mtxn_mrpsuxe1axo2",
+        "date": "2026-07-18",
+        "materialCode": "ND12",
+        "type": "in",
+        "qty": 547,
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "mtxn_mrptgw56mtz7",
+        "date": "2026-07-18",
+        "materialCode": "AINSWORTH-GREEN",
+        "type": "in",
+        "qty": 1600,
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "mtxn_mrpvcjrkuuq9",
+        "date": "2026-07-18",
+        "materialCode": "AINSWORTH-YELLOW",
+        "type": "in",
+        "qty": 9300,
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "mtxn_mrr54o64v3rf",
+        "date": "2026-07-18",
+        "materialCode": "PROFESSIONAL(25KG)",
+        "type": "out",
+        "qty": 360,
+        "memo": "PMGH260528-SD01 · DENTAL STONE -PINK auto-deducted on production in (생산입고 자동차감)",
+        "source": "auto",
+        "orderCode": "PMGH260528-SD01",
+        "orderItemId": "oitem_mrdabm5y7saq"
+      },
+      {
+        "id": "mtxn_mrsj8i6yujt7",
+        "date": "2026-07-20",
+        "materialCode": "PROFESSIONAL(25KG)",
+        "type": "out",
+        "qty": 126,
+        "memo": "PMGH260528-SD01 · DENTAL STONE -PINK auto-deducted on production in (생산입고 자동차감)",
+        "source": "auto",
+        "orderCode": "PMGH260528-SD01",
+        "orderItemId": "oitem_mrdabm5y7saq"
+      },
+      {
+        "id": "mtxn_mrsy07c6rtzd",
+        "date": "2026-07-20",
+        "materialCode": "PROFESSIONAL(25KG)",
+        "type": "out",
+        "qty": 216,
+        "memo": "PMGH260529-AF03 · DIE STONE -GOLDEN BROWN auto-deducted on production in (생산입고 자동차감)",
+        "source": "auto",
+        "orderCode": "PMGH260529-AF03",
+        "orderItemId": "oitem_mrd9xftppy9d"
+      },
+      {
+        "id": "mtxn_mrsy0qo63py0",
+        "date": "2026-07-20",
+        "materialCode": "PROFESSIONAL(25KG)",
+        "type": "out",
+        "qty": 108,
+        "memo": "PMGH260528-SD01 · DIE STONE -GOLDEN BROWN auto-deducted on production in (생산입고 자동차감)",
+        "source": "auto",
+        "orderCode": "PMGH260528-SD01",
+        "orderItemId": "oitem_mrdadqxusm1l"
+      },
+      {
+        "id": "mtxn_mrugwj79jo2h",
+        "date": "2026-07-21",
+        "materialCode": "AINSWORTH-YELLOW",
+        "type": "out",
+        "qty": 350,
+        "memo": "PMGH260604-AW03 · AINSWORTH YELLOW STONE auto-deducted on production in (생산입고 자동차감)",
+        "source": "auto",
+        "orderCode": "PMGH260604-AW03",
+        "orderItemId": "oitem_mrd4y4nyikrc"
+      },
+      {
+        "id": "mtxn_mrvpknm6wab8",
+        "date": "2026-07-22",
+        "materialCode": "Gypsum raw stone",
+        "type": "in",
+        "qty": 40,
+        "memo": "",
+        "source": "manual"
+      }
+    ],
+    "materialCategories": [
+      "원석"
+    ],
+    "submaterials": [
+      {
+        "id": "smat_mrecui4hvq67",
+        "code": "CI INNER INBOX SS2",
+        "name": "CI INNER INBOX SS2 INBOX",
+        "category": "IN BOX",
+        "spec": "",
+        "unit": "개",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mrecxtlstke1",
+        "code": "ALUMINUM DIE STONE",
+        "name": "ALUMINUM DIE STONE(ALUMINUM)",
+        "category": "ALUMINUM",
+        "spec": "",
+        "unit": "장",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreczby6vvqk",
+        "code": "CI PLAIN BOX",
+        "name": "CI PLAIN BOX(CARTON BOX)",
+        "category": "박스",
+        "spec": "",
+        "unit": "개",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mred0gpy7mxy",
+        "code": "DIE STONE MOUNT ZION",
+        "name": "DIE STONE MOUNT ZION(CARTON BOX)",
+        "category": "박스",
+        "spec": "",
+        "unit": "개",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mred4yugw5qa",
+        "code": "STICKER OUTBOX",
+        "name": "STICKER OUTBOX(STICKER)",
+        "category": "박스",
+        "spec": "",
+        "unit": "개",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mred5yuoqppn",
+        "code": "STICKER DOT",
+        "name": "STICKER DOT(STICKER)",
+        "category": "박스",
+        "spec": "",
+        "unit": "개",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mred7sgic4ql",
+        "code": "PLASTIC PALLET 15CM",
+        "name": "PLASTIC PALLET 15CM(PALLET)",
+        "category": "PALLET",
+        "spec": "",
+        "unit": "개",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mred8v5vsxz0",
+        "code": "PLASTIC PALLET 12CM",
+        "name": "PLASTIC PALLET 12CM(PALLET)",
+        "category": "PALLET",
+        "spec": "",
+        "unit": "개",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mree4nmey8on",
+        "code": "Y810",
+        "name": "Y810(안료)",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreeax44rvon",
+        "code": "Y1844",
+        "name": "Y1844(안료)",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreec1ui61h2",
+        "code": "LEMON YELLOW",
+        "name": "LEMON YELLOW(안료)",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreeerjhuvvi",
+        "code": "ULTRAMARINE BLUE",
+        "name": "ULTRAMARINE BLUE(안료)",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreefmwv17yt",
+        "code": "R125",
+        "name": "R125(안료)",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreegq728rhi",
+        "code": "C09950(GREEN)",
+        "name": "C09950(GREEN)안료",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreehhcimzh1",
+        "code": "GA76(GREEN)",
+        "name": "GA76(GREEN)안료",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreeiavkp8an",
+        "code": "BA33(BLACK)",
+        "name": "BA33(BLACK)안료",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreejb10ghwe",
+        "code": "지당(WHITE)",
+        "name": "지당(WHITE)안료 R902",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreekd3w28rx",
+        "code": "SMF",
+        "name": "SMF(안료)",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreelcqwmzwo",
+        "code": "구연산카리",
+        "name": "구연산카리(안료)",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreem2b8gzsa",
+        "code": "호박산",
+        "name": "호박산(안료)",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreemz1u2d4l",
+        "code": "롯셀염",
+        "name": "롯셀염(안료)",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mreenzfafkjj",
+        "code": "소포제",
+        "name": "소포제(안료)",
+        "category": "안료",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mrizs6ajuxcq",
+        "code": "ALUMINUM DIE STONE(1.5KG)KOREA",
+        "name": "ALUMINUM DIE STONE(1.5KG)KOREA",
+        "category": "ALUMINUM",
+        "spec": "",
+        "unit": "장",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mrpse1pxy93r",
+        "code": "미싱오일",
+        "name": "미싱오일",
+        "category": "미싱",
+        "spec": "",
+        "unit": "L",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mrpsfnfr5hed",
+        "code": "미싱봉사",
+        "name": "미싱봉사(미싱실)",
+        "category": "미싱",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mrpsgu82mxih",
+        "code": "고무줄",
+        "name": "고무줄",
+        "category": "고무줄",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mrpt44fp1f72",
+        "code": "비닐(PE) 파렛트 비닐",
+        "name": "파렛트 비닐 M(0.06*250*150)",
+        "category": "박스",
+        "spec": "",
+        "unit": "EA",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mrpt6iwshne5",
+        "code": "지대클립지(황테이프)",
+        "name": "지대클립지(황테이프)",
+        "category": "클립지",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mrpt7jzd6vtz",
+        "code": "지대클립지(백테이프)",
+        "name": "지대클립지(백테이프)",
+        "category": "클립지",
+        "spec": "",
+        "unit": "KG",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mrpta4c47hmv",
+        "code": "비닐PE8*50*70",
+        "name": "비닐PE8*50*70(11.25KG)",
+        "category": "비닐",
+        "spec": "",
+        "unit": "EA",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mrptcrhnfzkh",
+        "code": "비닐PE8*65*80",
+        "name": "비닐PE8*65*80(20KG)",
+        "category": "비닐",
+        "spec": "",
+        "unit": "EA",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mrpte7nvos6z",
+        "code": "비닐PE3*30*55",
+        "name": "비닐PE3*30*55",
+        "category": "비닐",
+        "spec": "",
+        "unit": "EA",
+        "safetyStock": 0
+      },
+      {
+        "id": "smat_mrputot9dpgq",
+        "code": "비닐PE8*60*85",
+        "name": "비닐PE8*60*85(25KG)",
+        "category": "비닐",
+        "spec": "",
+        "unit": "EA",
+        "safetyStock": 0
+      }
+    ],
+    "submaterialTxn": [
+      {
+        "id": "smtxn_mrecvmhmtzjz",
+        "date": "2026-06-22",
+        "materialCode": "CI INNER INBOX SS2",
+        "type": "in",
+        "qty": 2000,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrecxtn8wu1c",
+        "date": "2026-07-03",
+        "materialCode": "ALUMINUM DIE STONE",
+        "type": "in",
+        "qty": 80000,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreczc0jbxmj",
+        "date": "2026-06-22",
+        "materialCode": "CI PLAIN BOX",
+        "type": "in",
+        "qty": 2050,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mred0gstl9jn",
+        "date": "2026-07-01",
+        "materialCode": "DIE STONE MOUNT ZION",
+        "type": "in",
+        "qty": 550,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mred23j9yi10",
+        "date": "2026-07-01",
+        "materialCode": "CARTON BOX DENTAL STONE",
+        "type": "in",
+        "qty": 550,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mred39p7zzk4",
+        "date": "2026-07-01",
+        "materialCode": "CARTON BOX 25KG",
+        "type": "in",
+        "qty": 2000,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mred4ywtfen7",
+        "date": "2026-07-09",
+        "materialCode": "STICKER OUTBOX",
+        "type": "in",
+        "qty": 6180,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mred5yx8kal3",
+        "date": "2026-07-10",
+        "materialCode": "STICKER DOT",
+        "type": "in",
+        "qty": 5100,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mred7shwt5o4",
+        "date": "2026-07-09",
+        "materialCode": "PLASTIC PALLET 15CM",
+        "type": "in",
+        "qty": 90,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mred8v8bwmo5",
+        "date": "2026-07-10",
+        "materialCode": "PLASTIC PALLET 12CM",
+        "type": "in",
+        "qty": 10,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mree7wo9bp81",
+        "date": "2026-07-10",
+        "materialCode": "Y810",
+        "type": "in",
+        "qty": 720,
+        "kg": 720,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreeax44uhpr",
+        "date": "2026-07-09",
+        "materialCode": "Y1844",
+        "type": "in",
+        "qty": 180,
+        "kg": 180,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreec1uis7zd",
+        "date": "2026-07-10",
+        "materialCode": "LEMON YELLOW",
+        "type": "in",
+        "qty": 950,
+        "kg": 950,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreeerjinf9y",
+        "date": "2026-07-10",
+        "materialCode": "ULTRAMARINE BLUE",
+        "type": "in",
+        "qty": 475,
+        "kg": 475,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreefmwwt15q",
+        "date": "2026-07-10",
+        "materialCode": "R125",
+        "type": "in",
+        "qty": 560,
+        "kg": 560,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreegq73w4rn",
+        "date": "2026-07-10",
+        "materialCode": "C09950(GREEN)",
+        "type": "in",
+        "qty": 50,
+        "kg": 50,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreehhciv5v7",
+        "date": "2026-07-10",
+        "materialCode": "GA76(GREEN)",
+        "type": "in",
+        "qty": 100,
+        "kg": 100,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreeiavkgpge",
+        "date": "2026-07-10",
+        "materialCode": "BA33(BLACK)",
+        "type": "in",
+        "qty": 50,
+        "kg": 50,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreejb10qp9h",
+        "date": "2026-07-10",
+        "materialCode": "지당(WHITE)",
+        "type": "in",
+        "qty": 500,
+        "kg": 500,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreekd3w2ep1",
+        "date": "2026-07-10",
+        "materialCode": "SMF",
+        "type": "in",
+        "qty": 140,
+        "kg": 140,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreelcqwxt6d",
+        "date": "2026-07-10",
+        "materialCode": "구연산카리",
+        "type": "in",
+        "qty": 630,
+        "kg": 630,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreem2b888xq",
+        "date": "2026-07-10",
+        "materialCode": "호박산",
+        "type": "in",
+        "qty": 1420,
+        "kg": 1420,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreemz1ul1ox",
+        "date": "2026-07-10",
+        "materialCode": "롯셀염",
+        "type": "in",
+        "qty": 375,
+        "kg": 375,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mreenzfads9h",
+        "date": "2026-07-10",
+        "materialCode": "소포제",
+        "type": "in",
+        "qty": 70,
+        "kg": 70,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrizs818m922",
+        "date": "2026-07-13",
+        "materialCode": "ALUMINUM DIE STONE(1.5KG)KOREA",
+        "type": "in",
+        "qty": 80000,
+        "kg": 80000,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrpse219m0k8",
+        "date": "2026-07-18",
+        "materialCode": "미싱오일",
+        "type": "in",
+        "qty": 20,
+        "kg": 20,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrpsfnvej9p8",
+        "date": "2026-07-18",
+        "materialCode": "미싱봉사",
+        "type": "in",
+        "qty": 120,
+        "kg": 120,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrpsguhyf0lp",
+        "date": "2026-07-18",
+        "materialCode": "고무줄",
+        "type": "in",
+        "qty": 20,
+        "kg": 20,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrpt44sbnfc9",
+        "date": "2026-07-18",
+        "materialCode": "비닐(PE) 파렛트 비닐",
+        "type": "in",
+        "qty": 1000,
+        "kg": 1000,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrpt6j852zc1",
+        "date": "2026-07-18",
+        "materialCode": "지대클립지(황테이프)",
+        "type": "in",
+        "qty": 500,
+        "kg": 500,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrpt7ku4np76",
+        "date": "2026-07-18",
+        "materialCode": "지대클립지(백테이프)",
+        "type": "in",
+        "qty": 648,
+        "kg": 648,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrpta4ndbfap",
+        "date": "2026-07-18",
+        "materialCode": "비닐PE8*50*70",
+        "type": "in",
+        "qty": 5900,
+        "kg": 5900,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrptcruzwqc9",
+        "date": "2026-07-18",
+        "materialCode": "비닐PE8*65*80",
+        "type": "in",
+        "qty": 5810,
+        "kg": 5810,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrpte8h0l5s2",
+        "date": "2026-07-18",
+        "materialCode": "비닐PE3*30*55",
+        "type": "in",
+        "qty": 1600,
+        "kg": 1600,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrptn4jnpnk5",
+        "date": "2026-07-18",
+        "materialCode": "구연산카리",
+        "type": "in",
+        "qty": 500,
+        "kg": 500,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrputpt3bexy",
+        "date": "2026-07-18",
+        "materialCode": "비닐PE8*60*85",
+        "type": "in",
+        "qty": 5940,
+        "kg": 5940,
+        "partnerCode": "",
+        "memo": "",
+        "source": "manual"
+      },
+      {
+        "id": "smtxn_mrr54o651pw0",
+        "date": "2026-07-18",
+        "materialCode": "비닐PE8*60*85",
+        "type": "out",
+        "qty": 360,
+        "memo": "PMGH260528-SD01 · DENTAL STONE -PINK auto-deducted on production in (생산입고 자동차감)",
+        "source": "auto",
+        "orderCode": "PMGH260528-SD01",
+        "orderItemId": "oitem_mrdabm5y7saq"
+      },
+      {
+        "id": "smtxn_mrsj8i6ygzj4",
+        "date": "2026-07-20",
+        "materialCode": "비닐PE8*60*85",
+        "type": "out",
+        "qty": 126,
+        "memo": "PMGH260528-SD01 · DENTAL STONE -PINK auto-deducted on production in (생산입고 자동차감)",
+        "source": "auto",
+        "orderCode": "PMGH260528-SD01",
+        "orderItemId": "oitem_mrdabm5y7saq"
+      },
+      {
+        "id": "smtxn_mrsy07c697yz",
+        "date": "2026-07-20",
+        "materialCode": "비닐PE8*60*85",
+        "type": "out",
+        "qty": 216,
+        "memo": "PMGH260529-AF03 · DIE STONE -GOLDEN BROWN auto-deducted on production in (생산입고 자동차감)",
+        "source": "auto",
+        "orderCode": "PMGH260529-AF03",
+        "orderItemId": "oitem_mrd9xftppy9d"
+      },
+      {
+        "id": "smtxn_mrsy0qo651j5",
+        "date": "2026-07-20",
+        "materialCode": "비닐PE8*60*85",
+        "type": "out",
+        "qty": 108,
+        "memo": "PMGH260528-SD01 · DIE STONE -GOLDEN BROWN auto-deducted on production in (생산입고 자동차감)",
+        "source": "auto",
+        "orderCode": "PMGH260528-SD01",
+        "orderItemId": "oitem_mrdadqxusm1l"
+      }
+    ],
+    "submatCategories": [
+      "IN BOX",
+      "ALUMINUM",
+      "PALLET",
+      "안료",
+      "미싱",
+      "고무줄",
+      "클립지",
+      "비닐"
+    ],
+    "teamNames": [
+      "혼합반"
+    ]
+  }
+}
