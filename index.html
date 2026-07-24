@@ -932,32 +932,35 @@ async function doSave(){
   saveInFlight = true;
   setSaveStatus(retryAttempt>0 ? 'retrying' : 'saving');
   const keysToSave = Array.from(dirtyKeys);
-  try{
-    // Vercel 서버 함수는 한 번에 보낼 수 있는 요청 본문 크기가 약 4.5MB로
-    // 고정되어 있습니다. 그 한도 안에 들어가면 여러 항목(테이블)을 "한 번의
-    // 요청"으로 함께 저장합니다 — 항목별로 여러 번 나눠 보내면, 특히
-    // 모바일에서 화면을 끄거나 다른 앱으로 전환했을 때 브라우저가 중간에
-    // 저장을 멈춰버려서 일부 항목만 저장되고 나머지는 빈 채로 남는 사고가
-    // 날 수 있었습니다 (실제로 한 번 발생함). 요청이 너무 크면(한도 초과)
-    // 그때만 항목별로 나눠서 순서대로 저장합니다.
-    const batch = {};
-    for(const k of keysToSave) batch[k] = DB[k];
-    const approxBytes = JSON.stringify(batch).length;
-    if(approxBytes < 3500000){
-      await serverSave(batch);
-      keysToSave.forEach(k=>dirtyKeys.delete(k));
-    } else {
-      for(const k of keysToSave){
-        await serverSave({ [k]: DB[k] });
-        dirtyKeys.delete(k);
-      }
+  // Vercel 서버 함수는 한 번에 보낼 수 있는 요청 본문 크기가 약 4.5MB로
+  // 고정되어 있습니다. "백업 불러오기"처럼 여러 항목(테이블)을 한꺼번에
+  // 저장하면 전체 용량이 이 한도를 넘어 저장이 계속 실패할 수 있어서,
+  // 항목(키)별로 나눠서 하나씩 순서대로 저장합니다.
+  //
+  // 중요(버그 수정): 이전에는 하나의 키(예: 용량이 큰 orders)가 저장에
+  // 실패하면 for 루프가 그 자리에서 예외로 중단되어, 같은 저장 묶음에
+  // 함께 있던 다른 키(예: txn/입출고)는 시도조차 되지 않고 계속 dirty로
+  // 남아있었습니다. 그 상태로 다음 저장 시도가 와도 매번 orders에서 먼저
+  // 막혀 txn은 영원히 저장되지 않고, 새로고침하면 서버에는 없던 것처럼
+  // (즉, 생산입고가 입출고관리에 반영되지 않고 사라진 것처럼) 보였습니다.
+  // 이제는 각 키를 독립적으로 시도해서, 하나가 실패해도 나머지 키들은
+  // 계속 저장을 시도하고, 성공한 키만 dirtyKeys에서 제거합니다.
+  let anyFailed = false;
+  for(const k of keysToSave){
+    try{
+      await serverSave({ [k]: DB[k] });
+      dirtyKeys.delete(k);
+    }catch(e){
+      anyFailed = true;
+      console.error(`Save failed for key "${k}", will retry this key automatically (키별 저장 실패, 자동 재시도 예정)`, e);
     }
+  }
+  if(!anyFailed){
     isOnline = true;
     retryAttempt = 0;
     lastSyncedAt = nowStr();
     setSaveStatus('saved', lastSyncedAt);
-  }catch(e){
-    console.error('Save failed, will retry automatically (저장 실패, 자동 재시도 예정)', e);
+  } else {
     isOnline = false;
     retryAttempt++;
     setSaveStatus('retrying');
@@ -966,10 +969,9 @@ async function doSave(){
     }
     const delay = Math.min(5000 * Math.pow(2, retryAttempt-1), 30000);
     retryTimer = setTimeout(()=>{ retryTimer=null; doSave(); }, delay);
-  }finally{
-    saveInFlight = false;
-    if(saveQueued){ saveQueued = false; doSave(); }
   }
+  saveInFlight = false;
+  if(saveQueued){ saveQueued = false; doSave(); }
 }
 function exportBackup(){
   const payload = { exportedAt: new Date().toISOString(), data: DB };
@@ -983,7 +985,6 @@ function exportBackup(){
   showToast('Backup file downloaded. (백업 파일을 내려받았어요)');
 }
 async function runDiagnostics(){
-  const APP_BUILD = 'v2-batch-save-2026-07-24';
   const lines = [];
   let readOk = false, writeOk = false, readInfo = '', writeInfo = '';
   // 1) Read check
@@ -1018,7 +1019,7 @@ async function runDiagnostics(){
     writeInfo = 'Network/JS error (네트워크 오류): ' + (e && e.message);
   }
 
-  lines.push('=== Server Check (서버 점검 결과) — build: ' + APP_BUILD + ' ===');
+  lines.push('=== Server Check (서버 점검 결과) ===');
   lines.push('');
   lines.push((readOk?'✅':'❌') + ' Read from server (서버에서 불러오기): ' + readInfo);
   lines.push((writeOk?'✅':'❌') + ' Write to server (서버에 저장하기): ' + writeInfo);
@@ -1035,51 +1036,17 @@ async function runDiagnostics(){
   }
   alert(lines.join('\n'));
 }
-async function saveKeys(keys){
-  for(const k of keys){ dirtyKeys.add(k); }
-  await queueSave();
-}
 function importBackup(file){
   const reader = new FileReader();
   reader.onload = async (e)=>{
     try{
       const parsed = JSON.parse(e.target.result);
       const data = parsed.data || parsed;
-      // 중요: 백업 파일에 실제로 들어있는 항목(키)만 서버에 저장합니다.
-      // 예전에는 saveAll()을 호출해서 파일에 없는 다른 항목(예: 품목, 거래처,
-      // 생산실적 등)까지 이 브라우저에 있던 값으로 통째로 덮어써서, 부분
-      // 백업(예: 자재만 들어있는 파일)을 불러오면 서버에 있던 다른 데이터가
-      // 사라지는 사고가 날 수 있었습니다. (Only overwrite keys actually present
-      // in the imported file — never touch tables the file doesn't include.)
-      const presentKeys = [];
       for(const k in STORE_KEYS){
-        if(Array.isArray(data[k])){ DB[k] = data[k]; presentKeys.push(k); }
+        if(Array.isArray(data[k])) DB[k] = data[k];
       }
-      if(presentKeys.length===0){
-        showToast('No recognizable data found in this file. (이 파일에서 불러올 데이터를 찾지 못했어요)');
-        return;
-      }
-      await saveKeys(presentKeys);
-      // 저장 후 실제로 서버에 반영됐는지 다시 읽어서 확인합니다.
-      // (토스트 메시지만 보고 안심했다가, 실제로는 일부만 저장된 걸 나중에야
-      // 알게 되는 일이 없도록 여기서 바로 검증합니다.)
-      let verifyMsg = '';
-      try{
-        const check = await serverLoad();
-        const mismatches = presentKeys.filter(k=>{
-          const want = Array.isArray(DB[k]) ? DB[k].length : 0;
-          const got = check && Array.isArray(check[k]) ? check[k].length : 0;
-          return want !== got;
-        });
-        if(mismatches.length===0){
-          verifyMsg = '✅ Verified: all imported tables are correctly saved on the server. (확인 완료: 불러온 항목 모두 서버에 정상 저장됨)';
-        } else {
-          verifyMsg = '⚠️ Some tables did NOT save correctly, please try Import Backup again for this file: ' + mismatches.join(', ') + '\n(다음 항목은 서버 저장이 안 됐어요, 이 파일로 백업 불러오기를 다시 시도해주세요: ' + mismatches.join(', ') + ')';
-        }
-      }catch(e){
-        verifyMsg = '⚠️ Could not verify with the server just now — please press 🩺 Server Check to confirm. (지금 서버 확인을 못 했어요 — 서버 점검 버튼으로 확인해주세요)';
-      }
-      alert(`Backup loaded for: ${presentKeys.join(', ')}\n(백업을 불러왔어요 — 해당 항목만 반영됨)\n\n${verifyMsg}`);
+      await saveAll();
+      showToast('Backup loaded. (백업을 불러왔어요)');
       const activeTab = document.querySelector('.tab-btn.active');
       if(activeTab) RENDERERS[activeTab.dataset.tab] && RENDERERS[activeTab.dataset.tab]();
     }catch(err){
