@@ -348,6 +348,7 @@
       <button class="btn btn-ghost btn-sm" id="printBtn">🖨 Print (인쇄)</button>
       <button class="btn btn-ghost btn-sm" id="exportBtn">⬇ Export Backup (백업 내보내기)</button>
       <button class="btn btn-ghost btn-sm" id="importBtn">⬆ Import Backup (백업 불러오기)</button>
+      <button class="btn btn-ghost btn-sm" id="diagBtn">🩺 Server Check (서버 점검)</button>
       <input type="file" id="importFile" accept="application/json" style="display:none;">
     </div>
   </div>
@@ -971,6 +972,58 @@ function exportBackup(){
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
   showToast('Backup file downloaded. (백업 파일을 내려받았어요)');
+}
+async function runDiagnostics(){
+  const lines = [];
+  let readOk = false, writeOk = false, readInfo = '', writeInfo = '';
+  // 1) Read check
+  try{
+    const res = await fetch(API_URL, { method:'GET', cache:'no-store' });
+    const text = await res.text();
+    let parsed = null;
+    try{ parsed = JSON.parse(text); }catch(e){}
+    if(res.ok){
+      readOk = true;
+      const counts = parsed ? Object.keys(STORE_KEYS).map(k=>`${k}:${Array.isArray(parsed[k])?parsed[k].length:0}`).join(', ') : '(no data yet / 데이터 없음)';
+      readInfo = `HTTP ${res.status} — ${counts}`;
+    } else {
+      readInfo = `HTTP ${res.status} — ${(parsed && (parsed.debug_message||parsed.error)) || text.slice(0,300)}`;
+    }
+  }catch(e){
+    readInfo = 'Network/JS error (네트워크 오류): ' + (e && e.message);
+  }
+  // 2) Write check (harmless no-op patch, does not change any data)
+  try{
+    const res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({}) });
+    const text = await res.text();
+    let parsed = null;
+    try{ parsed = JSON.parse(text); }catch(e){}
+    if(res.ok){
+      writeOk = true;
+      writeInfo = `HTTP ${res.status} — OK`;
+    } else {
+      writeInfo = `HTTP ${res.status} — ${(parsed && (parsed.debug_message||parsed.error)) || text.slice(0,300)}`;
+    }
+  }catch(e){
+    writeInfo = 'Network/JS error (네트워크 오류): ' + (e && e.message);
+  }
+
+  lines.push('=== Server Check (서버 점검 결과) ===');
+  lines.push('');
+  lines.push((readOk?'✅':'❌') + ' Read from server (서버에서 불러오기): ' + readInfo);
+  lines.push((writeOk?'✅':'❌') + ' Write to server (서버에 저장하기): ' + writeInfo);
+  lines.push('');
+  if(readOk && writeOk){
+    lines.push('Server storage is working. Everyone opening this link should see the same data.');
+    lines.push('(서버 저장소가 정상 작동 중입니다. 이 링크로 접속하는 모든 사람이 같은 데이터를 봅니다.)');
+  } else {
+    lines.push("Server storage is NOT working, so each device only keeps its own local copy — this is why other people see nothing.");
+    lines.push('(서버 저장소가 작동하지 않고 있어요. 그래서 각 기기가 자기 브라우저에만 데이터를 저장하고 있고, 다른 사람에게는 안 보이는 거예요.)');
+    lines.push('');
+    lines.push('Likely fix (해결 방법): In the Vercel project, go to the "Storage (저장)" tab and check whether a Blob store is created and connected to this project. If not, create one (Create Database → Blob), connect it, then redeploy.');
+    lines.push('(Vercel 프로젝트 대시보드 → 왼쪽 메뉴 "저장(Storage)" 탭 → Blob 스토어가 생성되어 이 프로젝트에 연결되어 있는지 확인하세요. 없다면 새로 만들고 연결한 뒤, 다시 배포(Redeploy)해야 합니다.)');
+  }
+  alert(lines.join('\n'));
 }
 function importBackup(file){
   const reader = new FileReader();
@@ -3934,6 +3987,7 @@ const RENDERERS = {
   window.addEventListener('afterprint', ()=>{ document.body.classList.remove('printing-modal'); });
   document.getElementById('exportBtn').onclick = exportBackup;
   document.getElementById('importBtn').onclick = ()=>document.getElementById('importFile').click();
+  document.getElementById('diagBtn').onclick = runDiagnostics;
   document.getElementById('importFile').onchange = (e)=>{
     const file = e.target.files[0];
     if(file) importBackup(file);
