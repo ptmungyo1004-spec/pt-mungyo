@@ -52,7 +52,13 @@ function sleep(ms) {
 }
 
 async function readJsonBlob(pathname) {
-  const result = await get(pathname, { access: 'private', ...blobAuthOptions });
+  // 중요(진짜 원인이었던 버그): Vercel Blob은 private blob이라도 get()의 기본
+  // 동작이 CDN 캐시를 거치기 때문에, 방금 put()으로 덮어쓴 직후에 바로 읽으면
+  // 캐시 전파 지연(최대 60초)으로 예전 버전이 반환될 수 있습니다. 이게 바로
+  // "저장은 성공했는데 몇 초/몇십 초 뒤 자동 동기화 때 사라지는" 현상의
+  // 근본 원인이었습니다. useCache:false를 주면 캐시를 건너뛰고 원본에서
+  // 항상 최신 데이터를 읽습니다.
+  const result = await get(pathname, { access: 'private', useCache: false, ...blobAuthOptions });
   if (!result || !result.stream) return null; // 정말로 존재하지 않는 경우만 null
   const chunks = [];
   const reader = result.stream.getReader();

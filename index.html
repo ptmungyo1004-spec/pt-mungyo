@@ -2276,7 +2276,7 @@ function renderWorklogBoard(){
   const c = document.getElementById('prodContent');
   c.innerHTML = `
     <div class="panel-head" style="margin-bottom:10px;">
-      <div class="panel-sub" style="margin:0;">Browse work logs by date; click to see per-department details (날짜별 작업일지 모아보기)</div>
+      <div class="panel-sub" style="margin:0;">Browse work logs by date; click to see per-department details (날짜별 작업일지 모아보기). Semi-finished (반제품) items can be reflected to actual Stock via the "Reflect to Stock (재고반영)" button in each item's row. (반제품 항목은 각 행의 "재고반영" 버튼으로 실제 재고에 반영할 수 있어요)</div>
       <button class="btn btn-primary btn-sm" id="addWorklogBtn">+ Add Work Log (작업일지 추가)</button>
     </div>
     <div class="order-search-bar">
@@ -2441,6 +2441,109 @@ function renderWorklogDetailModal(){
     const [teamId, rowId] = b.dataset.rowdel.split('|');
     deleteTeamRow(w.id, teamId, rowId);
   });
+  root.querySelectorAll('[data-rowlink]').forEach(b=>b.onclick=()=>{
+    const [teamId, rowId] = b.dataset.rowlink.split('|');
+    reflectRowToStockModal(w.id, teamId, rowId);
+  });
+  root.querySelectorAll('[data-rowunlink]').forEach(b=>b.onclick=()=>{
+    const [teamId, rowId] = b.dataset.rowunlink.split('|');
+    unlinkRowFromStock(w.id, teamId, rowId);
+  });
+}
+/* ---------- 작업일지 반제품 항목 → 실제 재고 반영 (수동, 버튼 클릭 시) ----------
+   작업일지 행은 자유 텍스트(품명·생산량)라서 실제 품목·재고와 자동으로는
+   연결되지 않음. "재고에 반영" 버튼을 누르면 실제 품목을 선택해 생산입고기록
+   (DB.production) + 재고 입출고(DB.txn) + 연동 자재 자동차감까지 한 번에 생성.
+   생산입고기록에도 항목이 함께 남기 때문에, 같은 실적을 생산입고기록에서
+   또 등록하면 재고에 중복 반영되므로 주의가 필요함(모달 안내 문구로 고지). */
+function reflectRowToStockModal(worklogId, teamId, rowId){
+  const w = DB.worklogs.find(x=>x.id===worklogId); if(!w) return;
+  const team = (w.teams||[]).find(t=>t.id===teamId); if(!team) return;
+  const row = (team.rows||[]).find(r=>r.id===rowId); if(!row) return;
+  if(!DB.items.length){ showToast('Please register an item first. (먼저 품목을 등록해 주세요)'); return; }
+  const semiItems = sortedItemsList().filter(i=>(i.itemType||'완제품')==='반제품');
+  const itemOptions = semiItems.length ? semiItems : sortedItemsList();
+  const parsedQty = (String(row.qty||'').match(/[\d.]+/)||[])[0] || '';
+  const defaultItemCode = itemOptions[0] && itemOptions[0].code;
+  const partnerOptions = DB.partners.length ? DB.partners.map(p=>`<option value="${p.code}">${p.name} (${p.code})</option>`).join('') : '';
+  openModal(`Reflect to Stock (재고에 반영) · ${row.name}`, `
+    ${!semiItems.length ? `<div class="field-hint" style="margin:-2px 0 12px 2px;color:var(--warn);">No items are registered as Semi-finished (반제품) in Item Management yet, so all items are shown. Consider setting the item's Type to 반제품 there for a cleaner list. (품목관리에 반제품으로 등록된 품목이 없어 전체 품목을 보여드려요)</div>` : ''}
+    <div class="field"><label>Actual Item (실제 품목)</label><select id="f_linkitem">${itemOptions.map(i=>`<option value="${i.code}">${i.name} (${i.code})</option>`).join('')}</select></div>
+    <div class="field-hint" style="margin:-6px 0 12px 2px;">Work log entry (작업일지 기록): ${row.name}${row.spec?` · ${row.spec}`:''} · Qty ${row.qty||'-'}</div>
+    <div class="field"><label>Qty (수량)</label><input id="f_linkqty" type="number" min="0" step="any" value="${parsedQty}" placeholder="Enter numeric quantity (숫자로 입력)"></div>
+    <div class="field"><label>Unit (단위)</label><input id="f_linkunit" type="text" value="${itemUnit(defaultItemCode)}"></div>
+    <div class="field"><label>Partner (거래처) ${DB.partners.length?'':'(none registered / 등록된 거래처 없음)'}</label><select id="f_linkpartner"><option value="">Not selected (선택 안 함)</option>${partnerOptions}</select></div>
+    <div class="field-hint" style="margin-top:-6px;">This adds the quantity to Stock In/Out and to the Production Log (생산입고기록), and auto-deducts any linked materials — same as registering it there directly. Don't add it again manually in Production Log, or it will be double-counted in Stock Status. (재고 입고·자재 자동차감이 함께 처리돼요. 중복 방지를 위해 생산입고기록에는 따로 등록하지 마세요)</div>
+  `, async (close)=>{
+    const itemCode = document.getElementById('f_linkitem').value;
+    const qty = Number(document.getElementById('f_linkqty').value)||0;
+    const unit = document.getElementById('f_linkunit').value.trim() || itemUnit(itemCode);
+    const partnerCode = document.getElementById('f_linkpartner').value;
+    if(!itemCode){ showToast('Please select an item. (품목을 선택해 주세요)'); return false; }
+    if(qty<=0){ showToast('Please enter a quantity greater than 0. (0보다 큰 수량을 입력해 주세요)'); return false; }
+    const date = w.date;
+    const prodId = uid('prod');
+    const txnId = uid('txn');
+    DB.production.push({ id:prodId, date, itemCode, partnerCode, qty, unit, memo:`Work Log linked (작업일지 연동) · ${team.name} · ${row.name}` });
+    DB.txn.push({ id:txnId, type:'in', date, itemCode, partnerCode, qty, unit, memo:`Recorded via Work Log (작업일지 연동 · ${team.name})` });
+    await saveKey('production'); await saveKey('txn');
+    let msg = `Reflected to stock. (재고에 반영했어요) / ${itemName(itemCode)} +${fmtNum(qty)}${unit}`;
+    const links = itemMaterialLinks(itemCode);
+    const matTxnIds = [], submatTxnIds = [];
+    let touchedMat = false, touchedSubmat = false;
+    links.forEach(link=>{
+      const linkedMat = link.type==='submaterial' ? DB.submaterials.find(m=>m.code===link.code) : DB.materials.find(m=>m.code===link.code);
+      if(!linkedMat) return;
+      const consumeQty = qty * Number(link.per||0);
+      if(consumeQty>0){
+        const mtxnId = uid(link.type==='submaterial'?'smtxn':'mtxn');
+        if(link.type==='submaterial'){
+          DB.submaterialTxn.push({ id:mtxnId, date, materialCode:linkedMat.code, type:'out', qty:consumeQty, memo:`${itemName(itemCode)} auto-deducted, via Work Log (작업일지 연동 자동차감)`, source:'auto' });
+          submatTxnIds.push(mtxnId); touchedSubmat = true;
+        } else {
+          DB.materialTxn.push({ id:mtxnId, date, materialCode:linkedMat.code, type:'out', qty:consumeQty, memo:`${itemName(itemCode)} auto-deducted, via Work Log (작업일지 연동 자동차감)`, source:'auto' });
+          matTxnIds.push(mtxnId); touchedMat = true;
+        }
+        msg += ` / ${linkedMat.name} -${fmtNum(consumeQty)}${linkedMat.unit||''}`;
+      }
+    });
+    if(touchedMat) await saveKey('materialTxn');
+    if(touchedSubmat) await saveKey('submaterialTxn');
+    const teams = (w.teams||[]).map(t=>{
+      if(t.id!==teamId) return t;
+      const rows = (t.rows||[]).map(r=> r.id!==rowId ? r : {...r,
+        stockLinked:true, stockItemCode:itemCode, stockQty:qty, stockUnit:unit,
+        stockProdId:prodId, stockTxnId:txnId, stockMatTxnIds:matTxnIds, stockSubmatTxnIds:submatTxnIds });
+      return {...t, rows};
+    });
+    DB.worklogs = DB.worklogs.map(x=>x.id===w.id?{...x, teams}:x);
+    await saveKey('worklogs');
+    close(); renderWorklogDetailModal(); renderWorklogBoardList(); showToast(msg);
+  });
+  const itemSel = document.getElementById('f_linkitem');
+  itemSel.onchange = ()=>{ document.getElementById('f_linkunit').value = itemUnit(itemSel.value); };
+}
+function unlinkRowFromStock(worklogId, teamId, rowId){
+  const w = DB.worklogs.find(x=>x.id===worklogId); if(!w) return;
+  const team = (w.teams||[]).find(t=>t.id===teamId); if(!team) return;
+  const row = (team.rows||[]).find(r=>r.id===rowId); if(!row) return;
+  confirmDelete('Undo the stock reflection for this item? This removes the linked stock-in, Production Log entry, and any auto-deducted materials. (재고반영을 취소할까요? 연동된 재고 입고·생산입고기록·자재차감 내역이 함께 삭제돼요)', async ()=>{
+    DB.production = DB.production.filter(x=>x.id!==row.stockProdId);
+    DB.txn = DB.txn.filter(x=>x.id!==row.stockTxnId);
+    if(row.stockMatTxnIds && row.stockMatTxnIds.length) DB.materialTxn = DB.materialTxn.filter(x=>!row.stockMatTxnIds.includes(x.id));
+    if(row.stockSubmatTxnIds && row.stockSubmatTxnIds.length) DB.submaterialTxn = DB.submaterialTxn.filter(x=>!row.stockSubmatTxnIds.includes(x.id));
+    await saveKey('production'); await saveKey('txn'); await saveKey('materialTxn'); await saveKey('submaterialTxn');
+    const teams = (w.teams||[]).map(t=>{
+      if(t.id!==teamId) return t;
+      const rows = (t.rows||[]).map(r=> r.id!==rowId ? r : {...r,
+        stockLinked:false, stockItemCode:undefined, stockQty:undefined, stockUnit:undefined,
+        stockProdId:undefined, stockTxnId:undefined, stockMatTxnIds:undefined, stockSubmatTxnIds:undefined });
+      return {...t, rows};
+    });
+    DB.worklogs = DB.worklogs.map(x=>x.id===w.id?{...x, teams}:x);
+    await saveKey('worklogs');
+    renderWorklogDetailModal(); renderWorklogBoardList(); showToast('Undone. (연동을 취소했어요)');
+  });
 }
 function renderTeamBlock(w, t){
   const rows = t.rows||[];
@@ -2457,7 +2560,7 @@ function renderTeamBlock(w, t){
       <div class="wl-team-meta">Workers (작업인원) <strong>${t.workers||'-'}</strong> · Hours (작업시간) <strong>${t.hours||'-'}</strong>${t.total?` · Total (합계) <strong>${t.total}</strong>`:''}</div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Item (품명)</th><th>Type (구분)</th><th>Spec (규격)</th><th class="num">Qty (생산량)</th><th>Memo (비고)</th><th></th></tr></thead>
+          <thead><tr><th>Item (품명)</th><th>Type (구분)</th><th>Spec (규격)</th><th class="num">Qty (생산량)</th><th>Memo (비고)</th><th>Stock (재고연동)</th><th></th></tr></thead>
           <tbody>
             ${rows.length ? rows.map(r=>`
               <tr>
@@ -2466,11 +2569,15 @@ function renderTeamBlock(w, t){
                 <td class="muted">${r.spec||'-'}</td>
                 <td class="num mono">${r.qty||'-'}</td>
                 <td class="muted">${r.memo||'-'}</td>
+                <td>${r.itemType==='반제품' ? (r.stockLinked
+                    ? `<span class="tag tag-ok" title="${itemName(r.stockItemCode)} +${fmtNum(r.stockQty)}${r.stockUnit||''}">✅ Linked (연동됨)</span> <button class="btn-icon" data-rowunlink="${t.id}|${r.id}">Undo (취소)</button>`
+                    : `<button class="btn-icon btn-primary" data-rowlink="${t.id}|${r.id}">Reflect to Stock (재고반영)</button>`)
+                  : '<span class="muted">-</span>'}</td>
                 <td class="row-actions">
                   <button class="btn-icon" data-rowedit="${t.id}|${r.id}">Edit (수정)</button>
                   <button class="btn-icon btn-danger-text" data-rowdel="${t.id}|${r.id}">Delete (삭제)</button>
                 </td>
-              </tr>`).join('') : `<tr><td colspan="6" class="loading-row">No items registered. (등록된 품목이 없습니다)</td></tr>`}
+              </tr>`).join('') : `<tr><td colspan="7" class="loading-row">No items registered. (등록된 품목이 없습니다)</td></tr>`}
           </tbody>
         </table>
       </div>
@@ -2652,7 +2759,7 @@ function renderProdLog(){
   const c = document.getElementById('prodContent');
   c.innerHTML = `
     <div class="panel-head" style="margin-bottom:10px;">
-      <div class="panel-sub" style="margin:0;">Production stock-in log · records here auto-link to item/material stock (품목재고·자재재고 자동 연동)</div>
+      <div class="panel-sub" style="margin:0;">Production stock-in log · records here auto-link to item/material stock (품목재고·자재재고 자동 연동). Entries created by "Reflect to Stock (재고반영)" in the Work Log also appear here automatically — don't add those again manually, or they'll be double-counted. (작업일지에서 "재고반영"으로 만든 실적도 여기 자동으로 나타나요 · 중복 등록 주의)</div>
       <button class="btn btn-primary btn-sm" id="addProdBtn">+ Add Record (실적 등록)</button>
     </div>
     <div class="order-search-bar">
