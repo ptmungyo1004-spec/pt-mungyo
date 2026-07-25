@@ -1116,7 +1116,7 @@ function switchTab(id){
 ============================================================ */
 function computeStock(){
   const map = {};
-  DB.items.forEach(it=>{ map[it.code] = {code:it.code, name:it.name, unit:it.unit, safetyStock:Number(it.safetyStock)||0, inQty:0, outQty:0}; });
+  DB.items.forEach(it=>{ map[it.code] = {code:it.code, name:it.name, unit:it.unit, itemType: it.itemType||'완제품', safetyStock:Number(it.safetyStock)||0, inQty:0, outQty:0}; });
   DB.txn.forEach(t=>{
     if(!map[t.itemCode]) return;
     if(t.type==='in') map[t.itemCode].inQty += Number(t.qty)||0;
@@ -1262,9 +1262,16 @@ function confirmDelete(msg, onYes){
 /* ============================================================
    품목관리
 ============================================================ */
+const ITEM_TYPES = ['반제품','완제품','기타'];
+function itemTypeTagClass(t){
+  if(t==='반제품') return 'tag-warn';
+  if(t==='완제품') return 'tag-ok';
+  return 'tag-info';
+}
 let itemsPage = 1;
 let itemsSearchQ = '';
 let itemsStatusFilter = '';
+let itemsTypeFilter = '';
 function renderItems(){
   const el = document.getElementById('tab-items');
   el.innerHTML = `
@@ -1274,6 +1281,10 @@ function renderItems(){
     </div>
     <div class="order-search-bar">
       <input type="text" id="itemsSearchInput" placeholder="🔍 Search by name/code (품목명·품목코드 검색)" value="${itemsSearchQ}" style="flex:1;min-width:180px;">
+      <select id="itemsTypeFilter" style="max-width:180px;">
+        <option value="">All Types (전체 구분)</option>
+        ${ITEM_TYPES.map(t=>`<option value="${t}" ${itemsTypeFilter===t?'selected':''}>${L(t)}</option>`).join('')}
+      </select>
       <select id="itemsStatusFilter" style="max-width:220px;">
         <option value="">All Status (전체 상태)</option>
         <option value="Y" ${itemsStatusFilter==='Y'?'selected':''}>Active (사용)</option>
@@ -1284,7 +1295,7 @@ function renderItems(){
       </select>
     </div>
     <div class="table-wrap"><table>
-      <thead><tr><th>Item Code (품목코드)</th><th>Item Name (품목명)</th><th>Spec (규격)</th><th>Unit (단위)</th><th>Linked Material (연동 자재)</th><th class="num">Safety Stock (안전재고)</th><th>Active (사용여부)</th><th></th></tr></thead>
+      <thead><tr><th>Item Code (품목코드)</th><th>Item Name (품목명)</th><th>Type (구분)</th><th>Spec (규격)</th><th>Unit (단위)</th><th>Linked Material (연동 자재)</th><th class="num">Safety Stock (안전재고)</th><th>Active (사용여부)</th><th></th></tr></thead>
       <tbody id="itemsBody"></tbody>
     </table>
     <div id="itemsPgBar"></div>
@@ -1292,6 +1303,7 @@ function renderItems(){
   `;
   document.getElementById('addItemBtn').onclick = ()=>itemModal();
   document.getElementById('itemsSearchInput').oninput = (e)=>{ itemsSearchQ = e.target.value; itemsPage=1; renderItemsBody(); };
+  document.getElementById('itemsTypeFilter').onchange = (e)=>{ itemsTypeFilter = e.target.value; itemsPage=1; renderItemsBody(); };
   document.getElementById('itemsStatusFilter').onchange = (e)=>{ itemsStatusFilter = e.target.value; itemsPage=1; renderItemsBody(); };
   renderItemsBody();
 }
@@ -1302,13 +1314,14 @@ function renderItemsBody(){
   let sortedItems = [...DB.items].sort((a,b)=>koCompare(a.name, b.name));
   const q = itemsSearchQ.trim().toLowerCase();
   if(q){ sortedItems = sortedItems.filter(it=>(it.name||'').toLowerCase().includes(q) || (it.code||'').toLowerCase().includes(q)); }
+  if(itemsTypeFilter){ sortedItems = sortedItems.filter(it=>(it.itemType||'완제품')===itemsTypeFilter); }
   if(itemsStatusFilter==='Y'||itemsStatusFilter==='N'){ sortedItems = sortedItems.filter(it=>(it.active||'Y')===itemsStatusFilter); }
   else if(itemsStatusFilter.startsWith('code:')){ const code = itemsStatusFilter.slice(5); sortedItems = sortedItems.filter(it=>it.code===code); }
   if(!DB.items.length){
-    body.innerHTML = `<tr><td colspan="8" class="loading-row">No items registered. Use the button above to add one. (등록된 품목이 없습니다)</td></tr>`;
+    body.innerHTML = `<tr><td colspan="9" class="loading-row">No items registered. Use the button above to add one. (등록된 품목이 없습니다)</td></tr>`;
     pgBar.innerHTML = '';
   } else if(!sortedItems.length){
-    body.innerHTML = `<tr><td colspan="8" class="loading-row">No items match your search. (검색 조건에 맞는 품목이 없습니다)</td></tr>`;
+    body.innerHTML = `<tr><td colspan="9" class="loading-row">No items match your search. (검색 조건에 맞는 품목이 없습니다)</td></tr>`;
     pgBar.innerHTML = '';
   } else {
     const totalPages = Math.max(1, Math.ceil(sortedItems.length/PAGE_SIZE));
@@ -1319,6 +1332,7 @@ function renderItemsBody(){
       <tr>
         <td class="mono">${it.code}</td>
         <td>${it.name}</td>
+        <td><span class="tag ${itemTypeTagClass(it.itemType||'완제품')}">${L(it.itemType||'완제품')}</span></td>
         <td class="muted">${it.spec||'-'}</td>
         <td class="muted">${it.unit||'-'}</td>
         <td class="muted">${itemLinkedMaterialsHtml(it)}</td>
@@ -1347,6 +1361,10 @@ function itemModal(existing){
     <div class="field"><label>Item Name (품목명)</label><input id="f_name" type="text" value="${existing?existing.name:''}" placeholder="e.g. Gypsum Board 9.5T"></div>
     <div class="field"><label>Spec (규격)</label><input id="f_spec" type="text" value="${existing?existing.spec||'':''}" placeholder="e.g. 900x1800"></div>
     <div class="field"><label>Unit (단위)</label><input id="f_unit" type="text" value="${existing?existing.unit||'':''}" placeholder="e.g. sheet, box, kg"></div>
+    <div class="field"><label>Type (구분)</label>
+      <select id="f_itemtype">${ITEM_TYPES.map(t=>`<option value="${t}" ${(existing?(existing.itemType||'완제품'):'완제품')===t?'selected':''}>${L(t)}</option>`).join('')}</select>
+      <div class="field-hint">Semi-finished (반제품) items are produced first, then packaged/assembled into Finished (완제품) items — this splits Stock Status into the two so they don't get mixed together. (반제품을 생산해 완제품으로 포장하는 흐름을 재고현황에서 구분해서 볼 수 있어요)</div>
+    </div>
     <div class="field"><label>Active (사용여부)</label>
       <select id="f_active">
         <option value="Y" ${!existing||existing.active==='Y'?'selected':''}>Active (사용)</option>
@@ -1368,6 +1386,7 @@ function itemModal(existing){
       id: existing?existing.id:uid('item'), code, name,
       spec: document.getElementById('f_spec').value.trim(),
       unit: document.getElementById('f_unit').value.trim(),
+      itemType: document.getElementById('f_itemtype').value,
       active: document.getElementById('f_active').value,
       linkedMaterials: readMatLinksEditor('itemMatLinks'),
       safetyStock: Number(document.getElementById('f_safe').value)||0,
@@ -2104,9 +2123,12 @@ function itemProdInModal(orderId, itemId){
     <p style="margin:0 0 12px 0;font-size:13px;color:var(--ink-soft);">
       ${fmtNum(inQty)} of ${fmtNum(item.qty)} ordered produced so far. Remaining: ${fmtNum(remain)} (주문수량 중 생산입고/남은 수량)
     </p>
+    <p style="margin:0 0 12px 0;font-size:12.5px;color:var(--ink-faint);">⚠️ If you already logged this production in the Production (생산관리) tab and linked it to this order there, don't log it again here — it would double-count in Stock Status (재고현황). (생산관리에서 이 주문에 연결해 이미 등록했다면 여기서 또 등록하지 마세요 · 재고현황에 중복 합산됩니다)</p>
     <div class="field"><label>Stock-in Date (입고일)</label><input id="f_date" type="date" value="${todayStr()}"></div>
     <div class="field"><label>Production Qty (생산수량)</label><input id="f_qty" type="number" min="0" value="${remain}"></div>
-    <div class="field"><label>Unit (단위)</label><input id="f_qtyunit" type="text" value="${itemUnit(item.itemCode)}" placeholder="e.g. EA, BOX, TON (품목 단위 자동 입력, 수정 가능)"></div>
+    <div class="field"><label>Unit (단위)</label><input id="f_qtyunit" type="text" value="${itemUnit(item.itemCode)}" readonly disabled style="background:var(--panel-alt,#f3f3f3);cursor:not-allowed;">
+      <div class="field-hint">Fixed to the item's registered unit — it's a display label only and isn't converted in any calculation, so it can't be edited here. (품목에 등록된 단위로 고정됩니다. 계산에 쓰이지 않는 표시용 라벨이라 여기서 수정할 수 없어요)</div>
+    </div>
     <div class="field"><label>Linked Materials Consumed (연동 자재 소모) <span class="muted" style="font-weight:400;">(multiple allowed / 여러 개 가능)</span></label>
       <div id="prodInMatCon"></div>
       <button type="button" class="btn btn-ghost btn-sm" id="addProdInMatBtn" style="margin-top:2px;">+ Add Material (자재 추가)</button>
@@ -2688,6 +2710,21 @@ function renderProdBody(){
     });
   });
 }
+// 특정 품목에 대해 아직 생산입고가 남아있는 진행중 주문(취소 제외) 목록
+// 생산관리에서 이 목록으로 주문을 연결하면, 같은 생산실적을 주문서관리에서
+// 또 "생산입고 등록"하지 않아도 되어 재고현황에 중복 합산되는 것을 막을 수 있음
+function openOrdersForItem(itemCode){
+  const out = [];
+  DB.orders.forEach(order=>{
+    if(order.status==='취소') return;
+    (order.items||[]).forEach(it=>{
+      if(it.itemCode!==itemCode) return;
+      const remain = Math.max(0, (Number(it.qty)||0) - itemProgress(order, it).inQty);
+      if(remain>0) out.push({ orderId:order.id, itemId:it.id, orderCode:order.orderCode, partnerCode:order.partnerCode, remain, unit:itemUnit(itemCode) });
+    });
+  });
+  return out;
+}
 function prodModal(existing){
   if(!DB.items.length){ showToast('Please register an item first. (먼저 품목을 등록해 주세요)'); return; }
   const isEdit = !!existing;
@@ -2698,6 +2735,10 @@ function prodModal(existing){
     <div class="field"><label>Date (날짜)</label><input id="f_date" type="date" value="${isEdit?existing.date:todayStr()}"></div>
     <div class="field"><label>Item (품목)</label><select id="f_item">${sortedItemsList().map(i=>`<option value="${i.code}" ${isEdit&&existing.itemCode===i.code?'selected':''}>${i.name} (${i.code})</option>`).join('')}</select></div>
     <div id="prodMatHint" class="field-hint" style="margin:-6px 0 12px 2px;"></div>
+    ${isEdit?'':`<div class="field"><label>Link to Order (연결 주문) <span class="muted" style="font-weight:400;">(optional / 선택)</span></label>
+      <select id="f_prodorder"><option value="">Not linked - general production (미연동 · 일반 생산)</option></select>
+      <div class="field-hint" id="prodOrderHint">Link this to an order/item so it also advances that order's production progress here — you won't need to add it again via Order Management's "Log Production In (생산입고 등록)", which avoids double-counting the same production in Stock Status. (주문과 연결하면 이 등록 하나로 주문 진행상황·재고에 모두 반영돼요. 주문서관리에서 같은 수량을 또 등록하면 재고현황에 중복으로 합산되니, 이미 여기서 등록했다면 그쪽에서는 등록하지 마세요)</div>
+    </div>`}
     <div class="field"><label>Partner (거래처) ${DB.partners.length?'':'(no partners registered / 등록된 거래처 없음)'}</label>
       <select id="f_partner"><option value="" ${isEdit&&!existing.partnerCode?'selected':''}>Not selected (선택 안 함)</option>${partnerOptions}</select>
     </div>
@@ -2718,12 +2759,27 @@ function prodModal(existing){
       await saveKey('production'); close(); renderProdBody(); showToast('Production record updated. (생산실적을 수정했어요)');
       return;
     }
+    const prodOrderEl = document.getElementById('f_prodorder');
+    const [linkOrderId, linkItemId] = prodOrderEl && prodOrderEl.value ? prodOrderEl.value.split('::') : [null, null];
+    const linkOrder = linkOrderId ? DB.orders.find(o=>o.id===linkOrderId) : null;
+    const linkItem = linkOrder ? (linkOrder.items||[]).find(x=>x.id===linkItemId) : null;
     DB.production.push({ id:uid('prod'), date, itemCode: itemCode||undefined, partnerCode, qty, unit:prodUnit, memo });
     let msg = 'Production record added. (생산실적을 등록했어요)';
     if(itemCode && qty>0){
-      DB.txn.push({ id:uid('txn'), type:'in', date, itemCode, partnerCode, qty, unit:prodUnit||itemUnit(itemCode), memo:'Recorded via Production (생산관리 실적등록)' });
+      DB.txn.push({ id:uid('txn'), type:'in', date, itemCode, partnerCode: linkOrder ? (linkOrder.partnerCode||partnerCode) : partnerCode, qty, unit:prodUnit||itemUnit(itemCode),
+        memo: linkOrder ? `${linkOrder.orderCode} · Recorded via Production, linked to order (생산관리 실적등록 · 주문연동)` : 'Recorded via Production (생산관리 실적등록)',
+        ...(linkOrder && linkItem ? { orderCode: linkOrder.orderCode, orderItemId: linkItem.id } : {}) });
       await saveKey('txn');
       msg += ` / ${itemName(itemCode)} +${fmtNum(qty)} stock (재고 입고)`;
+      if(linkOrder && linkItem){
+        const {inQty} = itemProgress(linkOrder, linkItem);
+        const allIn = (linkOrder.items||[]).every(it=> it.id===linkItem.id ? inQty>=it.qty : itemProgress(linkOrder,it).inQty>=it.qty);
+        let newStatus = linkOrder.status;
+        if(linkOrder.status==='접수' || linkOrder.status==='생산중'){ newStatus = allIn ? '생산완료' : '생산중'; }
+        DB.orders = DB.orders.map(x=>x.id===linkOrder.id?{...x, status:newStatus}:x);
+        await saveKey('orders');
+        msg += ` / ${linkOrder.orderCode} progress updated (주문 진행상황 반영)`;
+      }
       const links = itemMaterialLinks(itemCode);
       let touchedMat = false, touchedSubmat = false;
       links.forEach(link=>{
@@ -2755,6 +2811,7 @@ function prodModal(existing){
   const itemSel = document.getElementById('f_item');
   const hintEl = document.getElementById('prodMatHint');
   const unitEl = document.getElementById('f_produnit');
+  const orderSel = document.getElementById('f_prodorder');
   const updateHint = ()=>{
     const code = itemSel.value;
     const links = itemMaterialLinks(code);
@@ -2762,8 +2819,16 @@ function prodModal(existing){
       ? `📦 ${links.map(link=>`<strong>${matSourceName(link.type,link.code)}</strong>(${link.code}${link.type==='submaterial'?' · 부자재':''}) ×${fmtNum(link.per)} (Stock: ${fmtNum(matSourceStock(link.type,link.code))})`).join(', ')} will be auto-deducted per unit produced. (자재 자동 차감)`
       : (code ? 'No material linked to this item. Link one in Item Management to enable auto-deduction here. (연동된 자재가 없는 품목)' : '');
   };
-  itemSel.onchange = ()=>{ updateHint(); unitEl.value = itemUnit(itemSel.value); };
+  const updateOrderOptions = ()=>{
+    if(!orderSel) return;
+    const code = itemSel.value;
+    const opts = openOrdersForItem(code);
+    orderSel.innerHTML = `<option value="">Not linked - general production (미연동 · 일반 생산)</option>` +
+      opts.map(o=>`<option value="${o.orderId}::${o.itemId}">${o.orderCode} · ${partnerName(o.partnerCode)} · remaining ${fmtNum(o.remain)}${o.unit||''} (남은 주문수량)</option>`).join('');
+  };
+  itemSel.onchange = ()=>{ updateHint(); unitEl.value = itemUnit(itemSel.value); updateOrderOptions(); };
   updateHint();
+  updateOrderOptions();
 }
 
 /* ============================================================
@@ -3635,6 +3700,7 @@ let stockViewMode = 'item'; // 'item' (품목별) | 'partner' (거래처별)
 let stockPage = 1;
 let stockSearchQ = '';
 let stockStatusFilter = '';
+let stockTypeFilter = ''; // '' (전체) | '반제품' | '완제품' | '기타'
 let partnerStockPage = 1;
 let partnerStockSearchQ = '';
 let partnerStockFilter = '';
@@ -3657,7 +3723,20 @@ function renderStock(){
 }
 function renderStockByItem(){
   const el = document.getElementById('stockContent');
+  const allStockNow = computeStock();
+  const sumByType = t => allStockNow.filter(r=>(r.itemType||'완제품')===t).reduce((s,r)=>s+r.stock, 0);
   el.innerHTML = `
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">Semi-finished Stock Total (반제품 재고 합계) <span class="muted" style="font-weight:400;">— produced, not yet packaged (생산 완료 · 포장 전)</span></div><div class="kpi-value">${fmtNum(sumByType('반제품'))}</div></div>
+      <div class="kpi-card"><div class="kpi-label">Finished Goods Stock Total (완제품 재고 합계) <span class="muted" style="font-weight:400;">— packaged, ready to ship (포장 완료 · 출고 가능)</span></div><div class="kpi-value">${fmtNum(sumByType('완제품'))}</div></div>
+      <div class="kpi-card"><div class="kpi-label">Other Stock Total (기타 재고 합계)</div><div class="kpi-value">${fmtNum(sumByType('기타'))}</div></div>
+    </div>
+    <div class="seg" id="stockTypeSeg" style="margin-bottom:10px;">
+      <button data-t="" class="${stockTypeFilter===''?'active':''}">All (전체)</button>
+      <button data-t="반제품" class="${stockTypeFilter==='반제품'?'active':''}">Semi-finished (반제품)</button>
+      <button data-t="완제품" class="${stockTypeFilter==='완제품'?'active':''}">Finished (완제품)</button>
+      <button data-t="기타" class="${stockTypeFilter==='기타'?'active':''}">Other (기타)</button>
+    </div>
     <div class="order-search-bar">
       <input type="text" id="stockSearchInput" placeholder="🔍 Search by name/code (품목명·품목코드 검색)" value="${stockSearchQ}" style="flex:1;min-width:180px;">
       <select id="stockStatusFilter" style="max-width:220px;">
@@ -3670,12 +3749,15 @@ function renderStockByItem(){
       </select>
     </div>
     <div class="table-wrap"><table>
-      <thead><tr><th>Item Code (품목코드)</th><th>Item Name (품목명)</th><th class="num">Total In (총입고)</th><th class="num">Total Out (총출고)</th><th class="num">Stock (현재고)</th><th class="num" title="Remaining qty from open orders in Order Management, not yet produced/shipped (주문서관리의 진행중 주문 중 아직 생산·출고되지 않은 잔여수량)">Order Qty (주문수량)</th><th>Unit (단위)</th></tr></thead>
+      <thead><tr><th>Item Code (품목코드)</th><th>Item Name (품목명)</th><th>Type (구분)</th><th class="num">Total In (총입고)</th><th class="num">Total Out (총출고)</th><th class="num">Stock (현재고)</th><th class="num" title="Remaining qty from open orders in Order Management, not yet produced/shipped (주문서관리의 진행중 주문 중 아직 생산·출고되지 않은 잔여수량)">Order Qty (주문수량)</th><th>Unit (단위)</th></tr></thead>
       <tbody id="stockBody"></tbody>
     </table>
     <div id="stockPgBarWrap"></div>
     </div>
   `;
+  document.getElementById('stockTypeSeg').querySelectorAll('button').forEach(b=>{
+    b.onclick = ()=>{ stockTypeFilter = b.dataset.t; stockPage=1; renderStockByItem(); };
+  });
   document.getElementById('stockSearchInput').oninput = (e)=>{ stockSearchQ = e.target.value; stockPage=1; renderStockBody(); };
   document.getElementById('stockStatusFilter').onchange = (e)=>{ stockStatusFilter = e.target.value; stockPage=1; renderStockBody(); };
   renderStockBody();
@@ -3684,6 +3766,7 @@ function renderStockBody(){
   const body = document.getElementById('stockBody');
   if(!body) return;
   let stock = computeStock();
+  if(stockTypeFilter){ stock = stock.filter(r=>(r.itemType||'완제품')===stockTypeFilter); }
   const allStock = stock;
   const q = stockSearchQ.trim().toLowerCase();
   if(q){ stock = stock.filter(r=>(r.name||'').toLowerCase().includes(q) || (r.code||'').toLowerCase().includes(q)); }
@@ -3697,11 +3780,12 @@ function renderStockBody(){
   body.innerHTML = stock.length ? pageStock.map(r=>`
     <tr>
       <td class="mono">${r.code}</td><td>${r.name}</td>
+      <td><span class="tag ${itemTypeTagClass(r.itemType||'완제품')}">${L(r.itemType||'완제품')}</span></td>
       <td class="num">${fmtNum(r.inQty)}</td><td class="num">${fmtNum(r.outQty)}</td>
       <td class="num" style="font-weight:700;${r.stock<=0?'color:var(--danger);':r.stock<=10?'color:var(--warn);':''}">${fmtNum(r.stock)}</td>
       <td class="num" style="${r.orderQty>0?'color:var(--accent);font-weight:600;':''}">${fmtNum(r.orderQty)}</td>
       <td class="muted">${r.unit||'-'}</td>
-    </tr>`).join('') : `<tr><td colspan="7" class="loading-row">${allStock.length ? 'No items match your search. (검색 조건에 맞는 품목이 없습니다)' : 'No items registered. (등록된 품목이 없습니다)'}</td></tr>`;
+    </tr>`).join('') : `<tr><td colspan="8" class="loading-row">${allStock.length ? 'No items match your search. (검색 조건에 맞는 품목이 없습니다)' : 'No items registered. (등록된 품목이 없습니다)'}</td></tr>`;
   const pgWrap = document.getElementById('stockPgBarWrap');
   pgWrap.innerHTML = stock.length ? pageBarHtml('stPg', stockPage, totalPages) : '';
   bindPageBar(pgWrap, 'stPg', ()=>stockPage, (p)=>stockPage=p, renderStockBody);
@@ -3720,7 +3804,12 @@ function computePartnerItemStock(){
         partnerType: p ? p.type : '',
         itemCode: t.itemCode,
         itemName: itemName(t.itemCode),
-        unit: t.unit || itemUnit(t.itemCode),
+        // 버그 수정: 개별 입출고 기록에 실수로 다른 단위(예: T)가 찍혀 있어도
+        // 화면에는 항상 품목관리에 등록된 정식 단위를 표시합니다. 이 앱은
+        // 단위 변환을 하지 않고 수량 숫자만 그대로 더하므로("단위"는 계산에
+        // 쓰이지 않는 라벨일 뿐), 개별 기록의 단위를 신뢰하면 합계 옆에 잘못된
+        // 라벨이 붙어 실제로는 맞는 합계도 틀린 것처럼 보이는 문제가 있었습니다.
+        unit: itemUnit(t.itemCode),
         inQty: 0, outQty: 0,
       };
     }
