@@ -2452,35 +2452,71 @@ function renderWorklogDetailModal(){
 }
 /* ---------- 작업일지 반제품 항목 → 실제 재고 반영 (수동, 버튼 클릭 시) ----------
    작업일지 행은 자유 텍스트(품명·생산량)라서 실제 품목·재고와 자동으로는
-   연결되지 않음. "재고에 반영" 버튼을 누르면 실제 품목을 선택해 생산입고기록
-   (DB.production) + 재고 입출고(DB.txn) + 연동 자재 자동차감까지 한 번에 생성.
-   생산입고기록에도 항목이 함께 남기 때문에, 같은 실적을 생산입고기록에서
-   또 등록하면 재고에 중복 반영되므로 주의가 필요함(모달 안내 문구로 고지). */
+   연결되지 않음. "재고에 반영" 버튼을 누르면 실제 품목을 선택(또는 그 자리에서
+   신규 품목으로 등록)해서 생산입고기록(DB.production) + 재고 입출고(DB.txn) +
+   연동 자재 자동차감까지 한 번에 생성. 생산입고기록에도 항목이 함께 남기 때문에,
+   같은 실적을 생산입고기록에서 또 등록하면 재고에 중복 반영되므로 주의가 필요함
+   (모달 안내 문구로 고지). */
+function suggestItemCode(name){
+  let base = (name||'').toUpperCase().replace(/[^A-Z0-9가-힣]+/g,'-').replace(/^-+|-+$/g,'');
+  if(!base) base = 'ITEM';
+  let code = base, n = 1;
+  while(DB.items.some(x=>x.code===code)){ n++; code = `${base}-${n}`; }
+  return code;
+}
+const NEW_ITEM_OPT = '__new__';
 function reflectRowToStockModal(worklogId, teamId, rowId){
   const w = DB.worklogs.find(x=>x.id===worklogId); if(!w) return;
   const team = (w.teams||[]).find(t=>t.id===teamId); if(!team) return;
   const row = (team.rows||[]).find(r=>r.id===rowId); if(!row) return;
-  if(!DB.items.length){ showToast('Please register an item first. (먼저 품목을 등록해 주세요)'); return; }
   const semiItems = sortedItemsList().filter(i=>(i.itemType||'완제품')==='반제품');
   const itemOptions = semiItems.length ? semiItems : sortedItemsList();
+  const nameMatch = itemOptions.find(i=>i.name.trim().toLowerCase()===row.name.trim().toLowerCase());
   const parsedQty = (String(row.qty||'').match(/[\d.]+/)||[])[0] || '';
-  const defaultItemCode = itemOptions[0] && itemOptions[0].code;
+  const suggestedCode = suggestItemCode(row.name);
+  const defaultSel = nameMatch ? nameMatch.code : NEW_ITEM_OPT;
+  const defaultUnit = nameMatch ? itemUnit(nameMatch.code) : '';
   const partnerOptions = DB.partners.length ? DB.partners.map(p=>`<option value="${p.code}">${p.name} (${p.code})</option>`).join('') : '';
   openModal(`Reflect to Stock (재고에 반영) · ${row.name}`, `
-    ${!semiItems.length ? `<div class="field-hint" style="margin:-2px 0 12px 2px;color:var(--warn);">No items are registered as Semi-finished (반제품) in Item Management yet, so all items are shown. Consider setting the item's Type to 반제품 there for a cleaner list. (품목관리에 반제품으로 등록된 품목이 없어 전체 품목을 보여드려요)</div>` : ''}
-    <div class="field"><label>Actual Item (실제 품목)</label><select id="f_linkitem">${itemOptions.map(i=>`<option value="${i.code}">${i.name} (${i.code})</option>`).join('')}</select></div>
+    <div class="field"><label>Actual Item (실제 품목)</label>
+      <select id="f_linkitem">
+        <option value="${NEW_ITEM_OPT}" ${defaultSel===NEW_ITEM_OPT?'selected':''}>➕ Register as new item (신규 품목으로 등록) · "${row.name}"</option>
+        ${itemOptions.map(i=>`<option value="${i.code}" ${defaultSel===i.code?'selected':''}>${i.name} (${i.code})</option>`).join('')}
+      </select>
+      ${!itemOptions.length ? `<div class="field-hint" style="color:var(--warn);">No items registered yet — pick "Register as new item" below to create one on the spot. (등록된 품목이 없어요 · 아래에서 신규 등록하면 돼요)</div>` : (!semiItems.length ? `<div class="field-hint">No items are registered as Semi-finished (반제품) yet, so all items are shown here too. (반제품으로 등록된 품목이 없어 전체 품목도 함께 보여드려요)</div>` : '')}
+    </div>
+    <div id="newItemFields" style="${defaultSel===NEW_ITEM_OPT?'':'display:none;'}">
+      <div class="field"><label>New Item Code (신규 품목코드)</label><input id="f_newcode" type="text" value="${suggestedCode}" placeholder="e.g. LAB-STONE-P"></div>
+      <div class="field"><label>New Item Name (신규 품목명)</label><input id="f_newname" type="text" value="${row.name}"></div>
+      <div class="field"><label>Spec (규격)</label><input id="f_newspec" type="text" value="${row.spec||''}"></div>
+      <div class="field-hint" style="margin:-6px 0 12px 2px;">Registered with Type (구분) = Semi-finished (반제품) in Item Management. You can add material links or safety stock there later. (품목관리에 반제품으로 등록되며, 자재연동·안전재고는 나중에 품목관리에서 추가하면 돼요)</div>
+    </div>
     <div class="field-hint" style="margin:-6px 0 12px 2px;">Work log entry (작업일지 기록): ${row.name}${row.spec?` · ${row.spec}`:''} · Qty ${row.qty||'-'}</div>
     <div class="field"><label>Qty (수량)</label><input id="f_linkqty" type="number" min="0" step="any" value="${parsedQty}" placeholder="Enter numeric quantity (숫자로 입력)"></div>
-    <div class="field"><label>Unit (단위)</label><input id="f_linkunit" type="text" value="${itemUnit(defaultItemCode)}"></div>
+    <div class="field"><label>Unit (단위)</label><input id="f_linkunit" type="text" value="${defaultUnit}" placeholder="e.g. T, BAG, BOX"></div>
     <div class="field"><label>Partner (거래처) ${DB.partners.length?'':'(none registered / 등록된 거래처 없음)'}</label><select id="f_linkpartner"><option value="">Not selected (선택 안 함)</option>${partnerOptions}</select></div>
     <div class="field-hint" style="margin-top:-6px;">This adds the quantity to Stock In/Out and to the Production Log (생산입고기록), and auto-deducts any linked materials — same as registering it there directly. Don't add it again manually in Production Log, or it will be double-counted in Stock Status. (재고 입고·자재 자동차감이 함께 처리돼요. 중복 방지를 위해 생산입고기록에는 따로 등록하지 마세요)</div>
   `, async (close)=>{
-    const itemCode = document.getElementById('f_linkitem').value;
+    const sel = document.getElementById('f_linkitem').value;
     const qty = Number(document.getElementById('f_linkqty').value)||0;
-    const unit = document.getElementById('f_linkunit').value.trim() || itemUnit(itemCode);
+    let unit = document.getElementById('f_linkunit').value.trim();
     const partnerCode = document.getElementById('f_linkpartner').value;
-    if(!itemCode){ showToast('Please select an item. (품목을 선택해 주세요)'); return false; }
     if(qty<=0){ showToast('Please enter a quantity greater than 0. (0보다 큰 수량을 입력해 주세요)'); return false; }
+    let itemCode = sel;
+    if(sel===NEW_ITEM_OPT){
+      const newCode = document.getElementById('f_newcode').value.trim();
+      const newName = document.getElementById('f_newname').value.trim();
+      const newSpec = document.getElementById('f_newspec').value.trim();
+      if(!newCode || !newName){ showToast('Please enter both a code and name for the new item. (신규 품목의 코드와 이름을 입력해 주세요)'); return false; }
+      if(DB.items.some(x=>x.code===newCode)){ showToast('This item code already exists. Pick a different code, or select the existing item above instead. (이미 존재하는 품목코드예요)'); return false; }
+      if(!unit){ showToast('Please enter a unit for the new item. (신규 품목의 단위를 입력해 주세요)'); return false; }
+      DB.items.push({ id:uid('item'), code:newCode, name:newName, spec:newSpec, unit, itemType:'반제품', active:'Y', linkedMaterials:[], safetyStock:0 });
+      await saveKey('items');
+      itemCode = newCode;
+    } else if(!itemCode){
+      showToast('Please select an item. (품목을 선택해 주세요)'); return false;
+    }
+    if(!unit) unit = itemUnit(itemCode);
     const date = w.date;
     const prodId = uid('prod');
     const txnId = uid('txn');
@@ -2521,7 +2557,11 @@ function reflectRowToStockModal(worklogId, teamId, rowId){
     close(); renderWorklogDetailModal(); renderWorklogBoardList(); showToast(msg);
   });
   const itemSel = document.getElementById('f_linkitem');
-  itemSel.onchange = ()=>{ document.getElementById('f_linkunit').value = itemUnit(itemSel.value); };
+  const newFields = document.getElementById('newItemFields');
+  itemSel.onchange = ()=>{
+    if(itemSel.value===NEW_ITEM_OPT){ newFields.style.display=''; document.getElementById('f_linkunit').value=''; }
+    else { newFields.style.display='none'; document.getElementById('f_linkunit').value = itemUnit(itemSel.value); }
+  };
 }
 function unlinkRowFromStock(worklogId, teamId, rowId){
   const w = DB.worklogs.find(x=>x.id===worklogId); if(!w) return;
@@ -3830,12 +3870,7 @@ function renderStock(){
 }
 function renderStockByItem(){
   const el = document.getElementById('stockContent');
-  const allStockNow = computeStock();
-  const finishedTotal = allStockNow.filter(r=>(r.itemType||'완제품')==='완제품').reduce((s,r)=>s+r.stock, 0);
   el.innerHTML = `
-    <div class="kpi-grid" style="grid-template-columns:1fr;max-width:460px;">
-      <div class="kpi-card"><div class="kpi-label">Total Stock (총재고) <span class="muted" style="font-weight:400;">— Finished Goods (완제품) only, Semi-finished (반제품) excluded (반제품은 총재고 집계에서 제외)</span></div><div class="kpi-value">${fmtNum(finishedTotal)}</div></div>
-    </div>
     <div class="seg" id="stockTypeSeg" style="margin-bottom:10px;">
       <button data-t="" class="${stockTypeFilter===''?'active':''}">All (전체)</button>
       <button data-t="반제품" class="${stockTypeFilter==='반제품'?'active':''}">Semi-finished (반제품)</button>
@@ -3854,7 +3889,7 @@ function renderStockByItem(){
       </select>
     </div>
     <div class="table-wrap"><table>
-      <thead><tr><th>Item Code (품목코드)</th><th>Item Name (품목명)</th><th>Type (구분)</th><th class="num">Total In (총입고)</th><th class="num">Total Out (총출고)</th><th class="num">Stock (현재고)</th><th class="num" title="Remaining qty from open orders in Order Management, not yet produced/shipped (주문서관리의 진행중 주문 중 아직 생산·출고되지 않은 잔여수량)">Order Qty (주문수량)</th><th>Unit (단위)</th></tr></thead>
+      <thead><tr><th>Item Code (품목코드)</th><th>Item Name (품목명)</th><th>Type (구분)</th><th class="num">Total In (총입고)</th><th class="num">Total Out (총출고)</th><th class="num">Stock (현재고)</th><th class="num" title="Remaining qty from open orders in Order Management, not yet produced/shipped (주문서관리의 미생산·미출고 잔여 주문수량)">Order Qty (주문수량)</th><th>Unit (단위)</th><th>Action (작업)</th></tr></thead>
       <tbody id="stockBody"></tbody>
     </table>
     <div id="stockPgBarWrap"></div>
@@ -3890,10 +3925,109 @@ function renderStockBody(){
       <td class="num" style="font-weight:700;${r.stock<=0?'color:var(--danger);':r.stock<=10?'color:var(--warn);':''}">${fmtNum(r.stock)}</td>
       <td class="num" style="${r.orderQty>0?'color:var(--accent);font-weight:600;':''}">${fmtNum(r.orderQty)}</td>
       <td class="muted">${r.unit||'-'}</td>
-    </tr>`).join('') : `<tr><td colspan="8" class="loading-row">${allStock.length ? 'No items match your search. (검색 조건에 맞는 품목이 없습니다)' : 'No items registered. (등록된 품목이 없습니다)'}</td></tr>`;
+      <td>${r.itemType==='반제품' ? `<button class="btn-icon btn-primary" data-pkg="${r.code}">Package (포장처리)</button>` : '<span class="muted">-</span>'}</td>
+    </tr>`).join('') : `<tr><td colspan="9" class="loading-row">${allStock.length ? 'No items match your search. (검색 조건에 맞는 품목이 없습니다)' : 'No items registered. (등록된 품목이 없습니다)'}</td></tr>`;
   const pgWrap = document.getElementById('stockPgBarWrap');
   pgWrap.innerHTML = stock.length ? pageBarHtml('stPg', stockPage, totalPages) : '';
   bindPageBar(pgWrap, 'stPg', ()=>stockPage, (p)=>stockPage=p, renderStockBody);
+  body.querySelectorAll('[data-pkg]').forEach(b=>b.onclick=()=>packagingModal(b.dataset.pkg));
+}
+/* ---------- 포장 처리 (반제품 → 완제품 재고 전환) ----------
+   반제품 재고를 소모해 완제품 재고를 생성하는 1회성 전환 처리.
+   반제품 재고 출고(out) + 완제품 재고 입고(in) 트랜잭션을 함께 만들고,
+   완제품에 연동된 자재(포장재 등)가 있으면 그만큼 자동 차감하며,
+   생산입고기록(DB.production)에도 남겨 이력을 추적할 수 있게 함. */
+function packagingModal(semiItemCode){
+  const semi = DB.items.find(x=>x.code===semiItemCode);
+  if(!semi){ showToast('Item not found. (품목을 찾을 수 없어요)'); return; }
+  const semiStockNow = computeStock().find(r=>r.code===semiItemCode);
+  const finishedItems = sortedItemsList().filter(i=>(i.itemType||'완제품')==='완제품');
+  const partnerOptions = DB.partners.length ? DB.partners.map(p=>`<option value="${p.code}">${p.name} (${p.code})</option>`).join('') : '';
+  const suggestedCode = suggestItemCode(semi.name);
+  openModal(`Package to Finished (포장 처리) · ${semi.name}`, `
+    <div class="field-hint" style="margin:0 0 12px 2px;">Current Semi-finished Stock (현재 반제품 재고): <strong>${fmtNum(semiStockNow?semiStockNow.stock:0)}${semi.unit||''}</strong></div>
+    <div class="field"><label>Consume Qty (소모할 반제품 수량)</label><input id="f_pkgconsume" type="number" min="0" step="any" placeholder="e.g. 5"></div>
+    <div class="field"><label>Target Finished Item (완제품)</label>
+      <select id="f_pkgitem">
+        <option value="${NEW_ITEM_OPT}">➕ Register as new finished item (신규 완제품으로 등록) · "${semi.name}"</option>
+        ${finishedItems.map(i=>`<option value="${i.code}">${i.name} (${i.code})</option>`).join('')}
+      </select>
+      ${!finishedItems.length ? `<div class="field-hint">No Finished (완제품) items registered yet — pick "Register as new" below. (등록된 완제품이 없어요 · 아래에서 신규 등록하면 돼요)</div>` : ''}
+    </div>
+    <div id="pkgNewItemFields">
+      <div class="field"><label>New Item Code (신규 품목코드)</label><input id="f_pkgnewcode" type="text" value="${suggestedCode}"></div>
+      <div class="field"><label>New Item Name (신규 품목명)</label><input id="f_pkgnewname" type="text" value="${semi.name}"></div>
+      <div class="field"><label>Spec (규격)</label><input id="f_pkgnewspec" type="text" value="${semi.spec||''}"></div>
+      <div class="field-hint" style="margin:-6px 0 12px 2px;">Registered with Type (구분) = Finished (완제품) in Item Management. (품목관리에 완제품으로 등록돼요)</div>
+    </div>
+    <div class="field"><label>Produced Qty (생산될 완제품 수량)</label><input id="f_pkgproduce" type="number" min="0" step="any" placeholder="e.g. 5"></div>
+    <div class="field"><label>Unit (완제품 단위)</label><input id="f_pkgunit" type="text" value="${finishedItems[0]?itemUnit(finishedItems[0].code):''}"></div>
+    <div class="field"><label>Date (날짜)</label><input id="f_pkgdate" type="date" value="${todayStr()}"></div>
+    <div class="field"><label>Partner (거래처) ${DB.partners.length?'':'(none registered / 등록된 거래처 없음)'}</label><select id="f_pkgpartner"><option value="">Not selected (선택 안 함)</option>${partnerOptions}</select></div>
+    <div class="field"><label>Memo (비고)</label><input id="f_pkgmemo" type="text" placeholder="e.g. Packaged into boxes"></div>
+    <div class="field-hint" style="margin-top:-6px;">This deducts the consumed qty from the Semi-finished (반제품) item's stock and adds the produced qty to the Finished (완제품) item's stock — Semi-finished (반제품) → Finished (완제품) as tracked separately in Stock Status. Any materials linked to the finished item (e.g. packaging) are auto-deducted too. (반제품 재고가 줄고 완제품 재고가 늘어나며, 완제품에 연동된 자재가 있으면 함께 자동 차감돼요)</div>
+  `, async (close)=>{
+    const consumeQty = Number(document.getElementById('f_pkgconsume').value)||0;
+    const produceQty = Number(document.getElementById('f_pkgproduce').value)||0;
+    const sel = document.getElementById('f_pkgitem').value;
+    const unit = document.getElementById('f_pkgunit').value.trim();
+    const date = document.getElementById('f_pkgdate').value;
+    const partnerCode = document.getElementById('f_pkgpartner').value;
+    const memo = document.getElementById('f_pkgmemo').value.trim();
+    if(!date){ showToast('Please enter a date. (날짜를 입력해 주세요)'); return false; }
+    if(consumeQty<=0 || produceQty<=0){ showToast('Please enter quantities greater than 0. (0보다 큰 수량을 입력해 주세요)'); return false; }
+    let finishedCode = sel;
+    if(sel===NEW_ITEM_OPT){
+      const newCode = document.getElementById('f_pkgnewcode').value.trim();
+      const newName = document.getElementById('f_pkgnewname').value.trim();
+      const newSpec = document.getElementById('f_pkgnewspec').value.trim();
+      if(!newCode || !newName){ showToast('Please enter both a code and name for the new item. (신규 품목의 코드와 이름을 입력해 주세요)'); return false; }
+      if(DB.items.some(x=>x.code===newCode)){ showToast('This item code already exists. (이미 존재하는 품목코드예요)'); return false; }
+      if(!unit){ showToast('Please enter a unit for the new item. (신규 품목의 단위를 입력해 주세요)'); return false; }
+      DB.items.push({ id:uid('item'), code:newCode, name:newName, spec:newSpec, unit, itemType:'완제품', active:'Y', linkedMaterials:[], safetyStock:0 });
+      await saveKey('items');
+      finishedCode = newCode;
+    } else if(!finishedCode){
+      showToast('Please select a finished item. (완제품을 선택해 주세요)'); return false;
+    }
+    const finalUnit = unit || itemUnit(finishedCode);
+    DB.txn.push({ id:uid('txn'), type:'out', date, itemCode:semiItemCode, partnerCode, qty:consumeQty, unit:semi.unit,
+      memo: memo ? `Packaged into ${itemName(finishedCode)} (포장처리) · ${memo}` : `Packaged into ${itemName(finishedCode)} (포장처리)` });
+    DB.txn.push({ id:uid('txn'), type:'in', date, itemCode:finishedCode, partnerCode, qty:produceQty, unit:finalUnit,
+      memo: memo ? `Packaged from ${itemName(semiItemCode)} (포장처리) · ${memo}` : `Packaged from ${itemName(semiItemCode)} (포장처리)` });
+    DB.production.push({ id:uid('prod'), date, itemCode:finishedCode, partnerCode, qty:produceQty, unit:finalUnit,
+      memo: `Packaging: ${itemName(semiItemCode)} -${fmtNum(consumeQty)}${semi.unit||''} → ${itemName(finishedCode)} +${fmtNum(produceQty)}${finalUnit} (포장처리)` });
+    await saveKey('txn'); await saveKey('production');
+    let msg = `Packaged. (포장 처리했어요) / ${itemName(semiItemCode)} -${fmtNum(consumeQty)}${semi.unit||''} → ${itemName(finishedCode)} +${fmtNum(produceQty)}${finalUnit}`;
+    const links = itemMaterialLinks(finishedCode);
+    let touchedMat = false, touchedSubmat = false;
+    links.forEach(link=>{
+      const linkedMat = link.type==='submaterial' ? DB.submaterials.find(m=>m.code===link.code) : DB.materials.find(m=>m.code===link.code);
+      if(!linkedMat) return;
+      const consumeMatQty = produceQty * Number(link.per||0);
+      if(consumeMatQty>0){
+        if(link.type==='submaterial'){
+          DB.submaterialTxn.push({ id:uid('smtxn'), date, materialCode:linkedMat.code, type:'out', qty:consumeMatQty, memo:`${itemName(finishedCode)} auto-deducted, via Packaging (포장처리 자동차감)`, source:'auto' });
+          touchedSubmat = true;
+        } else {
+          DB.materialTxn.push({ id:uid('mtxn'), date, materialCode:linkedMat.code, type:'out', qty:consumeMatQty, memo:`${itemName(finishedCode)} auto-deducted, via Packaging (포장처리 자동차감)`, source:'auto' });
+          touchedMat = true;
+        }
+        msg += ` / ${linkedMat.name} -${fmtNum(consumeMatQty)}${linkedMat.unit||''}`;
+      }
+    });
+    if(touchedMat) await saveKey('materialTxn');
+    if(touchedSubmat) await saveKey('submaterialTxn');
+    close(); renderStockByItem(); showToast(msg);
+  });
+  const pkgItemSel = document.getElementById('f_pkgitem');
+  const pkgNewFields = document.getElementById('pkgNewItemFields');
+  const syncPkgFields = ()=>{
+    if(pkgItemSel.value===NEW_ITEM_OPT){ pkgNewFields.style.display=''; document.getElementById('f_pkgunit').value=''; }
+    else { pkgNewFields.style.display='none'; document.getElementById('f_pkgunit').value = itemUnit(pkgItemSel.value); }
+  };
+  pkgItemSel.onchange = syncPkgFields;
+  syncPkgFields();
 }
 // 거래처(매입처·매출처)별 · 품목별 누적 입출고 집계 (거래처가 지정된 입출고 기록 기준)
 function computePartnerItemStock(){
