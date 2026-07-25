@@ -3724,12 +3724,10 @@ function renderStock(){
 function renderStockByItem(){
   const el = document.getElementById('stockContent');
   const allStockNow = computeStock();
-  const sumByType = t => allStockNow.filter(r=>(r.itemType||'완제품')===t).reduce((s,r)=>s+r.stock, 0);
+  const finishedTotal = allStockNow.filter(r=>(r.itemType||'완제품')==='완제품').reduce((s,r)=>s+r.stock, 0);
   el.innerHTML = `
-    <div class="kpi-grid">
-      <div class="kpi-card"><div class="kpi-label">Semi-finished Stock Total (반제품 재고 합계) <span class="muted" style="font-weight:400;">— produced, not yet packaged (생산 완료 · 포장 전)</span></div><div class="kpi-value">${fmtNum(sumByType('반제품'))}</div></div>
-      <div class="kpi-card"><div class="kpi-label">Finished Goods Stock Total (완제품 재고 합계) <span class="muted" style="font-weight:400;">— packaged, ready to ship (포장 완료 · 출고 가능)</span></div><div class="kpi-value">${fmtNum(sumByType('완제품'))}</div></div>
-      <div class="kpi-card"><div class="kpi-label">Other Stock Total (기타 재고 합계)</div><div class="kpi-value">${fmtNum(sumByType('기타'))}</div></div>
+    <div class="kpi-grid" style="grid-template-columns:1fr;max-width:460px;">
+      <div class="kpi-card"><div class="kpi-label">Total Stock (총재고) <span class="muted" style="font-weight:400;">— Finished Goods (완제품) only, Semi-finished (반제품) excluded (반제품은 총재고 집계에서 제외)</span></div><div class="kpi-value">${fmtNum(finishedTotal)}</div></div>
     </div>
     <div class="seg" id="stockTypeSeg" style="margin-bottom:10px;">
       <button data-t="" class="${stockTypeFilter===''?'active':''}">All (전체)</button>
