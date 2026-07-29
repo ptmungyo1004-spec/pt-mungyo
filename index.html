@@ -1122,7 +1122,7 @@ function computeStock(){
     if(t.type==='in') map[t.itemCode].inQty += Number(t.qty)||0;
     else map[t.itemCode].outQty += Number(t.qty)||0;
   });
-  return Object.values(map).map(r=>({...r, stock: r.inQty - r.outQty, orderQty: itemOpenOrderQty(r.code)})).sort((a,b)=>koCompare(a.name, b.name));
+  return Object.values(map).map(r=>({...r, stock: r.inQty - r.outQty, orderQty: itemOpenOrderQty(r.code)})).reverse();
 }
 // 진행중인 주문(취소 제외) 중 아직 생산/출고되지 않은 잔여 주문수량 합계 (품목 기준)
 function itemOpenOrderQty(itemCode){
@@ -1311,7 +1311,7 @@ function renderItemsBody(){
   const body = document.getElementById('itemsBody');
   const pgBar = document.getElementById('itemsPgBar');
   if(!body) return;
-  let sortedItems = [...DB.items].sort((a,b)=>koCompare(a.name, b.name));
+  let sortedItems = [...DB.items].reverse();
   const q = itemsSearchQ.trim().toLowerCase();
   if(q){ sortedItems = sortedItems.filter(it=>(it.name||'').toLowerCase().includes(q) || (it.code||'').toLowerCase().includes(q)); }
   if(itemsTypeFilter){ sortedItems = sortedItems.filter(it=>(it.itemType||'완제품')===itemsTypeFilter); }
@@ -1439,7 +1439,7 @@ function renderPartnersBody(){
   const body = document.getElementById('partnersBody');
   const pgBar = document.getElementById('partnersPgBar');
   if(!body) return;
-  let sortedPartners = [...DB.partners].sort((a,b)=>koCompare(a.name, b.name));
+  let sortedPartners = [...DB.partners].reverse();
   const q = partnersSearchQ.trim().toLowerCase();
   if(q){ sortedPartners = sortedPartners.filter(p=>(p.name||'').toLowerCase().includes(q) || (p.code||'').toLowerCase().includes(q)); }
   if(partnersTypeFilter==='매입처'||partnersTypeFilter==='매출처'){ sortedPartners = sortedPartners.filter(p=>p.type===partnersTypeFilter); }
@@ -1802,10 +1802,10 @@ let orderBoardPage = 1;
 function renderOrdersBoard(){
   const wrap = document.getElementById('ordersBoardWrap');
   if(!wrap) return;
-  let rows = [...DB.orders].sort((a,b)=>{
-    const da = a.reqDelivery || '9999-99-99';
-    const db = b.reqDelivery || '9999-99-99';
-    return da.localeCompare(db);
+  let rows = [...DB.orders].reverse().sort((a,b)=>{
+    const da = a.reqDelivery || '';
+    const db = b.reqDelivery || '';
+    return db.localeCompare(da);
   });
   const q = orderSearchQ.trim().toLowerCase();
   if(q){
@@ -2295,7 +2295,7 @@ function renderWorklogBoardList(){
     wrap.innerHTML = `<div class="loading-row">No work logs registered. Use the button above to add one. (등록된 작업일지가 없습니다)</div>`;
     return;
   }
-  let rows = [...DB.worklogs].sort((a,b)=>b.date.localeCompare(a.date));
+  let rows = [...DB.worklogs].reverse().sort((a,b)=>b.date.localeCompare(a.date));
   const q = worklogSearchQ.trim().toLowerCase();
   if(q){
     rows = rows.filter(w=>{
@@ -2824,7 +2824,7 @@ function renderProdBody(){
   const body = document.getElementById('prodBody');
   const pgBar = document.getElementById('prodLogPgBar');
   if(!body) return;
-  let rows = [...DB.production].sort((a,b)=>b.date.localeCompare(a.date));
+  let rows = [...DB.production].reverse().sort((a,b)=>b.date.localeCompare(a.date));
   const q = prodLogSearchQ.trim().toLowerCase();
   if(q){ rows = rows.filter(p=>itemName(p.itemCode).toLowerCase().includes(q) || (p.itemCode||'').toLowerCase().includes(q) || partnerName(p.partnerCode).toLowerCase().includes(q) || (p.partnerCode||'').toLowerCase().includes(q)); }
   if(prodLogItemFilter){ rows = rows.filter(p=>p.itemCode===prodLogItemFilter); }
@@ -3092,7 +3092,7 @@ function renderMaterialsListBody(){
   if(materialCatFilter){ rows = rows.filter(m=>(m.category||'기타')===materialCatFilter); }
   if(materialLowOnly){ rows = rows.filter(m=>m.safetyStock && m.stock < Number(m.safetyStock)); }
   if(materialNeedOrderOnly){ rows = rows.filter(m=>(m.openOrderQty - m.stock) > 0); }
-  rows.sort((a,b)=>koCompare(a.name, b.name));
+  rows.reverse();
   if(!rows.length){ wrap.innerHTML = `<div class="loading-row">No materials match your search. (검색 조건에 맞는 자재가 없습니다)</div>`; return; }
   const totalPages = Math.max(1, Math.ceil(rows.length/PAGE_SIZE));
   if(matListPage>totalPages) matListPage = totalPages;
@@ -3223,7 +3223,7 @@ function renderMaterialTxnLog(){
   `;
   document.getElementById('addMatInBtn').onclick = ()=>matTxnModal('in');
   document.getElementById('addMatOutBtn').onclick = ()=>matTxnModal('out');
-  const rows = [...DB.materialTxn].sort((a,b)=>b.date.localeCompare(a.date));
+  const rows = [...DB.materialTxn].reverse().sort((a,b)=>b.date.localeCompare(a.date));
   const body = document.getElementById('matTxnBody');
   const pgBar = document.getElementById('matTxnPgBar');
   const totalPages = Math.max(1, Math.ceil(rows.length/PAGE_SIZE));
@@ -3358,7 +3358,7 @@ function renderSubmatListBody(){
   if(submatCatFilter){ rows = rows.filter(m=>(m.category||'기타')===submatCatFilter); }
   if(submatLowOnly){ rows = rows.filter(m=>m.safetyStock && m.stock < Number(m.safetyStock)); }
   if(submatNeedOrderOnly){ rows = rows.filter(m=>(m.openOrderQty - m.stock) > 0); }
-  rows.sort((a,b)=>koCompare(a.name, b.name));
+  rows.reverse();
   if(!rows.length){ wrap.innerHTML = `<div class="loading-row">No sub-materials match your search. (검색 조건에 맞는 부자재가 없습니다)</div>`; document.getElementById('submatPager').innerHTML=''; return; }
   const totalPages = Math.max(1, Math.ceil(rows.length/SUBMAT_PAGE_SIZE));
   if(submatPage>totalPages) submatPage = totalPages;
@@ -3656,7 +3656,7 @@ function renderSubmatTxnLog(){
   renderSubmatTxnBody();
 }
 function renderSubmatTxnBody(){
-  let rows = [...DB.submaterialTxn].sort((a,b)=>b.date.localeCompare(a.date));
+  let rows = [...DB.submaterialTxn].reverse().sort((a,b)=>b.date.localeCompare(a.date));
   const q = submatTxnSearchQ.trim().toLowerCase();
   if(q){ rows = rows.filter(t=>submatName(t.materialCode).toLowerCase().includes(q) || (t.materialCode||'').toLowerCase().includes(q) || (t.partnerCode?partnerName(t.partnerCode):'').toLowerCase().includes(q) || (t.partnerCode||'').toLowerCase().includes(q)); }
   if(submatTxnMatFilter){ rows = rows.filter(t=>t.materialCode===submatTxnMatFilter); }
@@ -3741,7 +3741,7 @@ function renderTxnBody(){
   const body = document.getElementById('txnBody');
   const pgBar = document.getElementById('txnPgBar');
   if(!body) return;
-  let rows = DB.txn.filter(t=>t.type===txnSubTab).sort((a,b)=>b.date.localeCompare(a.date));
+  let rows = DB.txn.filter(t=>t.type===txnSubTab).reverse().sort((a,b)=>b.date.localeCompare(a.date));
   const q = txnSearchQ.trim().toLowerCase();
   if(q){ rows = rows.filter(t=>itemName(t.itemCode).toLowerCase().includes(q) || (t.itemCode||'').toLowerCase().includes(q) || partnerName(t.partnerCode).toLowerCase().includes(q) || (t.partnerCode||'').toLowerCase().includes(q)); }
   if(txnItemFilter){ rows = rows.filter(t=>t.itemCode===txnItemFilter); }
