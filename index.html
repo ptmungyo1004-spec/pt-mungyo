@@ -1599,8 +1599,24 @@ function matSourceName(type, code){ return type==='submaterial' ? submatName(cod
 function matSourceUnit(type, code){ return type==='submaterial' ? submatUnit(code) : materialUnit(code); }
 function matSourceStock(type, code){ return type==='submaterial' ? submatStock(code) : materialStock(code); }
 function matSourceOptionsHtml(type, selectedCode){
-  const list = type==='submaterial' ? DB.submaterials : DB.materials;
+  const list = [...(type==='submaterial' ? DB.submaterials : DB.materials)].sort((a,b)=>(a.name||'').localeCompare((b.name||''),'ko'));
   return `<option value="">Not linked (연동 안 함)</option>${list.map(m=>`<option value="${m.code}" ${selectedCode===m.code?'selected':''}>${m.name} (${m.code}) · Stock ${fmtNum(matSourceStock(type,m.code))}${m.unit||''}</option>`).join('')}`;
+}
+// select 안의 <option> 목록을 검색어로 필터링(값 없는 플레이스홀더 옵션은 항상 유지)해 자재가 많을 때도 쉽게 찾을 수 있게 함
+function filterSelectByQuery(selectEl, query){
+  if(!selectEl) return;
+  const q = (query||'').trim().toLowerCase();
+  Array.from(selectEl.options).forEach(opt=>{
+    if(!opt.value){ opt.style.display=''; return; }
+    opt.style.display = (!q || opt.textContent.toLowerCase().includes(q)) ? '' : 'none';
+  });
+}
+// 자재/부자재 선택용 <select> 위에 검색창을 붙여, 목록이 길어도 이름·코드로 빠르게 찾을 수 있게 해주는 공용 헬퍼
+function searchableSelectHtml(selectHtml, searchCls, placeholder){
+  return `<div style="flex:2;min-width:0;">
+    <input type="text" class="${searchCls}" placeholder="${placeholder||'🔍 Search by name/code (자재명·코드 검색)'}" style="width:100%;box-sizing:border-box;margin-bottom:6px;" autocomplete="off">
+    ${selectHtml}
+  </div>`;
 }
 
 /* ---------- 자재 여러 개 연동용 공용 편집 UI (품목관리 / 주문 품목 연동 오버라이드에서 사용) ----------
@@ -1614,10 +1630,10 @@ function matLinkRowHtml(link){
       <button type="button" class="matlink-type-btn ${type==='material'?'active':''}" data-type="material">Materials (자재관리)</button>
       <button type="button" class="matlink-type-btn ${type==='submaterial'?'active':''}" data-type="submaterial">Sub-materials (부자재관리)</button>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;">
-      <select class="matlink-code" style="flex:2;min-width:0;">${matSourceOptionsHtml(type, l.code)}</select>
-      <input class="matlink-per" type="number" min="0" step="0.01" value="${l.per!=null?l.per:1}" style="width:120px;flex:none;" placeholder="Per unit (소모량)">
-      <button type="button" class="btn-icon btn-danger-text matlink-remove" style="flex:none;">✕</button>
+    <div style="display:flex;gap:8px;align-items:flex-start;">
+      ${searchableSelectHtml(`<select class="matlink-code" style="width:100%;min-width:0;">${matSourceOptionsHtml(type, l.code)}</select>`, 'matlink-search')}
+      <input class="matlink-per" type="number" min="0" step="0.01" value="${l.per!=null?l.per:1}" style="width:120px;flex:none;margin-top:40px;" placeholder="Per unit (소모량)">
+      <button type="button" class="btn-icon btn-danger-text matlink-remove" style="flex:none;margin-top:40px;">✕</button>
     </div>
   </div>`;
 }
@@ -1636,7 +1652,7 @@ function bindMatLinksEditor(containerId){
       const rows = wrap.querySelectorAll('.matlink-row');
       const row = b.closest('.matlink-row');
       if(rows.length>1){ row.remove(); }
-      else { row.querySelector('.matlink-code').innerHTML = matSourceOptionsHtml(row.dataset.type,''); row.querySelector('.matlink-per').value=1; }
+      else { row.querySelector('.matlink-code').innerHTML = matSourceOptionsHtml(row.dataset.type,''); row.querySelector('.matlink-per').value=1; row.querySelector('.matlink-search').value=''; }
     };
   });
   wrap.querySelectorAll('.matlink-type-btn').forEach(btn=>{
@@ -1647,6 +1663,13 @@ function bindMatLinksEditor(containerId){
       row.dataset.type = newType;
       row.querySelectorAll('.matlink-type-btn').forEach(b2=>b2.classList.toggle('active', b2===btn));
       row.querySelector('.matlink-code').innerHTML = matSourceOptionsHtml(newType, '');
+      row.querySelector('.matlink-search').value = '';
+    };
+  });
+  wrap.querySelectorAll('.matlink-search').forEach(inp=>{
+    inp.oninput = ()=>{
+      const row = inp.closest('.matlink-row');
+      filterSelectByQuery(row.querySelector('.matlink-code'), inp.value);
     };
   });
 }
@@ -1687,10 +1710,10 @@ function matConsumeRowHtml(row){
       <button type="button" class="matcon-type-btn ${type==='material'?'active':''}" data-type="material">Materials (자재관리)</button>
       <button type="button" class="matcon-type-btn ${type==='submaterial'?'active':''}" data-type="submaterial">Sub-materials (부자재관리)</button>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;">
-      <select class="matcon-code" style="flex:2;min-width:0;">${matSourceOptionsHtml(type, r.code)}</select>
-      <input class="matcon-qty" type="number" min="0" step="0.01" value="${r.qty!=null?r.qty:0}" style="width:130px;flex:none;" placeholder="Consumed qty (소모수량)">
-      <button type="button" class="btn-icon btn-danger-text matcon-remove" style="flex:none;">✕</button>
+    <div style="display:flex;gap:8px;align-items:flex-start;">
+      ${searchableSelectHtml(`<select class="matcon-code" style="width:100%;min-width:0;">${matSourceOptionsHtml(type, r.code)}</select>`, 'matcon-search')}
+      <input class="matcon-qty" type="number" min="0" step="0.01" value="${r.qty!=null?r.qty:0}" style="width:130px;flex:none;margin-top:40px;" placeholder="Consumed qty (소모수량)">
+      <button type="button" class="btn-icon btn-danger-text matcon-remove" style="flex:none;margin-top:40px;">✕</button>
     </div>
   </div>`;
 }
@@ -1709,7 +1732,7 @@ function bindMatConsumeEditor(containerId){
       const rows = wrap.querySelectorAll('.matcon-row');
       const row = b.closest('.matcon-row');
       if(rows.length>1){ row.remove(); }
-      else { row.querySelector('.matcon-code').innerHTML = matSourceOptionsHtml(row.dataset.type,''); row.querySelector('.matcon-qty').value=0; row.dataset.per=''; }
+      else { row.querySelector('.matcon-code').innerHTML = matSourceOptionsHtml(row.dataset.type,''); row.querySelector('.matcon-qty').value=0; row.dataset.per=''; row.querySelector('.matcon-search').value=''; }
     };
   });
   wrap.querySelectorAll('.matcon-type-btn').forEach(btn=>{
@@ -1721,6 +1744,13 @@ function bindMatConsumeEditor(containerId){
       row.dataset.per = ''; // 소스를 바꾸면 기본 소모량 자동계산 연결은 끊고 직접 입력하도록 함
       row.querySelectorAll('.matcon-type-btn').forEach(b2=>b2.classList.toggle('active', b2===btn));
       row.querySelector('.matcon-code').innerHTML = matSourceOptionsHtml(newType, '');
+      row.querySelector('.matcon-search').value = '';
+    };
+  });
+  wrap.querySelectorAll('.matcon-search').forEach(inp=>{
+    inp.oninput = ()=>{
+      const row = inp.closest('.matcon-row');
+      filterSelectByQuery(row.querySelector('.matcon-code'), inp.value);
     };
   });
 }
@@ -2063,7 +2093,10 @@ function itemFormModal(orderId, existingItem){
   const initItemCode = existingItem ? existingItem.itemCode : DB.items[0].code;
   const initLinks = existingItem ? resolveItemMaterials(existingItem) : itemMaterialLinks(initItemCode);
   openModal(isEdit?'Edit Item (품목 수정)':'Add Item (품목 추가)', `
-    <div class="field"><label>1. Item (품목)</label><select id="f_itemcode">${sortedItemsList().map(i=>`<option value="${i.code}" ${existingItem&&existingItem.itemCode===i.code?'selected':''}>${i.name} (${i.code})</option>`).join('')}</select></div>
+    <div class="field"><label>1. Item (품목)</label>
+      <input type="text" id="f_itemsearch" placeholder="🔍 Search by name/code (품목명·코드 검색)" style="margin-bottom:6px;" autocomplete="off">
+      <select id="f_itemcode">${sortedItemsList().map(i=>`<option value="${i.code}" ${existingItem&&existingItem.itemCode===i.code?'selected':''}>${i.name} (${i.code})</option>`).join('')}</select>
+    </div>
     <div class="field"><label>2. ITEM NO.</label><input id="f_itemno" type="text" value="${existingItem?existingItem.itemNo||'':''}" placeholder="e.g. 26819"></div>
     <div class="field"><label>3. Weight (중량)</label><input id="f_weight" type="text" value="${existingItem?existingItem.weight||'':''}" placeholder="e.g. 5.000 M/T"></div>
     <div class="field"><label>4. Qty (수량)</label><input id="f_qty" type="number" min="0" value="${existingItem?existingItem.qty:''}" placeholder="Enter quantity (수량 입력)"></div>
@@ -2095,6 +2128,7 @@ function itemFormModal(orderId, existingItem){
   });
   renderMatLinksEditor('ordItemMatLinks', initLinks);
   document.getElementById('addOrdItemMatLinkBtn').onclick = ()=>addMatLinkRow('ordItemMatLinks');
+  document.getElementById('f_itemsearch').oninput = (e)=>filterSelectByQuery(document.getElementById('f_itemcode'), e.target.value);
   // When the item changes, auto-refresh to that item's default linked materials
   document.getElementById('f_itemcode').onchange = (e)=>{
     renderMatLinksEditor('ordItemMatLinks', itemMaterialLinks(e.target.value));
@@ -3092,7 +3126,7 @@ function renderMaterialsListBody(){
   if(materialCatFilter){ rows = rows.filter(m=>(m.category||'기타')===materialCatFilter); }
   if(materialLowOnly){ rows = rows.filter(m=>m.safetyStock && m.stock < Number(m.safetyStock)); }
   if(materialNeedOrderOnly){ rows = rows.filter(m=>(m.openOrderQty - m.stock) > 0); }
-  rows.reverse();
+  rows.sort((a,b)=>(a.name||'').localeCompare((b.name||''),'ko'));
   if(!rows.length){ wrap.innerHTML = `<div class="loading-row">No materials match your search. (검색 조건에 맞는 자재가 없습니다)</div>`; return; }
   const totalPages = Math.max(1, Math.ceil(rows.length/PAGE_SIZE));
   if(matListPage>totalPages) matListPage = totalPages;
@@ -3184,7 +3218,8 @@ function matTxnModal(type, presetCode){
   openModal(isIn?'Log Material In (자재 입고 등록)':'Log Material Out (자재 출고 등록)', `
     <div class="field"><label>Date (날짜)</label><input id="f_mdate" type="date" value="${todayStr()}"></div>
     <div class="field"><label>Material (자재)</label>
-      <select id="f_mtcode">${DB.materials.map(m=>`<option value="${m.code}" ${presetCode===m.code?'selected':''}>${m.name} (${m.code}) · Stock ${fmtNum(materialStock(m.code))}</option>`).join('')}</select>
+      <input type="text" id="f_mtsearch" placeholder="🔍 Search by name/code (자재명·코드 검색)" style="margin-bottom:6px;" autocomplete="off">
+      <select id="f_mtcode">${[...DB.materials].sort((a,b)=>(a.name||'').localeCompare((b.name||''),'ko')).map(m=>`<option value="${m.code}" ${presetCode===m.code?'selected':''}>${m.name} (${m.code}) · Stock ${fmtNum(materialStock(m.code))}</option>`).join('')}</select>
     </div>
     <div class="field"><label>Qty (수량)</label><input id="f_mtqty" type="number" min="0" value="" placeholder="Enter quantity (수량 입력)"></div>
     <div class="field"><label>Memo (비고)</label><input id="f_mtmemo" type="text" placeholder="${isIn?'e.g. Supplier order received':'e.g. Manual adjustment'}"></div>
@@ -3202,6 +3237,7 @@ function matTxnModal(type, presetCode){
     if(materialSubTab==='list') renderMaterialsListBody(); else renderMaterialTxnLog();
     showToast(isIn?'Material stock-in logged. (자재 입고를 등록했어요)':'Material stock-out logged. (자재 출고를 등록했어요)');
   });
+  document.getElementById('f_mtsearch').oninput = (e)=>filterSelectByQuery(document.getElementById('f_mtcode'), e.target.value);
 }
 let matTxnPage = 1;
 function renderMaterialTxnLog(){
@@ -3358,7 +3394,7 @@ function renderSubmatListBody(){
   if(submatCatFilter){ rows = rows.filter(m=>(m.category||'기타')===submatCatFilter); }
   if(submatLowOnly){ rows = rows.filter(m=>m.safetyStock && m.stock < Number(m.safetyStock)); }
   if(submatNeedOrderOnly){ rows = rows.filter(m=>(m.openOrderQty - m.stock) > 0); }
-  rows.reverse();
+  rows.sort((a,b)=>(a.name||'').localeCompare((b.name||''),'ko'));
   if(!rows.length){ wrap.innerHTML = `<div class="loading-row">No sub-materials match your search. (검색 조건에 맞는 부자재가 없습니다)</div>`; document.getElementById('submatPager').innerHTML=''; return; }
   const totalPages = Math.max(1, Math.ceil(rows.length/SUBMAT_PAGE_SIZE));
   if(submatPage>totalPages) submatPage = totalPages;
@@ -3499,7 +3535,8 @@ function submatTxnModal(type, presetCode){
   openModal(isIn?'Log Sub-material In (부자재 입고 등록)':'Log Sub-material Out (부자재 출고 등록)', `
     <div class="field"><label>Date (날짜)</label><input id="f_smdate" type="date" value="${todayStr()}"></div>
     <div class="field"><label>Sub-material (부자재)</label>
-      <select id="f_smtcode">${DB.submaterials.map(m=>`<option value="${m.code}" ${presetCode===m.code?'selected':''}>${m.name} (${m.code}) · Stock ${fmtNum(submatStock(m.code))}</option>`).join('')}</select>
+      <input type="text" id="f_smtsearch" placeholder="🔍 Search by name/code (자재명·코드 검색)" style="margin-bottom:6px;" autocomplete="off">
+      <select id="f_smtcode">${[...DB.submaterials].sort((a,b)=>(a.name||'').localeCompare((b.name||''),'ko')).map(m=>`<option value="${m.code}" ${presetCode===m.code?'selected':''}>${m.name} (${m.code}) · Stock ${fmtNum(submatStock(m.code))}</option>`).join('')}</select>
     </div>
     <div class="field"><label>Qty (수량)</label><input id="f_smtqty" type="number" min="0" value="" placeholder="Enter quantity (수량 입력)"></div>
     ${isIn ? `
@@ -3531,6 +3568,7 @@ function submatTxnModal(type, presetCode){
     showToast(isIn?'Sub-material stock-in logged. (부자재 입고를 등록했어요)':'Sub-material stock-out logged. (부자재 출고를 등록했어요)');
   });
   if(isIn) bindQtySubRows('smtQtyExtra','smtQtyExtraAdd');
+  document.getElementById('f_smtsearch').oninput = (e)=>filterSelectByQuery(document.getElementById('f_smtcode'), e.target.value);
 }
 // 매일 새로 들어오는 부자재를 마스터 등록 없이 입고 화면에서 바로 신규 등록 + 입고 처리
 function submatQuickInModal(){
@@ -3545,7 +3583,8 @@ function submatQuickInModal(){
     </div>
     <div id="qsmExistingWrap" style="${isNewDefault?'display:none;':''}">
       <div class="field"><label>Sub-material (부자재)</label>
-        <select id="qsm_existcode">${DB.submaterials.map(m=>`<option value="${m.code}">${m.name} (${m.code}) · Stock ${fmtNum(submatStock(m.code))}</option>`).join('')}</select>
+        <input type="text" id="qsm_existsearch" placeholder="🔍 Search by name/code (자재명·코드 검색)" style="margin-bottom:6px;" autocomplete="off">
+        <select id="qsm_existcode">${[...DB.submaterials].sort((a,b)=>(a.name||'').localeCompare((b.name||''),'ko')).map(m=>`<option value="${m.code}">${m.name} (${m.code}) · Stock ${fmtNum(submatStock(m.code))}</option>`).join('')}</select>
       </div>
     </div>
     <div id="qsmNewWrap" style="${isNewDefault?'':'display:none;'}">
@@ -3607,6 +3646,8 @@ function submatQuickInModal(){
     showToast('Sub-material stock-in logged. (부자재 입고를 등록했어요)');
   });
   bindQtySubRows('qsmQtyExtra','qsmQtyExtraAdd');
+  const qsmExistSearch = document.getElementById('qsm_existsearch');
+  if(qsmExistSearch) qsmExistSearch.oninput = (e)=>filterSelectByQuery(document.getElementById('qsm_existcode'), e.target.value);
   document.getElementById('qsm_newcat').onchange = (e)=>{
     document.getElementById('qsm_newcat_new').style.display = e.target.value==='__newcat__' ? '' : 'none';
     if(e.target.value==='__newcat__') document.getElementById('qsm_newcat_new').focus();
