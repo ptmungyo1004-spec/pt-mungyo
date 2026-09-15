@@ -2392,7 +2392,12 @@ function renderProdSchedBoard(){
   const wrap = document.getElementById('prodSchedWrap');
   if(!wrap) return;
   let orders = DB.orders.filter(o=>o.status!=='취소' && (o.items||[]).length);
-  orders = [...orders].sort((a,b)=> (a.reqDelivery||'9999-99-99').localeCompare(b.reqDelivery||'9999-99-99'));
+  // 납기일자가 가장 늦은(느린) 주문이 앞으로, 날짜가 비어있는 주문은 맨 뒤로 (주문서관리 목록과 동일한 정렬 기준)
+  orders = [...orders].sort((a,b)=>{
+    const da = a.reqDelivery || '';
+    const db = b.reqDelivery || '';
+    return db.localeCompare(da);
+  });
   const q = prodSchedSearchQ.trim().toLowerCase();
   if(q){
     orders = orders.filter(o=>
