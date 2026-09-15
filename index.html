@@ -93,9 +93,11 @@
   /* ---------- cards / dashboard ---------- */
   .kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
   .kpi-grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px;}
-  @media (max-width:900px){.kpi-grid{grid-template-columns:repeat(3,1fr);} .kpi-grid-5{grid-template-columns:repeat(3,1fr);}}
+  .kpi-grid-7{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:16px;}
+  @media (max-width:900px){.kpi-grid{grid-template-columns:repeat(3,1fr);} .kpi-grid-5{grid-template-columns:repeat(3,1fr);} .kpi-grid-7{grid-template-columns:repeat(4,1fr);}}
   @media (max-width:640px){.kpi-grid{grid-template-columns:repeat(1,1fr);}}
-  @media (max-width:520px){.kpi-grid-5{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.kpi-grid-5{grid-template-columns:repeat(2,1fr);} .kpi-grid-7{grid-template-columns:repeat(2,1fr);}}
+  .prod-progress-col{min-width:96px;}
   .kpi-card{
     background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
     padding:14px 16px;box-shadow:var(--shadow);
@@ -193,6 +195,7 @@
   .dot-sched{background:var(--accent);}
   .dot-prod{background:var(--warn);}
   .dot-txn{background:#7C6BAE;}
+  .dot-schedprod{background:#2E8B8B;}
 
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
   .cal-dow{text-align:center;font-size:11.5px;font-weight:600;color:var(--ink-soft);padding:4px 0 8px 0;}
@@ -352,7 +355,7 @@
       <input type="file" id="importFile" accept="application/json" style="display:none;">
     </div>
   </div>
-  <nav class="tabs" id="tabs"><button class="tab-btn active" data-tab="dashboard">Dashboard (대시보드)</button><button class="tab-btn" data-tab="calendar">Calendar (캘린더)</button><button class="tab-btn" data-tab="items">Items (품목관리)</button><button class="tab-btn" data-tab="orders">Orders (주문서관리)</button><button class="tab-btn" data-tab="production">Production (생산관리)</button><button class="tab-btn" data-tab="materials">Materials (자재관리)</button><button class="tab-btn" data-tab="submaterials">Sub-materials (부자재관리)</button><button class="tab-btn" data-tab="txn">Stock In/Out (입출고관리)</button><button class="tab-btn" data-tab="stock">Stock Status (재고현황)</button></nav>
+  <nav class="tabs" id="tabs"><button class="tab-btn active" data-tab="dashboard">Dashboard (대시보드)</button><button class="tab-btn" data-tab="calendar">Calendar (캘린더)</button><button class="tab-btn" data-tab="orders">Orders (주문서관리)</button><button class="tab-btn" data-tab="production">Production (생산관리)</button><button class="tab-btn" data-tab="worklog">Work Log (작업일지)</button><button class="tab-btn" data-tab="materials">Materials (자재관리)</button><button class="tab-btn" data-tab="submaterials">Sub-materials (부자재관리)</button><button class="tab-btn" data-tab="txn">Stock In/Out (입출고관리)</button><button class="tab-btn" data-tab="stock">Stock Status (재고현황)</button><button class="tab-btn" data-tab="partners">Partner Management (거래처관리)</button><button class="tab-btn" data-tab="items">Items (품목관리)</button></nav>
 </div>
 
 <main>
@@ -408,6 +411,7 @@
       <button class="btn btn-ghost btn-sm" id="calToday">Today (오늘)</button>
       <div class="cal-legend">
         <span><span class="dot dot-sched"></span>Events (등록한 일정)</span>
+        <span><span class="dot dot-schedprod"></span>Production Schedule (생산관리 일정)</span>
         <span><span class="dot dot-prod"></span>Production (생산실적)</span>
         <span><span class="dot dot-txn"></span>Stock In/Out (입출고)</span>
       </div>
@@ -717,6 +721,7 @@
   </section>
   <section id="tab-orders" class="tab-panel"></section>
   <section id="tab-production" class="tab-panel"></section>
+  <section id="tab-worklog" class="tab-panel"></section>
   <section id="tab-materials" class="tab-panel"></section>
   <section id="tab-submaterials" class="tab-panel"></section>
   <section id="tab-txn" class="tab-panel"></section>
@@ -821,6 +826,8 @@ const LABELS = {
   '소모품':'Consumable (소모품)', '박스':'Box (박스)', '지대':'Paper Bag (지대)', '톤백':'Ton Bag (톤백)',
   '기타':'Other (기타)', '포장재':'Packaging (포장재)',
   '반제품':'Semi-finished (반제품)', '완제품':'Finished (완제품)',
+  '대기':'Pending (대기)', '포장중':'Packing (포장중)', '포장완료':'Packing Done (포장완료)',
+  '출고가능':'Ready to Ship (출고가능)',
 };
 function L(v){ return LABELS[v] || v; }
 async function loadAll(){
@@ -1091,6 +1098,7 @@ const TABS = [
   {id:'calendar', label:'Calendar (캘린더)'},
   {id:'orders', label:'Orders (주문서관리)'},
   {id:'production', label:'Production (생산관리)'},
+  {id:'worklog', label:'Work Log (작업일지)'},
   {id:'materials', label:'Materials (자재관리)'},
   {id:'submaterials', label:'Sub-materials (부자재관리)'},
   {id:'txn', label:'Stock In/Out (입출고관리)'},
@@ -1793,6 +1801,16 @@ function itemProgress(order, it){
   const pct = it.qty>0 ? Math.min(100, Math.round(inQty/it.qty*100)) : 0;
   return {inQty, outQty, pct};
 }
+// 주문 전체의 생산 진행률(%) — 주문에 속한 모든 품목의 생산입고수량 합 ÷ 주문수량 합
+// 주문서관리 목록에서 "생산중일 때 몇 %인지" 한눈에 보여주기 위해 사용합니다.
+function orderProgress(order){
+  const items = order.items||[];
+  if(!items.length) return {pct:0, inQty:0, totalQty:0};
+  let inQty=0, totalQty=0;
+  items.forEach(it=>{ const p = itemProgress(order, it); inQty += p.inQty; totalQty += (Number(it.qty)||0); });
+  const pct = totalQty>0 ? Math.min(100, Math.round(inQty/totalQty*100)) : 0;
+  return {pct, inQty, totalQty};
+}
 
 let orderSearchQ = '';
 let orderStatusFilterVal = '';
@@ -1857,10 +1875,12 @@ function renderOrdersBoard(){
   wrap.innerHTML = `
     <table>
       <thead><tr>
-        <th>Order No. (주문번호)</th><th>Partner (거래처)</th><th>Country (국가)</th><th>Delivery Date (납기일자)</th><th class="num">Items (품목수)</th><th>Status (상태)</th><th></th>
+        <th>Order No. (주문번호)</th><th>Partner (거래처)</th><th>Country (국가)</th><th>Delivery Date (납기일자)</th><th class="num">Items (품목수)</th><th>Status (상태)</th><th class="prod-progress-col">Production Progress (생산진행률)</th><th></th>
       </tr></thead>
       <tbody>
-        ${pageRows.map(o=>`
+        ${pageRows.map(o=>{
+          const p = orderProgress(o);
+          return `
           <tr class="order-row" data-open="${o.id}">
             <td class="mono order-code">${o.orderCode}</td>
             <td>${partnerName(o.partnerCode)}</td>
@@ -1868,11 +1888,18 @@ function renderOrdersBoard(){
             <td class="mono">${o.reqDelivery||'-'}</td>
             <td class="num">${(o.items||[]).length}</td>
             <td><span class="tag ${statusTagClass(o.status)}">${L(o.status)}</span></td>
+            <td class="prod-progress-col">
+              <div class="item-progress-mini">
+                <span>${p.pct}% (${fmtNum(p.inQty)}/${fmtNum(p.totalQty)})</span>
+                <div class="bar" style="width:100%;"><div class="fill" style="width:${p.pct}%;"></div></div>
+              </div>
+            </td>
             <td class="row-actions">
               <button class="btn-icon" data-open2="${o.id}">View (상세보기)</button>
               <button class="btn-icon btn-danger-text" data-del="${o.id}">Delete (삭제)</button>
             </td>
-          </tr>`).join('')}
+          </tr>`;
+        }).join('')}
       </tbody>
     </table>
     ${totalPages>1?`
@@ -1971,6 +1998,8 @@ function closeOrderDetail(){
 function refreshAfterOrderChange(){
   renderOrdersBoard();
   if(currentDetailOrderId) renderOrderDetailModal();
+  renderProdSchedBoard();
+  if(currentProdDetailOrderId) renderProductionDetailModal();
 }
 function renderOrderDetailModal(){
   const order = DB.orders.find(x=>x.id===currentDetailOrderId);
@@ -2157,7 +2186,7 @@ function itemProdInModal(orderId, itemId){
     <p style="margin:0 0 12px 0;font-size:13px;color:var(--ink-soft);">
       ${fmtNum(inQty)} of ${fmtNum(item.qty)} ordered produced so far. Remaining: ${fmtNum(remain)} (주문수량 중 생산입고/남은 수량)
     </p>
-    <p style="margin:0 0 12px 0;font-size:12.5px;color:var(--ink-faint);">⚠️ If you already logged this production in the Production (생산관리) tab and linked it to this order there, don't log it again here — it would double-count in Stock Status (재고현황). (생산관리에서 이 주문에 연결해 이미 등록했다면 여기서 또 등록하지 마세요 · 재고현황에 중복 합산됩니다)</p>
+    <p style="margin:0 0 12px 0;font-size:12.5px;color:var(--ink-faint);">⚠️ If you already logged this production in the Work Log (작업일지) tab's Production Log and linked it to this order there, don't log it again here — it would double-count in Stock Status (재고현황). (작업일지의 생산입고기록에서 이 주문에 연결해 이미 등록했다면 여기서 또 등록하지 마세요 · 재고현황에 중복 합산됩니다)</p>
     <div class="field"><label>Stock-in Date (입고일)</label><input id="f_date" type="date" value="${todayStr()}"></div>
     <div class="field"><label>Production Qty (생산수량)</label><input id="f_qty" type="number" min="0" value="${remain}"></div>
     <div class="field"><label>Unit (단위)</label><input id="f_qtyunit" type="text" value="${itemUnit(item.itemCode)}" readonly disabled style="background:var(--panel-alt,#f3f3f3);cursor:not-allowed;">
@@ -2242,17 +2271,354 @@ function itemShipModal(orderId, itemId){
   });
 }
 /* ============================================================
-   생산관리
+   Production (생산관리) — 주문 품목별 생산 스케줄 관리
+   - 주문서관리(Orders)의 각 품목(line item)에 대해 매일 진행 상황을 기록:
+     1) 생산예정일/생산완료일 2) 포장예정일/포장완료일 3) 제품완료일 4) 출고가능일
+   - 날짜/상태는 주문 품목(item.sched)에 직접 저장되며, 기존 "orders" 저장키를
+     그대로 사용하므로 서버/백업 구조를 바꾸지 않습니다.
+============================================================ */
+const SCHED_STATUSES = ['대기','생산중','생산완료','포장중','포장완료','출고가능','출고완료'];
+function schedStatusTagClass(s){
+  if(s==='대기') return 'tag-warn';
+  if(s==='생산중') return 'tag-info';
+  if(s==='생산완료') return 'tag-ok';
+  if(s==='포장중') return 'tag-info';
+  if(s==='포장완료') return 'tag-ok';
+  if(s==='출고가능') return 'tag-done';
+  if(s==='출고완료') return 'tag-done';
+  return 'tag-warn';
+}
+function itemSched(it){ return it.sched || {}; }
+// 생산 스케줄 상태 ↔ 주문 상태 연동
+// 품목별 스케줄 상태를 4단계로 매핑하고, 주문 내 모든 품목 중 "가장 뒤처진" 단계를
+// 주문 상태로 반영합니다(품목 하나라도 아직 안 끝났으면 주문 전체도 그 단계로 봄).
+// 이미 취소된 주문은 건드리지 않고, 단계가 뒤로 가는(자동 강등) 일은 없도록
+// 계산된 단계가 현재 주문 상태보다 앞설 때만 갱신합니다(수동으로 앞서 바꿔둔 상태를
+// 실수로 되돌리지 않기 위함).
+const ORDER_STAGE = {'접수':0,'생산중':1,'생산완료':2,'출고완료':3};
+const ORDER_STAGE_STATUS = ['접수','생산중','생산완료','출고완료'];
+const SCHED_STAGE = {'대기':0,'생산중':1,'생산완료':2,'포장중':2,'포장완료':2,'출고가능':2,'출고완료':3};
+function recalcOrderStatusFromSchedule(order){
+  if(order.status==='취소') return null;
+  const items = order.items||[];
+  if(!items.length) return null;
+  const minStage = Math.min(...items.map(it=> SCHED_STAGE[itemSched(it).status||'대기'] ?? 0));
+  const curStage = ORDER_STAGE[order.status] ?? 0;
+  if(minStage > curStage) return ORDER_STAGE_STATUS[minStage];
+  return null;
+}
+const SCHED_DATE_FIELDS = [
+  ['planProd', 'Plan Production (생산예정)'],
+  ['doneProd', 'Production Done (생산완료)'],
+  ['planPack', 'Plan Packing (포장예정)'],
+  ['donePack', 'Packing Done (포장완료)'],
+  ['complete', 'Completion (제품완료)'],
+  ['ready', 'Ready to Ship (출고가능)'],
+];
+// 캘린더 연동: 지정한 날짜에 예정/완료로 잡힌 생산 스케줄 항목을 모두 찾음
+function scheduleEventsForDate(dateStr){
+  const out = [];
+  DB.orders.forEach(o=>{
+    (o.items||[]).forEach(it=>{
+      const s = itemSched(it);
+      SCHED_DATE_FIELDS.forEach(([key, label])=>{
+        if(s[key]===dateStr) out.push({ order:o, item:it, key, label });
+      });
+    });
+  });
+  return out;
+}
+// 모든 주문의 품목을 한 줄씩 펼쳐서 {order, item} 목록으로 만듦
+function scheduleRows(){
+  const rows = [];
+  DB.orders.forEach(o=>{
+    (o.items||[]).forEach(it=>{
+      rows.push({ order:o, item:it });
+    });
+  });
+  return rows;
+}
+let prodSchedSearchQ = '';
+let prodSchedStatusFilterVal = '';
+let prodSchedPage = 1;
+// 주문 전체(품목들)의 생산 스케줄 요약 — 가장 뒤처진 품목의 단계를 주문의 대표 상태로,
+// 전체 품목 단계의 평균을 진행률(%)로 사용합니다. (게시판형 목록에서 한 줄로 보여주기 위함)
+function orderSchedSummary(order){
+  const items = order.items||[];
+  if(!items.length) return { status:'대기', pct:0 };
+  const lastIdx = SCHED_STATUSES.length-1;
+  let minIdx = lastIdx, sumIdx = 0;
+  items.forEach(it=>{
+    const idx = Math.max(0, SCHED_STATUSES.indexOf(itemSched(it).status||'대기'));
+    sumIdx += idx;
+    if(idx < minIdx) minIdx = idx;
+  });
+  const pct = Math.round((sumIdx/items.length)/lastIdx*100);
+  return { status: SCHED_STATUSES[minIdx], pct };
+}
+function renderProductionSchedule(){
+  const el = document.getElementById('tab-production');
+  const counts = {}; SCHED_STATUSES.forEach(s=>counts[s]=0);
+  scheduleRows().filter(r=>r.order.status!=='취소').forEach(r=>{
+    const st = itemSched(r.item).status || '대기';
+    counts[st] = (counts[st]||0)+1;
+  });
+  el.innerHTML = `
+    <div class="panel-head">
+      <div><div class="panel-title">Production (생산관리)</div><div class="panel-sub">Orders in one list, grouped like Order Management — click an order to manage each item's production, packing, and ship-ready schedule (주문 단위로 모아보기 · 클릭하면 품목별 생산 일정 관리)</div></div>
+    </div>
+    <div class="kpi-grid-7">
+      ${SCHED_STATUSES.map(s=>`
+        <div class="kpi-card">
+          <div class="kpi-label">${L(s)}</div>
+          <div class="kpi-value">${fmtNum(counts[s]||0)}<span class="kpi-unit">items (건)</span></div>
+        </div>`).join('')}
+    </div>
+    <div class="order-search-bar">
+      <input type="text" id="prodSchedSearchInput" placeholder="🔍 Search by order no, partner, or item (주문번호·거래처·품명 검색)" value="${prodSchedSearchQ}">
+      <select id="prodSchedStatusSel">
+        <option value="">All Statuses (전체 진행상태)</option>
+        ${SCHED_STATUSES.map(s=>`<option value="${s}" ${prodSchedStatusFilterVal===s?'selected':''}>${L(s)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="table-wrap" id="prodSchedWrap"></div>
+    <p class="field-hint" style="margin-top:10px;">※ Orders come from Order Management (Orders). Add or edit order items there first, then track their production schedule here. (주문서관리에 등록된 주문이 이 목록에 표시됩니다. 주문·품목 자체의 추가·수정은 주문서관리에서 해주세요)</p>
+  `;
+  document.getElementById('prodSchedSearchInput').oninput = (e)=>{ prodSchedSearchQ = e.target.value; prodSchedPage = 1; renderProdSchedBoard(); };
+  document.getElementById('prodSchedStatusSel').onchange = (e)=>{ prodSchedStatusFilterVal = e.target.value; prodSchedPage = 1; renderProdSchedBoard(); };
+  renderProdSchedBoard();
+}
+function renderProdSchedBoard(){
+  const wrap = document.getElementById('prodSchedWrap');
+  if(!wrap) return;
+  let orders = DB.orders.filter(o=>o.status!=='취소' && (o.items||[]).length);
+  orders = [...orders].sort((a,b)=> (a.reqDelivery||'9999-99-99').localeCompare(b.reqDelivery||'9999-99-99'));
+  const q = prodSchedSearchQ.trim().toLowerCase();
+  if(q){
+    orders = orders.filter(o=>
+      (o.orderCode||'').toLowerCase().includes(q) ||
+      partnerName(o.partnerCode).toLowerCase().includes(q) ||
+      (o.items||[]).some(it=>itemName(it.itemCode).toLowerCase().includes(q))
+    );
+  }
+  if(prodSchedStatusFilterVal){
+    orders = orders.filter(o=>orderSchedSummary(o).status===prodSchedStatusFilterVal);
+  }
+  if(!DB.orders.some(o=>(o.items||[]).length)){
+    wrap.innerHTML = `<div class="loading-row">No order items yet. Add items in Order Management first. (주문서관리에서 품목을 먼저 등록해 주세요)</div>`;
+    return;
+  }
+  if(!orders.length){
+    wrap.innerHTML = `<div class="loading-row">No orders match your search. (검색 조건에 맞는 주문이 없습니다)</div>`;
+    return;
+  }
+  const totalPages = Math.max(1, Math.ceil(orders.length/BOARD_PAGE_SIZE));
+  if(prodSchedPage>totalPages) prodSchedPage = totalPages;
+  if(prodSchedPage<1) prodSchedPage = 1;
+  const pageRows = orders.slice((prodSchedPage-1)*BOARD_PAGE_SIZE, prodSchedPage*BOARD_PAGE_SIZE);
+  wrap.innerHTML = `
+    <table>
+      <thead><tr>
+        <th>Order No. (주문번호)</th><th>Partner (거래처)</th><th>Country (국가)</th><th>Delivery Date (납기일자)</th>
+        <th class="num">Items (품목수)</th><th class="prod-progress-col">Progress (진행률)</th><th>Status (진행상태)</th><th></th>
+      </tr></thead>
+      <tbody>
+        ${pageRows.map(o=>{
+          const sum = orderSchedSummary(o);
+          return `
+          <tr class="order-row" data-open="${o.id}">
+            <td class="mono order-code">${o.orderCode}</td>
+            <td>${partnerName(o.partnerCode)}</td>
+            <td class="muted">${o.country||'-'}</td>
+            <td class="mono">${o.reqDelivery||'-'}</td>
+            <td class="num">${(o.items||[]).length}</td>
+            <td class="prod-progress-col">
+              <div class="item-progress-mini">
+                <span>${sum.pct}%</span>
+                <div class="bar" style="width:100%;"><div class="fill" style="width:${sum.pct}%;"></div></div>
+              </div>
+            </td>
+            <td><span class="tag ${schedStatusTagClass(sum.status)}">${L(sum.status)}</span></td>
+            <td class="row-actions"><button class="btn-icon" data-open2="${o.id}">View (상세보기)</button></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+    ${totalPages>1?`
+      <div class="pg-bar" style="padding:12px 0;">
+        <button class="pg-btn" id="psPgPrev" ${prodSchedPage<=1?'disabled':''}>‹</button>
+        ${Array.from({length:totalPages},(_,i)=>i+1).map(p=>`<button class="pg-btn ${p===prodSchedPage?'active':''}" data-pspg="${p}">${p}</button>`).join('')}
+        <button class="pg-btn" id="psPgNext" ${prodSchedPage>=totalPages?'disabled':''}>›</button>
+      </div>` : ''}
+  `;
+  const psPrev = document.getElementById('psPgPrev'); if(psPrev) psPrev.onclick = ()=>{ prodSchedPage--; renderProdSchedBoard(); };
+  const psNext = document.getElementById('psPgNext'); if(psNext) psNext.onclick = ()=>{ prodSchedPage++; renderProdSchedBoard(); };
+  wrap.querySelectorAll('[data-pspg]').forEach(b=>b.onclick=()=>{ prodSchedPage = Number(b.dataset.pspg); renderProdSchedBoard(); });
+  wrap.querySelectorAll('.order-row').forEach(tr=>{
+    tr.addEventListener('click', ()=>{ openProductionDetail(tr.dataset.open); });
+  });
+}
+
+/* ---------- 생산관리 상세보기(주문 1건의 품목별 생산 스케줄) : 품목 10개씩 페이지 이동 ---------- */
+let currentProdDetailOrderId = null;
+let prodItemPageMap = {};
+function openProductionDetail(orderId){
+  currentProdDetailOrderId = orderId;
+  if(!prodItemPageMap[orderId]) prodItemPageMap[orderId] = 1;
+  renderProductionDetailModal();
+}
+function closeProductionDetail(){
+  currentProdDetailOrderId = null;
+  document.getElementById('modal-root').innerHTML = '';
+  renderProdSchedBoard();
+}
+function renderProductionDetailModal(){
+  const order = DB.orders.find(x=>x.id===currentProdDetailOrderId);
+  const root = document.getElementById('modal-root');
+  if(!order){ root.innerHTML=''; return; }
+  const items = order.items||[];
+  const totalPages = Math.max(1, Math.ceil(items.length/ITEM_PAGE_SIZE));
+  let page = prodItemPageMap[order.id] || 1;
+  if(page > totalPages) page = totalPages;
+  prodItemPageMap[order.id] = page;
+  const pageItems = items.slice((page-1)*ITEM_PAGE_SIZE, page*ITEM_PAGE_SIZE);
+  const sum = orderSchedSummary(order);
+
+  root.innerHTML = `
+    <div class="overlay" id="pdOv">
+      <div class="modal modal-lg">
+        <div class="modal-head">
+          <h3><span class="mono">${order.orderCode}</span> <span class="tag ${schedStatusTagClass(sum.status)}" style="margin-left:8px;">${L(sum.status)}</span></h3>
+          <button class="close-x" id="pdClose">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="od-grid">
+            <div class="field"><label>Partner (Buyer) (거래처/바이어)</label><div>${partnerName(order.partnerCode)} ${order.partnerCode?`<span class="mono muted">(${order.partnerCode})</span>`:''}</div></div>
+            <div class="field"><label>Requested Delivery (요청납기일)</label><div class="mono">${order.reqDelivery||'-'}</div></div>
+            <div class="field"><label>Production Delivery Date (생산부가능납기일)</label><div class="mono">${order.prodDeliveryDate||'-'}</div></div>
+          </div>
+          <div class="item-progress-mini" style="margin-bottom:16px;">
+            <span>Overall Progress (전체 진행률) ${sum.pct}%</span>
+            <div class="bar" style="width:100%;height:8px;"><div class="fill" style="width:${sum.pct}%;"></div></div>
+          </div>
+          <div class="od-section-title">
+            <span>Items (품목) (total ${items.length}${totalPages>1?` · page ${page}/${totalPages}`:''})</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th>#</th><th>Item Name (품명)</th><th class="num">Qty (수량)</th>
+                <th>Plan Prod. (생산예정일)</th><th>Prod. Done (생산완료일)</th>
+                <th>Plan Pack (포장예정일)</th><th>Pack Done (포장완료일)</th>
+                <th>Completion (제품완료일)</th><th>Ready to Ship (출고가능일)</th>
+                <th>Status (진행상태)</th><th></th>
+              </tr></thead>
+              <tbody>
+                ${pageItems.length ? pageItems.map((it,idx)=>{
+                  const s = itemSched(it);
+                  const rowNum = (page-1)*ITEM_PAGE_SIZE + idx + 1;
+                  return `<tr>
+                    <td class="mono muted">${rowNum}</td>
+                    <td>${itemName(it.itemCode)} <span class="lowstock-code">${it.itemCode}</span></td>
+                    <td class="num mono">${fmtNum(it.qty)}</td>
+                    <td class="mono">${s.planProd||'-'}</td>
+                    <td class="mono">${s.doneProd||'-'}</td>
+                    <td class="mono">${s.planPack||'-'}</td>
+                    <td class="mono">${s.donePack||'-'}</td>
+                    <td class="mono">${s.complete||'-'}</td>
+                    <td class="mono">${s.ready||'-'}</td>
+                    <td><span class="tag ${schedStatusTagClass(s.status||'대기')}">${L(s.status||'대기')}</span></td>
+                    <td class="row-actions"><button class="btn-icon" data-schededit="${it.id}">Edit (수정)</button></td>
+                  </tr>`;
+                }).join('') : `<tr><td colspan="11" class="loading-row">No items registered. (등록된 품목이 없습니다)</td></tr>`}
+              </tbody>
+            </table>
+          </div>
+          ${totalPages>1?`
+            <div class="pg-bar">
+              <button class="pg-btn" id="pdPgPrev" ${page<=1?'disabled':''}>‹</button>
+              ${Array.from({length:totalPages},(_,i)=>i+1).map(p=>`<button class="pg-btn ${p===page?'active':''}" data-pdpg="${p}">${p}</button>`).join('')}
+              <button class="pg-btn" id="pdPgNext" ${page>=totalPages?'disabled':''}>›</button>
+            </div>` : ''}
+        </div>
+        <div class="modal-foot">
+          <div class="modal-foot-split">
+            <div></div>
+            <button class="btn btn-primary" id="pdCloseBtn">Close (닫기)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('pdClose').onclick = closeProductionDetail;
+  document.getElementById('pdCloseBtn').onclick = closeProductionDetail;
+  document.getElementById('pdOv').addEventListener('click', e=>{ if(e.target.id==='pdOv') closeProductionDetail(); });
+  root.querySelectorAll('[data-schededit]').forEach(b=>b.onclick=()=>openProdSchedModal(order.id, b.dataset.schededit));
+  const pdPrev = document.getElementById('pdPgPrev'); if(pdPrev) pdPrev.onclick = ()=>{ prodItemPageMap[order.id]=Math.max(1,page-1); renderProductionDetailModal(); };
+  const pdNext = document.getElementById('pdPgNext'); if(pdNext) pdNext.onclick = ()=>{ prodItemPageMap[order.id]=Math.min(totalPages,page+1); renderProductionDetailModal(); };
+  root.querySelectorAll('[data-pdpg]').forEach(b=>b.onclick=()=>{ prodItemPageMap[order.id]=Number(b.dataset.pdpg); renderProductionDetailModal(); });
+}
+function openProdSchedModal(orderId, itemId){
+  const order = DB.orders.find(o=>o.id===orderId);
+  if(!order) return;
+  const item = (order.items||[]).find(it=>it.id===itemId);
+  if(!item) return;
+  const s = itemSched(item);
+  openModal(`Production Schedule (생산 스케줄) · ${order.orderCode} / ${itemName(item.itemCode)}`, `
+    <div class="field"><label>Planned Production Date (생산예정일)</label><input id="f_planProd" type="date" value="${s.planProd||''}"></div>
+    <div class="field"><label>Production Done (생산완료일)</label><input id="f_doneProd" type="date" value="${s.doneProd||''}"></div>
+    <div class="field"><label>Planned Packing Date (포장예정일)</label><input id="f_planPack" type="date" value="${s.planPack||''}"></div>
+    <div class="field"><label>Packing Done (포장완료일)</label><input id="f_donePack" type="date" value="${s.donePack||''}"></div>
+    <div class="field"><label>Final Completion Date (제품완료일)</label><input id="f_complete" type="date" value="${s.complete||''}"></div>
+    <div class="field"><label>Ready to Ship (출고가능일)</label><input id="f_ready" type="date" value="${s.ready||''}"></div>
+    <div class="field"><label>Status (진행상태)</label>
+      <select id="f_schedStatus">
+        ${SCHED_STATUSES.map(st=>`<option value="${st}" ${(s.status||'대기')===st?'selected':''}>${L(st)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="field"><label>Notes (비고)</label><input id="f_schedNote" type="text" value="${s.note||''}" placeholder="e.g. Waiting on raw material"></div>
+  `, async (close)=>{
+    const sched = {
+      planProd: document.getElementById('f_planProd').value,
+      doneProd: document.getElementById('f_doneProd').value,
+      planPack: document.getElementById('f_planPack').value,
+      donePack: document.getElementById('f_donePack').value,
+      complete: document.getElementById('f_complete').value,
+      ready: document.getElementById('f_ready').value,
+      status: document.getElementById('f_schedStatus').value,
+      note: document.getElementById('f_schedNote').value.trim(),
+    };
+    DB.orders = DB.orders.map(o=>{
+      if(o.id!==orderId) return o;
+      return { ...o, items: (o.items||[]).map(it=> it.id===itemId ? {...it, sched} : it) };
+    });
+    const updatedOrder = DB.orders.find(o=>o.id===orderId);
+    const advancedStatus = updatedOrder ? recalcOrderStatusFromSchedule(updatedOrder) : null;
+    if(advancedStatus){
+      DB.orders = DB.orders.map(o=>o.id===orderId?{...o, status:advancedStatus}:o);
+    }
+    await saveKey('orders'); close();
+    if(currentProdDetailOrderId) renderProductionDetailModal();
+    renderProdSchedBoard(); refreshAfterOrderChange();
+    showToast(advancedStatus
+      ? `Production schedule saved. Order status also advanced to ${L(advancedStatus)}. (생산 스케줄을 저장했고, 주문 상태도 ${L(advancedStatus)}(으)로 자동 반영했어요)`
+      : 'Production schedule saved. (생산 스케줄을 저장했어요)');
+  });
+}
+/* ============================================================
+   작업일지 (Work Log) — 예전 "생산관리" 탭
    - 작업일지: 업로드해 주신 작업일지 양식(준비반/소성반/알파반/혼합반/포장반 등
      파트별로 품명·규격·수량·작업인원·작업시간을 기록)을 그대로 반영
    - 생산설비 / 생산입고기록: 주문서관리의 생산입고 등록과 연동되는 자동 기록
+   NOTE: 새 "Production (생산관리)" 탭(주문서관리 다음)은 주문 품목별 생산·포장
+   진행일정을 관리하며, renderProductionSchedule()에서 별도로 구현됩니다.
 ============================================================ */
 let prodSubTab = 'worklog';
-function renderProduction(){
-  const el = document.getElementById('tab-production');
+function renderWorklogTab(){
+  const el = document.getElementById('tab-worklog');
   el.innerHTML = `
     <div class="panel-head">
-      <div><div class="panel-title">Production (생산관리)</div><div class="panel-sub">Log work by department and manage production records (작업일지·생산입고 실적 관리)</div></div>
+      <div><div class="panel-title">Work Log (작업일지)</div><div class="panel-sub">Log work by department and manage production records (작업일지·생산입고 실적 관리)</div></div>
       <div class="seg" id="prodSeg">
         <button data-s="worklog" class="${prodSubTab==='worklog'?'active':''}">Work Log (작업일지)</button>
         <button data-s="log" class="${prodSubTab==='log'?'active':''}">Production Log (생산입고기록)</button>
@@ -2261,7 +2627,7 @@ function renderProduction(){
     <div id="prodContent"></div>
   `;
   document.getElementById('prodSeg').querySelectorAll('button').forEach(b=>{
-    b.onclick = ()=>{ prodSubTab=b.dataset.s; renderProduction(); };
+    b.onclick = ()=>{ prodSubTab=b.dataset.s; renderWorklogTab(); };
   });
   if(prodSubTab==='worklog') renderWorklogBoard();
   else renderProdLog();
@@ -2892,7 +3258,7 @@ function renderProdBody(){
   });
 }
 // 특정 품목에 대해 아직 생산입고가 남아있는 진행중 주문(취소 제외) 목록
-// 생산관리에서 이 목록으로 주문을 연결하면, 같은 생산실적을 주문서관리에서
+// 작업일지에서 이 목록으로 주문을 연결하면, 같은 생산실적을 주문서관리에서
 // 또 "생산입고 등록"하지 않아도 되어 재고현황에 중복 합산되는 것을 막을 수 있음
 function openOrdersForItem(itemCode){
   const out = [];
@@ -2948,7 +3314,7 @@ function prodModal(existing){
     let msg = 'Production record added. (생산실적을 등록했어요)';
     if(itemCode && qty>0){
       DB.txn.push({ id:uid('txn'), type:'in', date, itemCode, partnerCode: linkOrder ? (linkOrder.partnerCode||partnerCode) : partnerCode, qty, unit:prodUnit||itemUnit(itemCode),
-        memo: linkOrder ? `${linkOrder.orderCode} · Recorded via Production, linked to order (생산관리 실적등록 · 주문연동)` : 'Recorded via Production (생산관리 실적등록)',
+        memo: linkOrder ? `${linkOrder.orderCode} · Recorded via Work Log, linked to order (작업일지 실적등록 · 주문연동)` : 'Recorded via Work Log (작업일지 실적등록)',
         ...(linkOrder && linkItem ? { orderCode: linkOrder.orderCode, orderItemId: linkItem.id } : {}) });
       await saveKey('txn');
       msg += ` / ${itemName(itemCode)} +${fmtNum(qty)} stock (재고 입고)`;
@@ -4174,6 +4540,7 @@ function renderCalendar(){
       <button class="btn btn-ghost btn-sm" id="calToday">Today (오늘)</button>
       <div class="cal-legend">
         <span>📌 Colored chip on date = event title (등록한 일정 제목)</span>
+        <span><span class="dot dot-schedprod"></span>Production Schedule (생산관리 일정)</span>
         <span><span class="dot dot-prod"></span>Production (생산실적)</span>
         <span><span class="dot dot-txn"></span>Stock In/Out (입출고)</span>
       </div>
@@ -4219,6 +4586,7 @@ function buildCalGrid(y, m){
     const dayEvents = DB.calendar.filter(e=>e.date===cellDate);
     const hasProd = DB.production.some(p=>p.date===cellDate);
     const hasTxn = DB.txn.some(t=>t.date===cellDate);
+    const hasSchedProd = scheduleEventsForDate(cellDate).length>0;
     const classes = ['cal-cell'];
     if(otherMonth) classes.push('other-month');
     if(cellDate===today) classes.push('today');
@@ -4234,6 +4602,7 @@ function buildCalGrid(y, m){
           ${moreCount>0?`<span class="cal-title-more">+${moreCount} more (더보기)</span>`:''}
         </div>
         <div class="cal-dots">
+          ${hasSchedProd?'<span class="dot dot-schedprod"></span>':''}
           ${hasProd?'<span class="dot dot-prod"></span>':''}
           ${hasTxn?'<span class="dot dot-txn"></span>':''}
         </div>
@@ -4271,6 +4640,7 @@ function renderDayPanel(){
   const events = DB.calendar.filter(e=>e.date===calSelected).sort((a,b)=>(a.createdAt||'').localeCompare(b.createdAt||''));
   const prodOfDay = DB.production.filter(p=>p.date===calSelected);
   const txnOfDay = DB.txn.filter(t=>t.date===calSelected);
+  const schedOfDay = scheduleEventsForDate(calSelected);
   const dateLabel = calSelected;
 
   let body = '';
@@ -4291,6 +4661,19 @@ function renderDayPanel(){
   } else {
     body += `<div class="empty-msg">No events. (등록된 일정이 없습니다)</div>`;
   }
+  if(schedOfDay.length){
+    body += `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);">
+      <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Production Schedule (생산관리 일정)</div>
+      ${schedOfDay.map(se=>`
+        <div class="cal-event-row" data-sched-open="${se.order.id}|${se.item.id}" style="cursor:pointer;">
+          <div>
+            <span class="dot dot-schedprod" style="margin-right:6px;"></span>
+            <span class="tag tag-info" style="margin-right:6px;">${se.label}</span>
+            <span class="cal-event-title">${se.order.orderCode} · ${itemName(se.item.itemCode)}</span>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  }
   if(prodOfDay.length || txnOfDay.length){
     body += `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);">`;
     if(prodOfDay.length) body += `<div>Production (생산실적) ${prodOfDay.length} (${prodOfDay.map(p=>(p.itemCode?itemName(p.itemCode):'-')+' '+fmtNum(p.qty)).join(', ')})</div>`;
@@ -4305,6 +4688,13 @@ function renderDayPanel(){
       DB.calendar = DB.calendar.filter(x=>x.id!==b.dataset.del);
       await saveKey('calendar'); renderCalendar();
     });
+  });
+  panel.querySelectorAll('[data-sched-open]').forEach(row=>{
+    row.onclick = ()=>{
+      const [orderId, itemId] = row.dataset.schedOpen.split('|');
+      switchTab('production');
+      openProdSchedModal(orderId, itemId);
+    };
   });
 }
 
@@ -4362,7 +4752,7 @@ function eventModal(existing, presetDate){
 ============================================================ */
 const RENDERERS = {
   dashboard: renderDashboard, calendar: renderCalendar, items: renderItems, partners: renderPartners,
-  orders: renderOrders, production: renderProduction, materials: renderMaterials, submaterials: renderSubmaterials, txn: renderTxn, stock: renderStock,
+  orders: renderOrders, production: renderProductionSchedule, worklog: renderWorklogTab, materials: renderMaterials, submaterials: renderSubmaterials, txn: renderTxn, stock: renderStock,
 };
 
 (async function init(){
