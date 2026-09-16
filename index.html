@@ -2358,9 +2358,13 @@ function orderSchedSummary(order){
 }
 function renderProductionSchedule(){
   const el = document.getElementById('tab-production');
+  // 카운트는 품목(줄) 단위가 아니라 주문서 단위로 집계합니다.
+  // 한 주문에 품목이 여러 개면 그중 "가장 뒤처진" 단계(orderSchedSummary)를
+  // 그 주문 전체의 대표 상태로 보고 1건으로 셉니다. (수량이 많을 때 카드 숫자가
+  // 지나치게 커지는 것을 막기 위함 — 상세 목록의 대표 상태 계산과 동일한 기준)
   const counts = {}; SCHED_STATUSES.forEach(s=>counts[s]=0);
-  scheduleRows().filter(r=>r.order.status!=='취소').forEach(r=>{
-    const st = itemSched(r.item).status || '대기';
+  DB.orders.filter(o=>o.status!=='취소' && (o.items||[]).length).forEach(o=>{
+    const st = orderSchedSummary(o).status || '대기';
     counts[st] = (counts[st]||0)+1;
   });
   el.innerHTML = `
@@ -2371,7 +2375,7 @@ function renderProductionSchedule(){
       ${SCHED_STATUSES.map(s=>`
         <div class="kpi-card">
           <div class="kpi-label">${L(s)}</div>
-          <div class="kpi-value">${fmtNum(counts[s]||0)}<span class="kpi-unit">items (건)</span></div>
+          <div class="kpi-value">${fmtNum(counts[s]||0)}<span class="kpi-unit">orders (건)</span></div>
         </div>`).join('')}
     </div>
     <div class="order-search-bar">
