@@ -721,6 +721,7 @@
   </section>
   <section id="tab-orders" class="tab-panel"></section>
   <section id="tab-production" class="tab-panel"></section>
+  <section id="tab-dailystock" class="tab-panel"></section>
   <section id="tab-worklog" class="tab-panel"></section>
   <section id="tab-materials" class="tab-panel"></section>
   <section id="tab-submaterials" class="tab-panel"></section>
@@ -741,9 +742,9 @@ const STORE_KEYS = {
   production:'gyp_production', txn:'gyp_txn', calendar:'gyp_calendar', orders:'gyp_orders', worklogs:'gyp_worklogs',
   materials:'gyp_materials', materialTxn:'gyp_materialTxn', materialCategories:'gyp_materialCategories',
   submaterials:'gyp_submaterials', submaterialTxn:'gyp_submaterialTxn', submatCategories:'gyp_submatCategories',
-  teamNames:'gyp_teamNames'
+  teamNames:'gyp_teamNames', dsItems:'gyp_dsItems', dsTxn:'gyp_dsTxn'
 };
-let DB = { items:[], partners:[], equipment:[], production:[], txn:[], calendar:[], orders:[], worklogs:[], materials:[], materialTxn:[], materialCategories:[], submaterials:[], submaterialTxn:[], submatCategories:[], teamNames:[] };
+let DB = { items:[], partners:[], equipment:[], production:[], txn:[], calendar:[], orders:[], worklogs:[], materials:[], materialTxn:[], materialCategories:[], submaterials:[], submaterialTxn:[], submatCategories:[], teamNames:[], dsItems:[], dsTxn:[] };
 let LOADED = false;
 
 // 이 앱은 Vercel Functions + Vercel Blob을 통해 서버에 데이터를 저장합니다.
@@ -1098,6 +1099,7 @@ const TABS = [
   {id:'calendar', label:'Calendar (캘린더)'},
   {id:'orders', label:'Orders (주문서관리)'},
   {id:'production', label:'Production (생산관리)'},
+  {id:'dailystock', label:'PT Stock (PT재고)'},
   {id:'worklog', label:'Work Log (작업일지)'},
   {id:'materials', label:'Materials (자재관리)'},
   {id:'submaterials', label:'Sub-materials (부자재관리)'},
@@ -1242,11 +1244,12 @@ function buildGaugeSVG(pct){
 /* ============================================================
    공통: 테이블+모달 CRUD 빌더
 ============================================================ */
-function openModal(title, fieldsHtml, onSave){
+function openModal(title, fieldsHtml, onSave, opts){
   const root = document.getElementById('modal-root');
+  const sizeClass = (opts && opts.size==='lg') ? ' modal-lg' : '';
   root.innerHTML = `
     <div class="overlay" id="ov">
-      <div class="modal">
+      <div class="modal${sizeClass}">
         <div class="modal-head"><h3>${title}</h3><button class="close-x" id="mClose">✕</button></div>
         <div class="modal-body" id="mBody">${fieldsHtml}</div>
         <div class="modal-foot">
@@ -2614,6 +2617,368 @@ function openProdSchedModal(orderId, itemId){
       : 'Production schedule saved. (생산 스케줄을 저장했어요)');
   });
 }
+
+/* ============================================================
+   일일 생산·출고 현황 (Daily Stock) — 인도네시아 전용 · 완전 독립 모듈
+   - 기존 생산관리(주문 기반)·주문서관리·품목관리·입출고관리와는 데이터를
+     전혀 공유하지 않습니다. 품목(DB.dsItems)과 입출고 기록(DB.dsTxn)을
+     이 탭 전용으로 따로 두고, 이 탭 안에서만 등록·입력·재고계산을 합니다.
+     (다른 탭에서 아무리 주문/생산/출고를 처리해도 이 탭 숫자는 바뀌지 않고,
+      반대로 이 탭에서 입력해도 기존 생산관리·재고현황에는 전혀 영향이 없어요)
+   - 품목이 색상·규격별로 매우 많으므로, 품목명에서 "제품군 -(색상) 규격"
+     패턴을 읽어 제품군 단위로 묶어서 보여줌 → 스크롤/탐색 부담을 줄이는 목적.
+   - 각 품목 줄에서 오늘 날짜 기준 생산(입고)/출고 수량을 바로 입력 → DB.dsTxn에 즉시 반영.
+   - 이 탭에 아직 없는 제품은 상단 "+ Add Product"나 하단 "미등록 제품" 카드에서
+     바로 등록할 수 있습니다 (이 등록은 DB.dsItems에만 저장되며, 품목관리에는 나타나지 않습니다).
+============================================================ */
+function parseItemFamily(name){
+  name = name || '';
+  // 마지막 괄호 "(...)"를 색상/규격으로, 그 앞부분을 제품군으로 인식 (예: "DIE STONE -(GOLDEN BROWN) 25KG BOX")
+  let m = name.match(/^(.*)\(([^()]*)\)\s*([^()]*)$/);
+  if(m && m[1].trim().replace(/-+$/,'').trim()){
+    return { family: m[1].trim().replace(/-+$/,'').trim(), variant: m[2].trim(), pack: m[3].trim() };
+  }
+  // 괄호가 없으면 "제품군 - 색상" 패턴을 시도 (예: "DIE STONE TYPE 4 -GREY")
+  m = name.match(/^(.*?)\s*-\s*([A-Za-z][A-Za-z \/]*)$/);
+  if(m && m[1].trim()){
+    return { family: m[1].trim(), variant: m[2].trim(), pack: '' };
+  }
+  return { family: name.trim() || '(No name / 이름없음)', variant: '', pack: '' };
+}
+// ---- 독립 품목/재고 헬퍼 (DB.dsItems, DB.dsTxn 전용 — 다른 탭과 무관) ----
+function dsItemUnit(code){ const it = DB.dsItems.find(x=>x.code===code); return it ? (it.unit||'') : ''; }
+function dsItemName(code){ const it = DB.dsItems.find(x=>x.code===code); return it ? it.name : (code||'-'); }
+function computeDsStock(){
+  const map = {};
+  DB.dsItems.forEach(it=>{ map[it.code] = { code:it.code, name:it.name, unit:it.unit, safetyStock:Number(it.safetyStock)||0, inQty:0, outQty:0 }; });
+  DB.dsTxn.forEach(t=>{
+    if(!map[t.itemCode]) return;
+    if(t.type==='in') map[t.itemCode].inQty += Number(t.qty)||0;
+    else map[t.itemCode].outQty += Number(t.qty)||0;
+  });
+  return Object.values(map).map(r=>({...r, stock: r.inQty - r.outQty}));
+}
+let dsSearchQ = '';
+let dsFamilyFilter = '';
+let dsOnlyLow = false;
+let dsCollapsed = {};
+// 수불대장 양식 기준 참고 제품군 체크리스트 — 이 탭의 품목(DB.dsItems)에
+// 비슷한 이름이 하나도 없으면 "미등록"으로 보고 빠른 등록 버튼을 보여주기 위함
+// (전체 품목 목록을 대체하지 않음, 품목관리와는 무관)
+const DAILY_STOCK_REF_FAMILIES = [
+  ['CH70','CH70'], ['CH75','CH75'], ['CH80','CH80'], ['GR50','GR50'], ['GR60','GR60'],
+  ['GM10','GM10'], ['GM40','GM40'], ['UH-3000(L)','UH-3000(L)'], ['UH-3000(S)','UH-3000(S)'],
+  ['건축용','Construction Use (건축용)'], ['분필','Chalk (분필)'],
+  ['DENTAL PLASTER','DENTAL PLASTER'], ['MOUNTING PLASTER','MOUNTING PLASTER'],
+  ['DENTAL STONE','DENTAL STONE'], ['ORTHO DONTIC ROCK','ORTHODONTIC ROCK'],
+  ['LAB STONE','LAB STONE'], ['ZERO MOUNTING STONE','ZERO MOUNTING STONE'],
+  ['DIE STONE GOLD','DIE STONE GOLD'], ['DIE STONE','DIE STONE'],
+  ['FLOW ROCK','FLOWROCK'], ['ZERO STONE','ZERO STONE'],
+  ['DIE STONE(IMP)','DIE STONE (IMP)'], ['DENTAL STONE(IMP)','DENTAL STONE (IMP)'], ['ORTHO STONE(IMP)','ORTHO STONE (IMP)'],
+  ['방향제','Air Freshener (방향제)'], ['FINE','FINE'], ['VEST','VEST'], ['CR20','CR20'], ['ALGINATE','ALGINATE'],
+  ['교재용','Textbook Use (교재용)'],
+  ['경화제','Hardener (경화제)'], ['카리비누','Soap (카리비누)'], ['세파레타','Separator (세파레타)'], ['기포제거제','Defoamer (기포제거제)'],
+];
+function dailyStockGroups(){
+  const stockMap = {}; computeDsStock().forEach(r=>{ stockMap[r.code] = r; });
+  let items = DB.dsItems.filter(it=>(it.active||'Y')==='Y');
+  const q = dsSearchQ.trim().toLowerCase();
+  const groups = {};
+  items.forEach(it=>{
+    const parsed = parseItemFamily(it.name);
+    const stock = stockMap[it.code] || { stock:0, inQty:0, outQty:0 };
+    if(q){
+      const hay = (it.name+' '+it.code+' '+parsed.family+' '+parsed.variant).toLowerCase();
+      if(!hay.includes(q)) return;
+    }
+    if(dsOnlyLow && !(stock.stock <= (Number(it.safetyStock)||0))) return;
+    if(!groups[parsed.family]) groups[parsed.family] = [];
+    groups[parsed.family].push({ item: it, ...parsed, stock });
+  });
+  let list = Object.keys(groups).map(family=>({ family, rows: groups[family].sort((a,b)=>koCompare(a.variant||a.item.name, b.variant||b.item.name)) }));
+  if(dsFamilyFilter) list = list.filter(g=>g.family===dsFamilyFilter);
+  list.sort((a,b)=> b.rows.length - a.rows.length || koCompare(a.family,b.family));
+  return list;
+}
+function renderDailyStock(){
+  const el = document.getElementById('tab-dailystock');
+  const allFamilies = [...new Set(DB.dsItems.filter(it=>(it.active||'Y')==='Y').map(it=>parseItemFamily(it.name).family))].sort((a,b)=>koCompare(a,b));
+  el.innerHTML = `
+    <div class="panel-head">
+      <div><div class="panel-title">PT Stock (PT재고) <span class="tag tag-info" style="margin-left:6px;">Indonesia only (인도네시아 전용)</span></div><div class="panel-sub">Independent module — its own product list and stock, not linked with Production/Order Management (생산관리·주문서관리와는 완전히 별도로 운영되는 독립 화면입니다 · 자체 품목·재고 사용)</div></div>
+      <button class="btn btn-primary" id="dsAddProductBtn">+ Add Product (제품 추가)</button>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">Today (오늘 날짜)</div><div class="kpi-value" style="font-size:20px;">${todayStr()}</div></div>
+    </div>
+    <div class="order-search-bar">
+      <input type="text" id="dsSearchInput" placeholder="🔍 Search by product line, color, code (제품군·색상·품목코드 검색)" value="${dsSearchQ}" style="flex:1;min-width:200px;">
+      <select id="dsFamilyFilter" style="max-width:220px;">
+        <option value="">All Product Lines (전체 제품군)</option>
+        ${allFamilies.map(f=>`<option value="${f}" ${dsFamilyFilter===f?'selected':''}>${f}</option>`).join('')}
+      </select>
+      <label style="display:flex;align-items:center;gap:6px;font-size:12.5px;white-space:nowrap;">
+        <input type="checkbox" id="dsOnlyLow" ${dsOnlyLow?'checked':''}> Low stock only (저재고만)
+      </label>
+      <button class="btn btn-ghost btn-sm" id="dsCollapseAllBtn" style="white-space:nowrap;">Collapse All (전체 접기)</button>
+      <button class="btn btn-ghost btn-sm" id="dsExpandAllBtn" style="white-space:nowrap;">Expand All (전체 펼치기)</button>
+    </div>
+    <div id="dsGroupsWrap"></div>
+    <div class="card" id="dsRegisterCard" style="margin-top:18px;"></div>
+  `;
+  document.getElementById('dsAddProductBtn').onclick = ()=>dsItemModal();
+  document.getElementById('dsSearchInput').oninput = (e)=>{ dsSearchQ = e.target.value; renderDsGroups(); };
+  document.getElementById('dsFamilyFilter').onchange = (e)=>{ dsFamilyFilter = e.target.value; renderDsGroups(); };
+  document.getElementById('dsOnlyLow').onchange = (e)=>{ dsOnlyLow = e.target.checked; renderDsGroups(); };
+  document.getElementById('dsCollapseAllBtn').onclick = ()=>{ allFamilies.forEach(f=>dsCollapsed[f]=true); renderDsGroups(); };
+  document.getElementById('dsExpandAllBtn').onclick = ()=>{ allFamilies.forEach(f=>dsCollapsed[f]=false); renderDsGroups(); };
+  renderDsGroups();
+  renderDsRegisterCard();
+}
+function renderDsGroups(){
+  const wrap = document.getElementById('dsGroupsWrap');
+  if(!wrap) return;
+  const groups = dailyStockGroups();
+  if(!DB.dsItems.length){
+    wrap.innerHTML = `<div class="loading-row">No products registered yet in this tab. Use "+ Add Product" above, or "Not Yet Registered" below. (이 탭에 등록된 제품이 없어요 · 위의 "제품 추가" 또는 아래 "미등록 제품"을 이용해 보세요)</div>`;
+    return;
+  }
+  if(!groups.length){
+    wrap.innerHTML = `<div class="loading-row">No products match your search. (검색 조건에 맞는 제품이 없습니다)</div>`;
+    return;
+  }
+  wrap.innerHTML = groups.map(g=>{
+    const totalStock = g.rows.reduce((s,r)=>s+r.stock.stock,0);
+    const collapsed = !!dsCollapsed[g.family];
+    return `
+    <div class="card ds-family-card" style="margin-bottom:10px;">
+      <div class="ds-family-head" data-fam="${encodeURIComponent(g.family)}" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;flex-wrap:wrap;gap:6px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="ds-caret">${collapsed?'▸':'▾'}</span>
+          <strong>${g.family}</strong>
+          <span class="muted" style="font-size:12px;">${g.rows.length} variant(s) (${g.rows.length}종)</span>
+        </div>
+        <span class="muted" style="font-size:12.5px;">Total Stock (합계재고) <strong style="color:var(--ink);">${fmtNum(totalStock)}</strong></span>
+      </div>
+      ${collapsed?'':`
+      <div class="table-wrap" style="margin-top:8px;"><table>
+        <thead><tr>
+          <th>Color/Variant (색상·규격)</th><th>Code (품목코드)</th><th class="num">Stock (현재고)</th>
+          <th style="width:110px;">Production (생산입고)</th><th style="width:110px;">Shipment (출고)</th><th style="width:140px;"></th>
+        </tr></thead>
+        <tbody>
+        ${g.rows.map(r=>`
+          <tr data-code="${r.item.code}">
+            <td>${r.variant||r.item.name}${r.pack?` <span class="lowstock-code">${r.pack}</span>`:''}</td>
+            <td class="mono muted">${r.item.code}</td>
+            <td class="num" style="font-weight:700;${r.stock.stock<=0?'color:var(--danger);':(r.stock.stock<=(Number(r.item.safetyStock)||0)?'color:var(--warn);':'')}">${fmtNum(r.stock.stock)} <span class="muted" style="font-weight:400;">${r.item.unit||''}</span></td>
+            <td><input type="number" min="0" class="ds-in" placeholder="0" style="width:90px;"></td>
+            <td><input type="number" min="0" class="ds-out" placeholder="0" style="width:90px;"></td>
+            <td class="row-actions">
+              <button class="btn-icon btn-primary ds-apply">Save (반영)</button>
+              <button class="btn-icon ds-edit">Edit (수정)</button>
+              <button class="btn-icon ds-history">Info (정보)</button>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>`}
+    </div>`;
+  }).join('');
+  wrap.querySelectorAll('.ds-family-head').forEach(h=>{
+    h.onclick = ()=>{ const fam = decodeURIComponent(h.dataset.fam); dsCollapsed[fam] = !dsCollapsed[fam]; renderDsGroups(); };
+  });
+  wrap.querySelectorAll('tr[data-code]').forEach(tr=>{
+    const code = tr.dataset.code;
+    const applyBtn = tr.querySelector('.ds-apply');
+    applyBtn.onclick = async (e)=>{
+      e.stopPropagation();
+      const inEl = tr.querySelector('.ds-in');
+      const outEl = tr.querySelector('.ds-out');
+      const inQty = Number(inEl.value)||0;
+      const outQty = Number(outEl.value)||0;
+      if(inQty<=0 && outQty<=0){ showToast('Enter a production or shipment quantity. (생산 또는 출고 수량을 입력해 주세요)'); return; }
+      const date = todayStr();
+      const unit = dsItemUnit(code);
+      if(inQty>0) DB.dsTxn.push({ id:uid('dstxn'), type:'in', date, itemCode:code, qty:inQty, unit, memo:'Daily Stock quick entry (일일 생산·출고 빠른입력)' });
+      if(outQty>0) DB.dsTxn.push({ id:uid('dstxn'), type:'out', date, itemCode:code, qty:outQty, unit, memo:'Daily Stock quick entry (일일 생산·출고 빠른입력)' });
+      await saveKey('dsTxn');
+      showToast('Saved. (반영했어요)');
+      renderDsGroups();
+    };
+    const editBtn = tr.querySelector('.ds-edit');
+    editBtn.onclick = (e)=>{ e.stopPropagation(); dsItemModal(DB.dsItems.find(x=>x.code===code)); };
+    const historyBtn = tr.querySelector('.ds-history');
+    historyBtn.onclick = (e)=>{ e.stopPropagation(); dsHistoryModal(code); };
+  });
+}
+function renderDsRegisterCard(){
+  const card = document.getElementById('dsRegisterCard');
+  if(!card) return;
+  const existingNames = DB.dsItems.map(it=>(it.name||'').toUpperCase());
+  const missing = DAILY_STOCK_REF_FAMILIES.filter(([ko,en])=>{
+    const enKey = en.split(' (')[0].toUpperCase();
+    return !existingNames.some(n=>n.includes(ko.toUpperCase()) || n.includes(enKey));
+  });
+  if(!missing.length){
+    card.innerHTML = `<h3 style="margin-top:0;">Not Yet Registered (미등록 제품)</h3><div class="empty-msg">All reference product lines are registered. (참고 제품군이 모두 등록되어 있어요)</div>`;
+    return;
+  }
+  card.innerHTML = `
+    <h3 style="margin-top:0;">Not Yet Registered (미등록 제품) <span class="muted" style="font-weight:400;font-size:12px;">— common product lines with no matching product in this tab yet; tap to quick-add (이 탭에 아직 없어 보이는 제품군이에요 · 눌러서 바로 등록)</span></h3>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      ${missing.map(([ko,en])=>`<button class="btn btn-ghost btn-sm ds-quickadd" data-en="${en.replace(/"/g,'&quot;')}">+ ${en}</button>`).join('')}
+    </div>
+  `;
+  card.querySelectorAll('.ds-quickadd').forEach(b=>{
+    b.onclick = ()=>quickAddItemForFamily(b.dataset.en);
+  });
+}
+function quickAddItemForFamily(label){
+  dsItemModal(undefined, label);
+}
+// ---- 이 탭 전용 제품 등록/수정 모달 (DB.dsItems에만 저장 — 품목관리와 무관) ----
+function dsItemModal(existing, prefillName){
+  const isEdit = !!existing;
+  openModal(isEdit?'Edit Product (제품 수정)':'Add Product (제품 추가)', `
+    <div class="field"><label>Product Code (품목코드)</label><input id="f_dscode" type="text" value="${existing?existing.code:''}" placeholder="e.g. ID-CH70-W"></div>
+    <div class="field"><label>Product Name (품목명)</label><input id="f_dsname" type="text" value="${existing?existing.name:(prefillName||'')}" placeholder="e.g. CH70 -(WHITE) 25KG BAG"></div>
+    <div class="field"><label>Unit (단위)</label><input id="f_dsunit" type="text" value="${existing?existing.unit||'':''}" placeholder="e.g. BAG, BOX, KG"></div>
+    <div class="field"><label>Safety Stock (안전재고) <span class="muted" style="font-weight:400;">(optional)</span></label><input id="f_dssafe" type="number" min="0" value="${existing?existing.safetyStock||'':''}" placeholder="e.g. 10"></div>
+    <div class="field"><label>Active (사용여부)</label>
+      <select id="f_dsactive">
+        <option value="Y" ${!existing||existing.active==='Y'?'selected':''}>Active (사용)</option>
+        <option value="N" ${existing&&existing.active==='N'?'selected':''}>Inactive (미사용)</option>
+      </select>
+    </div>
+    ${isEdit?`<button type="button" class="btn btn-ghost btn-sm" id="dsDeleteBtn" style="color:var(--danger);">Delete Product (제품 삭제)</button>`:''}
+  `, async (close)=>{
+    const code = document.getElementById('f_dscode').value.trim();
+    const name = document.getElementById('f_dsname').value.trim();
+    if(!code || !name){ showToast('Product code and name are required. (품목코드와 품목명은 필수예요)'); return false; }
+    if(!isEdit && DB.dsItems.some(x=>x.code===code)){ showToast('This product code already exists. (이미 존재하는 품목코드예요)'); return false; }
+    if(isEdit && code!==existing.code && DB.dsItems.some(x=>x.code===code)){ showToast('This product code already exists. (이미 존재하는 품목코드예요)'); return false; }
+    const rec = {
+      id: existing?existing.id:uid('dsitem'), code, name,
+      unit: document.getElementById('f_dsunit').value.trim(),
+      safetyStock: Number(document.getElementById('f_dssafe').value)||0,
+      active: document.getElementById('f_dsactive').value,
+    };
+    if(isEdit){ DB.dsItems = DB.dsItems.map(x=>x.id===rec.id?rec:x); }
+    else { DB.dsItems.push(rec); }
+    await saveKey('dsItems'); close(); renderDailyStock(); showToast('Saved. (저장했어요)');
+  });
+  if(isEdit){
+    document.getElementById('dsDeleteBtn').onclick = ()=>{
+      confirmDelete(`Delete "${existing.name}"? Its stock-in/out history in this tab will no longer be shown. (이 제품을 삭제할까요? 이 탭에 쌓인 입출고 기록도 더 이상 표시되지 않아요)`, async ()=>{
+        DB.dsItems = DB.dsItems.filter(x=>x.id!==existing.id);
+        await saveKey('dsItems');
+        document.getElementById('modal-root').innerHTML = '';
+        renderDailyStock(); showToast('Deleted. (삭제했어요)');
+      });
+    };
+  }
+}
+
+/* ----------------------------------------------------------------
+   일일 생산·출고 — 품목별 입출고 이력 조회/수정 ("정보" 버튼)
+   - 실수로 잘못 입력했을 때, 지난 날짜의 입력 기록을 모두 보고
+     그 자리에서 날짜/구분/수량을 고쳐 저장하거나 삭제할 수 있게 함.
+   - DB.dsTxn만 다루며 다른 탭(품목관리·입출고관리)과는 무관.
+---------------------------------------------------------------- */
+function dsHistoryModal(code){
+  const item = DB.dsItems.find(x=>x.code===code);
+  if(!item) return;
+  openModal(`Entry History (입출고 이력) · ${item.name}`, '', ()=>{}, {size:'lg'});
+  const mSaveBtn = document.getElementById('mSave');
+  mSaveBtn.textContent = 'Close (닫기)';
+  mSaveBtn.onclick = ()=>{ document.getElementById('modal-root').innerHTML = ''; };
+  renderDsHistoryBody(code);
+}
+function renderDsHistoryBody(code){
+  const item = DB.dsItems.find(x=>x.code===code);
+  const body = document.getElementById('mBody');
+  if(!body || !item) return;
+  const stock = computeDsStock().find(r=>r.code===code);
+  const rows = DB.dsTxn.filter(t=>t.itemCode===code)
+    .slice()
+    .sort((a,b)=> b.date.localeCompare(a.date) || String(b.id||'').localeCompare(String(a.id||'')));
+  body.innerHTML = `
+    <div class="muted" style="margin-bottom:10px;font-size:12.5px;">
+      ${item.code} · Current Stock (현재고): <strong style="color:var(--ink);">${fmtNum(stock?stock.stock:0)} ${item.unit||''}</strong>
+    </div>
+    <div class="panel-head" style="margin-bottom:8px;">
+      <div class="panel-sub" style="margin:0;">Past Entries (날짜별 입력 내역) — edit or delete a wrong entry, or add one for another date (잘못 입력한 내역을 여기서 바로 수정·삭제하거나, 다른 날짜의 기록을 추가할 수 있어요)</div>
+      <button class="btn btn-ghost btn-sm" id="dsHistAddBtn">+ Add Entry (기록 추가)</button>
+    </div>
+    ${rows.length ? `
+    <div class="table-wrap"><table>
+      <thead><tr><th style="width:120px;">Date (날짜)</th><th>Type (구분)</th><th class="num">Qty (수량)</th><th>Memo (메모)</th><th style="width:120px;"></th></tr></thead>
+      <tbody>
+      ${rows.map(t=>`
+        <tr data-id="${t.id}">
+          <td class="mono">${t.date}</td>
+          <td>${t.type==='in' ? 'Production (생산입고)' : 'Shipment (출고)'}</td>
+          <td class="num">${fmtNum(t.qty)} ${t.unit||''}</td>
+          <td class="muted" style="font-size:12px;">${t.memo||'-'}</td>
+          <td class="row-actions">
+            <button class="btn-icon dsh-edit" data-id="${t.id}">Edit (수정)</button>
+            <button class="btn-icon btn-danger-text dsh-del" data-id="${t.id}">Delete (삭제)</button>
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>` : `<div class="loading-row">No entries yet for this product. (아직 입력된 기록이 없어요)</div>`}
+  `;
+  document.getElementById('dsHistAddBtn').onclick = ()=>dsHistoryEntryModal(code);
+  body.querySelectorAll('.dsh-edit').forEach(b=>{
+    b.onclick = ()=>{
+      const t = DB.dsTxn.find(x=>x.id===b.dataset.id);
+      if(t) dsHistoryEntryModal(code, t);
+    };
+  });
+  body.querySelectorAll('.dsh-del').forEach(b=>{
+    b.onclick = ()=>{
+      confirmDelete('Delete this entry? (이 입출고 기록을 삭제할까요?)', async ()=>{
+        DB.dsTxn = DB.dsTxn.filter(x=>x.id!==b.dataset.id);
+        await saveKey('dsTxn');
+        showToast('Deleted. (삭제했어요)');
+        dsHistoryModal(code);
+        renderDsGroups();
+      });
+    };
+  });
+}
+// 개별 입출고 기록 추가/수정용 소형 모달 (날짜·구분·수량 수정)
+function dsHistoryEntryModal(code, existing){
+  const isEdit = !!existing;
+  const unit = dsItemUnit(code);
+  openModal(isEdit?'Edit Entry (기록 수정)':'Add Entry (기록 추가)', `
+    <div class="field"><label>Date (날짜)</label><input id="f_dhdate" type="date" value="${isEdit?existing.date:todayStr()}"></div>
+    <div class="field"><label>Type (구분)</label>
+      <select id="f_dhtype">
+        <option value="in" ${isEdit&&existing.type==='in'?'selected':''}>Production (생산입고)</option>
+        <option value="out" ${(!isEdit)||(isEdit&&existing.type==='out')?'selected':''}>Shipment (출고)</option>
+      </select>
+    </div>
+    <div class="field"><label>Qty (수량)</label><input id="f_dhqty" type="number" min="0" value="${isEdit?existing.qty:''}" placeholder="Enter quantity (수량 입력)"></div>
+  `, async (close)=>{
+    const date = document.getElementById('f_dhdate').value;
+    const type = document.getElementById('f_dhtype').value;
+    const qty = Number(document.getElementById('f_dhqty').value)||0;
+    if(!date){ showToast('Please select a date. (날짜를 선택해 주세요)'); return false; }
+    if(qty<=0){ showToast('Please enter a quantity greater than 0. (0보다 큰 수량을 입력해 주세요)'); return false; }
+    if(isEdit){
+      DB.dsTxn = DB.dsTxn.map(t=>t.id===existing.id ? {...t, date, type, qty, unit: t.unit||unit} : t);
+    } else {
+      DB.dsTxn.push({ id:uid('dstxn'), type, date, itemCode:code, qty, unit, memo:'Manual entry via history (이력에서 수동 등록/수정)' });
+    }
+    await saveKey('dsTxn');
+    close();
+    showToast(isEdit ? 'Updated. (수정했어요)' : 'Added. (추가했어요)');
+    dsHistoryModal(code);
+    renderDsGroups();
+  });
+}
+
 /* ============================================================
    작업일지 (Work Log) — 예전 "생산관리" 탭
    - 작업일지: 업로드해 주신 작업일지 양식(준비반/소성반/알파반/혼합반/포장반 등
@@ -4761,7 +5126,7 @@ function eventModal(existing, presetDate){
 ============================================================ */
 const RENDERERS = {
   dashboard: renderDashboard, calendar: renderCalendar, items: renderItems, partners: renderPartners,
-  orders: renderOrders, production: renderProductionSchedule, worklog: renderWorklogTab, materials: renderMaterials, submaterials: renderSubmaterials, txn: renderTxn, stock: renderStock,
+  orders: renderOrders, production: renderProductionSchedule, dailystock: renderDailyStock, worklog: renderWorklogTab, materials: renderMaterials, submaterials: renderSubmaterials, txn: renderTxn, stock: renderStock,
 };
 
 (async function init(){
